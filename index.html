@@ -12,6 +12,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="assets/css/style.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" />
 </head>
 <body data-bs-spy="scroll" data-bs-target="#mainNav" data-bs-offset="80" tabindex="0">
 
@@ -29,7 +30,7 @@
           <li class="nav-item"><a class="nav-link" href="research.html">Research</a></li>
           <li class="nav-item"><a class="nav-link" href="publications.html">Publications</a></li>
           <li class="nav-item"><a class="nav-link" href="projects.html">Projects</a></li>
-          <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+          <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
         </ul>
       </div>
     </div>
@@ -53,14 +54,14 @@
             and <span class="text-white fw-semibold">3D Surrogate Modeling</span> for design optimization.
           </p>
           <a href="#about" class="btn btn-accent btn-lg me-2">About Me</a>
-          <a href="#contact" class="btn btn-outline-light btn-lg">Contact</a>
+          <a href="contact.html" class="btn btn-outline-light btn-lg">Contact</a>
         </div>
       </div>
     </div>
   </header>
 
   <!-- ========================= ABOUT ========================= -->
-  <section id="about" class="section-padding">
+  <section id="about" class="section-padding" data-aos="fade-up">
     <div class="container">
       <div class="row justify-content-center mb-5">
         <div class="col-lg-8 text-center">
@@ -118,7 +119,7 @@
   </section>
 
   <!-- ========================= BACKGROUND ========================= -->
-  <section id="background" class="section-padding bg-light">
+  <section id="background" class="section-padding bg-light" data-aos="fade-up">
     <div class="container">
       <div class="row justify-content-center mb-5">
         <div class="col-lg-8 text-center">
@@ -191,7 +192,7 @@
   </section>
 
   <!-- ========================= HIGHLIGHTS ========================= -->
-  <section id="highlights" class="section-padding">
+  <section id="highlights" class="section-padding" data-aos="fade-up">
     <div class="container">
       <div class="row justify-content-center mb-5">
         <div class="col-lg-8 text-center">
@@ -255,7 +256,7 @@
   </section>
 
   <!-- ========================= RECOGNITION ========================= -->
-  <section id="recognition" class="section-padding bg-light">
+  <section id="recognition" class="section-padding bg-light" data-aos="fade-up">
     <div class="container">
       <div class="row justify-content-center mb-5">
         <div class="col-lg-8 text-center">
@@ -284,10 +285,10 @@
   </section>
 
   <!-- ========================= CONTACT / FOOTER ========================= -->
-  <footer id="contact" class="py-5 text-center bg-dark text-light">
+  <footer id="contact" class="py-5 text-center bg-dark text-light" data-aos="fade-up">
     <div class="container">
       <h2 class="section-title mb-3">Contact</h2>
-      <p class="mb-4">I am always happy to chat about research or collaboration.</p>
+      <p class="mb-4">Feel free to contact me about research or collaboration.</p>
       <p class="lead mb-4"><a href="mailto:jangseop@kaist.ac.kr" class="text-accent text-decoration-none">jangseop@kaist.ac.kr</a></p>
       <div class="social-links mb-4">
         <a href="mailto:jangseop@kaist.ac.kr" aria-label="Email" title="Email"><i class="bi bi-envelope-fill"></i></a>
@@ -303,6 +304,26 @@
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+  <script>
+    AOS.init({ duration: 700, once: true, offset: 80 });
+    (function () {
+      const titles = document.querySelectorAll('.section-title');
+      if (!titles.length || !('IntersectionObserver' in window)) {
+        titles.forEach((el) => el.classList.add('is-revealed'));
+        return;
+      }
+      const io = new IntersectionObserver((entries, obs) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-revealed');
+            obs.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.4 });
+      titles.forEach((el) => io.observe(el));
+    })();
+  </script>
   <script src="assets/js/main.js"></script>
 </body>
 </html>

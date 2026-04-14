@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="assets/css/style.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" />
 </head>
 <body>
 
@@ -23,18 +24,18 @@
           <li class="nav-item"><a class="nav-link" href="research.html">Research</a></li>
           <li class="nav-item"><a class="nav-link active" href="publications.html">Publications</a></li>
           <li class="nav-item"><a class="nav-link" href="projects.html">Projects</a></li>
-          <li class="nav-item"><a class="nav-link" href="index.html#contact">Contact</a></li>
+          <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
         </ul>
       </div>
     </div>
   </nav>
 
-  <section class="section-padding" style="padding-top: 9rem;">
+  <section class="section-padding" style="padding-top: 120px;">
     <div class="container">
       <div class="row justify-content-center mb-5">
         <div class="col-lg-8 text-center">
           <h1 class="section-title">Publications</h1>
-          <p class="section-subtitle mb-1">
+          <p class="lead text-muted mb-1">
             <a href="https://scholar.google.com/citations?user=67ZMHSAAAAAJ&amp;hl=en" target="_blank" rel="noopener">Google Scholar</a>
           </p>
           <p class="text-muted small mb-0"><sup>*</sup> Corresponding author</p>
@@ -45,7 +46,7 @@
         <div class="col-lg-10">
 
           <!-- ===================== Under Review ===================== -->
-          <h3 class="mt-4 mb-3 heading-navy">Under Review</h3>
+          <h3 class="mt-4 mb-4 heading-navy">Under Review</h3>
           <ol class="publication-list" reversed>
 
             <li class="mb-4" value="2">
@@ -255,5 +256,25 @@
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+  <script>
+    AOS.init({ duration: 700, once: true, offset: 80 });
+    (function () {
+      const titles = document.querySelectorAll('.section-title');
+      if (!titles.length || !('IntersectionObserver' in window)) {
+        titles.forEach((el) => el.classList.add('is-revealed'));
+        return;
+      }
+      const io = new IntersectionObserver((entries, obs) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-revealed');
+            obs.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.4 });
+      titles.forEach((el) => io.observe(el));
+    })();
+  </script>
 </body>
 </html>

@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="assets/css/style.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" />
 </head>
 <body>
 
@@ -25,7 +26,7 @@
           <li class="nav-item"><a class="nav-link" href="research.html">Research</a></li>
           <li class="nav-item"><a class="nav-link" href="publications.html">Publications</a></li>
           <li class="nav-item"><a class="nav-link active" href="projects.html">Projects</a></li>
-          <li class="nav-item"><a class="nav-link" href="index.html#contact">Contact</a></li>
+          <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
         </ul>
       </div>
     </div>
@@ -35,18 +36,18 @@
 
     <div class="row justify-content-center mb-5">
       <div class="col-lg-9 text-center">
-        <h1 class="fw-bold mb-2">Projects</h1>
-        <p class="text-muted mb-0">
-          Industrial collaborations and applied R&amp;D projects,<br>
-          conducted at the <a href="https://www.smartdesignlab.org/" target="_blank" rel="noopener">Smart Design Lab</a>, KAIST,
-          and as an AI Researcher at <a href="https://www.narnia.ai/?r=0" target="_blank" rel="noopener">Narnia Labs</a>.
+        <h1 class="section-title">Projects</h1>
+        <p class="lead text-muted mb-1">Industrial collaborations and applied R&amp;D projects</p>
+        <p class="text-muted small mb-0">
+          conducted as an AI Researcher at <a href="https://www.narnia.ai/?r=0" target="_blank" rel="noopener">Narnia Labs</a>
+          and the <a href="https://www.smartdesignlab.org/" target="_blank" rel="noopener">Smart Design Lab</a>, KAIST.
         </p>
       </div>
     </div>
 
     <!-- ========================= SAMSUNG HEAVY INDUSTRIES ========================= -->
     <section class="mb-5">
-      <h3 class="fw-bold heading-navy mb-4">Samsung Heavy Industries</h3>
+      <h3 class="fw-bold heading-navy mt-4 mb-4">Samsung Heavy Industries</h3>
 
       <article class="project-detail mb-4 p-4 border rounded">
         <div class="d-flex flex-wrap justify-content-between align-items-start mb-2">
@@ -147,5 +148,25 @@
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+  <script>
+    AOS.init({ duration: 700, once: true, offset: 80 });
+    (function () {
+      const titles = document.querySelectorAll('.section-title');
+      if (!titles.length || !('IntersectionObserver' in window)) {
+        titles.forEach((el) => el.classList.add('is-revealed'));
+        return;
+      }
+      const io = new IntersectionObserver((entries, obs) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-revealed');
+            obs.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1, rootMargin: '0px 0px -10% 0px' });
+      titles.forEach((el) => io.observe(el));
+    })();
+  </script>
 </body>
 </html>

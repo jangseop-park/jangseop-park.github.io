@@ -90,12 +90,14 @@ body {
 .section-title::after {
   content: '';
   display: block;
-  width: 48px;
+  width: 0;
   height: 2px;
   background: var(--accent-color);
   margin: 0.85rem auto 0;
   border-radius: 1px;
+  transition: width 0.7s ease 0.15s;
 }
+.section-title.is-revealed::after { width: 100%; }
 .section-subtitle { color: #6c757d; font-size: 1.1rem; }
 
 /* ----- About ----- */

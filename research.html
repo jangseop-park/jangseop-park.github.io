@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="assets/css/style.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" />
 </head>
 <body>
 
@@ -25,7 +26,7 @@
           <li class="nav-item"><a class="nav-link active" href="research.html">Research</a></li>
           <li class="nav-item"><a class="nav-link" href="publications.html">Publications</a></li>
           <li class="nav-item"><a class="nav-link" href="projects.html">Projects</a></li>
-          <li class="nav-item"><a class="nav-link" href="index.html#contact">Contact</a></li>
+          <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
         </ul>
       </div>
     </div>
@@ -35,7 +36,7 @@
 
     <div class="row justify-content-center mb-5">
       <div class="col-lg-9 text-center">
-        <h1 class="fw-bold mb-3">Research</h1>
+        <h1 class="section-title">Research</h1>
         <p class="lead text-muted mb-0">
           Connecting <strong class="lead-emphasis">large language models</strong> with <strong class="lead-emphasis">mechanical engineering</strong><br>
           to build autonomous design systems.
@@ -175,5 +176,25 @@
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+  <script>
+    AOS.init({ duration: 700, once: true, offset: 80 });
+    (function () {
+      const titles = document.querySelectorAll('.section-title');
+      if (!titles.length || !('IntersectionObserver' in window)) {
+        titles.forEach((el) => el.classList.add('is-revealed'));
+        return;
+      }
+      const io = new IntersectionObserver((entries, obs) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-revealed');
+            obs.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.4 });
+      titles.forEach((el) => io.observe(el));
+    })();
+  </script>
 </body>
 </html>
