@@ -1,0 +1,173 @@
+/* ============================================================
+   Personal Homepage — Custom Styles
+   Bootstrap 5 위에 덧씌우는 커스텀 스타일.
+   색상/폰트를 바꾸고 싶다면 아래 :root 변수만 수정하세요.
+   ============================================================ */
+
+:root {
+  --accent-color: #ff5a1f;       /* 메인 강조색 (버튼, 제목 하이라이트) */
+  --accent-dark: #d94a18;
+  --bg-dark: #1a1a1a;            /* Hero 배경 */
+  --text-dark: #212529;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+/* ----- Base ----- */
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font-sans);
+  color: var(--text-dark);
+  line-height: 1.7;
+}
+
+/* ----- Navbar ----- */
+#mainNav {
+  background-color: rgba(26, 26, 26, 0.0);
+  transition: background-color 0.3s ease, padding 0.3s ease;
+  padding: 1.25rem 0;
+}
+#mainNav.scrolled {
+  background-color: rgba(26, 26, 26, 0.95);
+  padding: 0.6rem 0;
+  backdrop-filter: blur(8px);
+}
+#mainNav .navbar-brand { letter-spacing: 2px; }
+#mainNav .nav-link {
+  color: rgba(255, 255, 255, 0.85) !important;
+  font-weight: 500;
+  margin: 0 0.5rem;
+}
+#mainNav .nav-link:hover,
+#mainNav .nav-link.active { color: var(--accent-color) !important; }
+
+/* ----- Hero ----- */
+.hero {
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+  color: #fff;
+  padding-top: 6rem;
+}
+.hero .display-2 { line-height: 1.1; }
+.text-accent { color: var(--accent-color) !important; }
+
+/* ----- Buttons ----- */
+.btn-accent {
+  background-color: var(--accent-color);
+  border-color: var(--accent-color);
+  color: #fff;
+}
+.btn-accent:hover,
+.btn-accent:focus {
+  background-color: var(--accent-dark);
+  border-color: var(--accent-dark);
+  color: #fff;
+}
+
+/* ----- Section ----- */
+.section-padding { padding: 6rem 0; }
+.section-title {
+  font-weight: 800;
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+  position: relative;
+  display: inline-block;
+}
+.section-title::after {
+  content: '';
+  display: block;
+  width: 60px;
+  height: 4px;
+  background: var(--accent-color);
+  margin: 0.75rem auto 0;
+  border-radius: 2px;
+}
+.section-subtitle { color: #6c757d; font-size: 1.1rem; }
+
+/* ----- About ----- */
+.profile-img {
+  width: 240px;
+  height: 240px;
+  object-fit: cover;
+  border: 6px solid #fff;
+}
+
+/* ----- Research cards ----- */
+.research-icon { font-size: 3rem; line-height: 1; }
+.card { transition: transform 0.25s ease, box-shadow 0.25s ease; }
+.card:hover { transform: translateY(-6px); box-shadow: 0 1rem 2rem rgba(0,0,0,0.1) !important; }
+
+/* ----- Publications ----- */
+.publication-list { padding-left: 1.25rem; }
+.pub-title { font-size: 1.05rem; }
+
+/* ----- Contact / Social ----- */
+.social-links a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: #f1f1f1;
+  color: var(--text-dark);
+  font-size: 1.4rem;
+  margin: 0 0.35rem;
+  transition: all 0.25s ease;
+}
+.social-links a:hover {
+  background: var(--accent-color);
+  color: #fff;
+  transform: translateY(-3px);
+}
+
+/* ----- Timeline (Education / Experience) ----- */
+.timeline-list {
+  position: relative;
+  padding-left: 2rem;
+  border-left: 3px solid var(--accent-color);
+}
+.timeline-item {
+  position: relative;
+  padding: 0.25rem 0 1.75rem 0.75rem;
+}
+.timeline-item::before {
+  content: '';
+  position: absolute;
+  left: -2.55rem;
+  top: 0.5rem;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--accent-color);
+  border: 3px solid #fff;
+  box-shadow: 0 0 0 1px var(--accent-color);
+}
+.timeline-item h5 { font-size: 1.1rem; }
+
+/* ----- Project / Award list ----- */
+.project-list {
+  list-style: none;
+  padding-left: 0;
+}
+.project-list li {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.65rem 0;
+  border-bottom: 1px solid #e9ecef;
+}
+.project-list li:last-child { border-bottom: none; }
+.project-list li > span:first-child { flex: 1; }
+@media (max-width: 576px) {
+  .project-list li { flex-direction: column; gap: 0.25rem; }
+}
+
+/* ----- Footer ----- */
+footer { background: #f8f9fa; }
+
+/* ----- Responsive tweaks ----- */
+@media (max-width: 768px) {
+  .hero .display-2 { font-size: 3rem; }
+  .section-padding { padding: 4rem 0; }
+  .section-title { font-size: 2rem; }
+  .profile-img { width: 180px; height: 180px; }
+}
