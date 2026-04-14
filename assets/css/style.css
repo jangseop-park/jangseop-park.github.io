@@ -5,10 +5,12 @@
    ============================================================ */
 
 :root {
-  --accent-color: #ff5a1f;       /* 메인 강조색 (버튼, 제목 하이라이트) */
-  --accent-dark: #d94a18;
-  --bg-dark: #1a1a1a;            /* Hero 배경 */
-  --text-dark: #212529;
+  --accent-color: #4a9bce;       /* muted sky — 살짝 더 채도 있는 하늘색 */
+  --accent-dark: #2e7aab;        /* deeper sky — 호버 시 진해지는 색 */
+  --bg-dark: #0a1929;            /* midnight navy — Hero/푸터 배경 */
+  --bg-dark-light: #14253c;      /* 약간 밝은 navy — Hero 그라디언트 끝 */
+  --bg-soft: #f5f7fa;            /* cool gray-50 — navy 톤과 어울리는 회백색 */
+  --text-dark: #1a1f2e;          /* near-black slate */
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
 
@@ -22,12 +24,12 @@ body {
 
 /* ----- Navbar ----- */
 #mainNav {
-  background-color: rgba(26, 26, 26, 0.0);
+  background-color: rgba(10, 25, 41, 0.0);
   transition: background-color 0.3s ease, padding 0.3s ease;
   padding: 1.25rem 0;
 }
 #mainNav.scrolled {
-  background-color: rgba(26, 26, 26, 0.95);
+  background-color: rgba(10, 25, 41, 0.95);
   padding: 0.6rem 0;
   backdrop-filter: blur(8px);
 }
@@ -42,18 +44,28 @@ body {
 
 /* ----- Hero ----- */
 .hero {
-  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+  background: linear-gradient(135deg, var(--bg-dark) 0%, var(--bg-dark-light) 100%);
   color: #fff;
   padding-top: 6rem;
 }
 .hero .display-2 { line-height: 1.1; }
 .text-accent { color: var(--accent-color) !important; }
+.heading-navy {
+  color: var(--bg-dark) !important;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  position: relative;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid rgba(10, 25, 41, 0.12);
+}
 
 /* ----- Buttons ----- */
 .btn-accent {
   background-color: var(--accent-color);
   border-color: var(--accent-color);
   color: #fff;
+  font-weight: 600;
+  letter-spacing: 0.01em;
 }
 .btn-accent:hover,
 .btn-accent:focus {
@@ -74,11 +86,11 @@ body {
 .section-title::after {
   content: '';
   display: block;
-  width: 60px;
-  height: 4px;
+  width: 48px;
+  height: 2px;
   background: var(--accent-color);
-  margin: 0.75rem auto 0;
-  border-radius: 2px;
+  margin: 0.85rem auto 0;
+  border-radius: 1px;
 }
 .section-subtitle { color: #6c757d; font-size: 1.1rem; }
 
@@ -96,8 +108,61 @@ body {
 .card:hover { transform: translateY(-6px); box-shadow: 0 1rem 2rem rgba(0,0,0,0.1) !important; }
 
 /* ----- Publications ----- */
-.publication-list { padding-left: 1.25rem; }
+.publication-list {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+  counter-reset: pub-counter;
+}
+ol.publication-list > li {
+  position: relative;
+  background: #fff;
+  border: 1px solid #e9ecef;
+  border-radius: 10px;
+  padding: 1.1rem 1.25rem 1.1rem 3.6rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+  transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+}
+/* 번호 뱃지 — value 속성을 우선 사용해서 reversed 순서 그대로 표시 */
+ol.publication-list > li::before {
+  content: attr(value);
+  position: absolute;
+  left: 1rem;
+  top: 1.15rem;
+  width: 1.9rem;
+  height: 1.9rem;
+  border-radius: 50%;
+  background: var(--accent-color);
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12);
+  transition: transform 0.22s ease;
+}
+ol.publication-list > li:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 0.75rem 1.5rem rgba(0, 0, 0, 0.10);
+  border-color: var(--accent-color);
+}
+ol.publication-list > li:hover::before {
+  transform: scale(1.08);
+}
 .pub-title { font-size: 1.05rem; }
+.pub-authors { font-size: 0.95rem; }
+.pub-venue { font-size: 0.92rem; }
+@media (max-width: 576px) {
+  ol.publication-list > li {
+    padding: 3.6rem 1rem 1rem 1rem;
+  }
+  ol.publication-list > li::before {
+    top: 0.75rem;
+    left: 0.75rem;
+  }
+}
 
 /* ----- Contact / Social ----- */
 .social-links a {
@@ -143,6 +208,21 @@ body {
 }
 .timeline-item h5 { font-size: 1.1rem; }
 
+/* ----- Project detail card (Projects 페이지) ----- */
+.project-detail {
+  background: #fff;
+  border: 1px solid #e9ecef !important;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+  transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+}
+.project-detail:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 0.75rem 1.5rem rgba(0, 0, 0, 0.10);
+  border-color: var(--accent-color) !important;
+}
+.project-detail h5 { font-size: 1.05rem; }
+
 /* ----- Project / Award list ----- */
 .project-list {
   list-style: none;
@@ -161,8 +241,13 @@ body {
   .project-list li { flex-direction: column; gap: 0.25rem; }
 }
 
+/* ----- Backgrounds ----- */
+section.bg-light { background-color: var(--bg-soft) !important; }
+
 /* ----- Footer ----- */
-footer { background: #f8f9fa; }
+footer { background: var(--bg-soft); }
+footer.bg-dark { background-color: var(--bg-dark) !important; }
+footer.bg-dark .text-muted { color: rgba(255, 255, 255, 0.75) !important; }
 
 /* ----- Responsive tweaks ----- */
 @media (max-width: 768px) {
