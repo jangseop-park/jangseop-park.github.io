@@ -50,6 +50,10 @@ body {
 }
 .hero .display-2 { line-height: 1.1; }
 .text-accent { color: var(--accent-color) !important; }
+.hero-emphasis {
+  color: #f5b870;       /* warm amber — navy + sky 보색 */
+  font-weight: 600;
+}
 .heading-navy {
   color: var(--bg-dark) !important;
   font-weight: 700;
