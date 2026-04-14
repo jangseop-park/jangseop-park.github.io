@@ -347,9 +347,9 @@
   <script>
     AOS.init({ duration: 700, once: true, offset: 80 });
     (function () {
-      const titles = document.querySelectorAll('.section-title');
-      if (!titles.length || !('IntersectionObserver' in window)) {
-        titles.forEach((el) => el.classList.add('is-revealed'));
+      const targets = document.querySelectorAll('.section-title, .timeline-list');
+      if (!targets.length || !('IntersectionObserver' in window)) {
+        targets.forEach((el) => el.classList.add('is-revealed'));
         return;
       }
       const io = new IntersectionObserver((entries, obs) => {
@@ -359,8 +359,8 @@
             obs.unobserve(entry.target);
           }
         });
-      }, { threshold: 0.4 });
-      titles.forEach((el) => io.observe(el));
+      }, { threshold: 0.2 });
+      targets.forEach((el) => io.observe(el));
     })();
   </script>
   <script src="assets/js/main.js"></script>
