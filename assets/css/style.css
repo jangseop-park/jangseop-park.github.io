@@ -119,7 +119,7 @@ ol.publication-list > li {
   background: #fff;
   border: 1px solid #e9ecef;
   border-radius: 10px;
-  padding: 1.1rem 1.25rem 1.1rem 3.6rem;
+  padding: 1.1rem 1.25rem 1.1rem 3.2rem;
   margin-bottom: 1rem;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
   transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
@@ -129,14 +129,14 @@ ol.publication-list > li::before {
   content: attr(value);
   position: absolute;
   left: 1rem;
-  top: 1.15rem;
-  width: 1.9rem;
-  height: 1.9rem;
+  top: 1.2rem;
+  width: 1.6rem;
+  height: 1.6rem;
   border-radius: 50%;
   background: var(--accent-color);
   color: #fff;
   font-weight: 700;
-  font-size: 0.95rem;
+  font-size: 0.85rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -152,6 +152,14 @@ ol.publication-list > li:hover::before {
   transform: scale(1.08);
 }
 .pub-title { font-size: 1.05rem; }
+/* Publication/Project 제목의 strong을 짙은 회색으로 톤다운 */
+.pub-title strong,
+.project-detail h5 { color: #4b5563 !important; }
+/* Research lead 강조 — 더 진하고 굵게 */
+.lead-emphasis {
+  color: #1f2937 !important;
+  font-weight: 800;
+}
 .pub-authors { font-size: 0.95rem; }
 .pub-venue { font-size: 0.92rem; }
 @media (max-width: 576px) {
