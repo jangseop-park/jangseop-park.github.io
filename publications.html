@@ -67,7 +67,7 @@
           <h3 class="mt-5 mb-3 heading-navy">International Journal</h3>
           <ol class="publication-list" reversed>
 
-            <li class="mb-4" value="5">
+            <li class="mb-4 pub-clickable" value="5" data-href="https://doi.org/10.1016/j.neunet.2026.108560">
               <p class="pub-title mb-1"><strong>Point-DeepONet: Predicting Nonlinear Fields on Non-Parametric Geometries under Variable Load Conditions.</strong></p>
               <p class="pub-authors mb-1"><strong>Park, J.</strong>, &amp; Kang, N.<sup>*</sup></p>
               <p class="pub-venue mb-1 text-muted">Neural Networks, 108560, 2026.</p>
@@ -76,14 +76,14 @@
               <a href="https://www.kaggle.com/datasets/jangseop/point-deeponet-dataset" target="_blank" rel="noopener" class="btn btn-sm btn-outline-dark">Dataset</a>
             </li>
 
-            <li class="mb-4" value="4">
+            <li class="mb-4 pub-clickable" value="4" data-href="https://doi.org/10.1016/j.eswa.2025.126907">
               <p class="pub-title mb-1"><strong>Physics-constrained Graph Neural Networks for Spatio-temporal Prediction of Drop Impact on OLED Display Panels.</strong></p>
               <p class="pub-authors mb-1">Kim, J., <strong>Park, J.</strong>, Kim, N., Yu, Y., Chang, K., Woo, C. S., Yang, S., &amp; Kang, N.<sup>*</sup></p>
               <p class="pub-venue mb-1 text-muted">Expert Systems with Applications, 126907, 2025.</p>
               <a href="https://drive.google.com/file/d/19UGsFCe5Sy11yK7XyVSx3SH4UjWmDPvP/view?usp=drive_link" target="_blank" rel="noopener" class="btn btn-sm btn-outline-dark">PDF</a>
             </li>
 
-            <li class="mb-4" value="3">
+            <li class="mb-4 pub-clickable" value="3" data-href="https://doi.org/10.1115/1.4067089">
               <p class="pub-title mb-1"><strong>DeepJEB: 3D Deep Learning-Based Synthetic Jet Engine Bracket Dataset.</strong></p>
               <p class="pub-authors mb-1">Hong, S., Kwon, Y., Shin, D., <strong>Park, J.</strong>, &amp; Kang, N.<sup>*</sup></p>
               <p class="pub-venue mb-1 text-muted">Journal of Mechanical Design, 147(4), 2025.</p>
@@ -91,7 +91,7 @@
               <a href="https://www.narnia.ai/dataset" target="_blank" rel="noopener" class="btn btn-sm btn-outline-dark">Dataset</a>
             </li>
 
-            <li class="mb-4" value="2">
+            <li class="mb-4 pub-clickable" value="2" data-href="https://doi.org/10.1093/jcde/qwae102">
               <p class="pub-title mb-1"><strong>BMO-GNN: Bayesian Mesh Optimization for Graph Neural Networks to Enhance Engineering Performance Prediction.</strong></p>
               <p class="pub-authors mb-1"><strong>Park, J.</strong>, &amp; Kang, N.</p>
               <p class="pub-venue mb-1 text-muted">Journal of Computational Design and Engineering, 11(6), 260–271, 2024.</p>
@@ -100,7 +100,7 @@
               <a href="https://www.kaggle.com/datasets/jangseop/bmo-gnn-dataset" target="_blank" rel="noopener" class="btn btn-sm btn-outline-dark">Dataset</a>
             </li>
 
-            <li class="mb-4" value="1">
+            <li class="mb-4 pub-clickable" value="1" data-href="https://doi.org/10.1177/03611981221095516">
               <p class="pub-title mb-1"><strong>How to Measure the Network Vulnerability of Cities to Wildfires: Cases in California, USA.</strong></p>
               <p class="pub-authors mb-1">Yun, J., Lee, J., <strong>Park, J.</strong>, Chung, K., &amp; Lee, J.<sup>*</sup></p>
               <p class="pub-venue mb-1 text-muted">Transportation Research Record, 2676(12), 382–395, 2022.</p>
@@ -275,6 +275,32 @@
       }, { threshold: 0.4 });
       titles.forEach((el) => io.observe(el));
     })();
+
+    // Make publication cards clickable (open paper link in new tab as a real anchor click)
+    document.querySelectorAll('li.pub-clickable[data-href]').forEach((li) => {
+      const href = li.dataset.href;
+      li.setAttribute('role', 'link');
+      li.setAttribute('tabindex', '0');
+      const openLink = () => {
+        const a = document.createElement('a');
+        a.href = href;
+        a.target = '_blank';
+        a.rel = 'noopener';
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+      };
+      li.addEventListener('click', (e) => {
+        if (e.target.closest('a, button')) return; // 내부 버튼/링크는 그대로 동작
+        openLink();
+      });
+      li.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          openLink();
+        }
+      });
+    });
   </script>
 </body>
 </html>
