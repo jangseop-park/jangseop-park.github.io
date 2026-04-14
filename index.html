@@ -38,6 +38,7 @@
 
   <!-- ========================= HERO ========================= -->
   <header id="home" class="hero d-flex align-items-center min-vh-100">
+    <div id="particles-js" aria-hidden="true"></div>
     <div class="container text-center text-lg-start">
       <div class="row align-items-center">
         <div class="col-lg-11">
@@ -50,8 +51,7 @@
           <p class="mb-4 fs-5 text-white-50">
             I explore the intersection of <span class="hero-emphasis">Large Language Models</span> and
             <span class="hero-emphasis">Mechanical Engineering</span>,<br>
-            developing <span class="text-white fw-semibold">Agentic AI</span> for autonomous engineering design
-            and <span class="text-white fw-semibold">3D Surrogate Modeling</span> for design optimization.
+            <span id="hero-typed"></span>
           </p>
           <a href="#about" class="btn btn-accent btn-lg me-2">About Me</a>
           <a href="contact.html" class="btn btn-outline-light btn-lg">Contact</a>
@@ -305,6 +305,45 @@
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/typed.js@2.1.0/dist/typed.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+  <script>
+    if (document.getElementById('particles-js')) {
+      particlesJS('particles-js', {
+        particles: {
+          number: { value: 55, density: { enable: true, value_area: 900 } },
+          color: { value: '#ffffff' },
+          shape: { type: 'circle' },
+          opacity: { value: 0.35, random: true },
+          size: { value: 2.5, random: true },
+          line_linked: { enable: true, distance: 140, color: '#ffffff', opacity: 0.18, width: 1 },
+          move: { enable: true, speed: 1.1, direction: 'none', out_mode: 'out' },
+        },
+        interactivity: {
+          detect_on: 'canvas',
+          events: {
+            onhover: { enable: true, mode: 'repulse' },
+            onclick: { enable: false },
+            resize: true,
+          },
+          modes: { repulse: { distance: 120, duration: 0.4 } },
+        },
+        retina_detect: true,
+      });
+    }
+  </script>
+  <script>
+    if (document.getElementById('hero-typed')) {
+      new Typed('#hero-typed', {
+        strings: ['developing <span class="text-white fw-semibold">Agentic AI</span> for autonomous engineering design and <span class="text-white fw-semibold">3D Surrogate Modeling</span> for design optimization.'],
+        typeSpeed: 35,
+        startDelay: 500,
+        showCursor: true,
+        cursorChar: '|',
+        contentType: 'html',
+      });
+    }
+  </script>
   <script>
     AOS.init({ duration: 700, once: true, offset: 80 });
     (function () {

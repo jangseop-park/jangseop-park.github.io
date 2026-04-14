@@ -44,10 +44,18 @@ body {
 
 /* ----- Hero ----- */
 .hero {
-  background: linear-gradient(135deg, var(--bg-dark) 0%, var(--bg-dark-light) 100%);
+  background: var(--bg-dark);
   color: #fff;
   padding-top: 6rem;
+  position: relative;
+  overflow: hidden;
 }
+.hero > #particles-js {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+.hero > .container { position: relative; z-index: 1; }
 .hero .display-2 { line-height: 1.1; }
 .text-accent { color: var(--accent-color) !important; }
 .hero-emphasis {
@@ -264,9 +272,27 @@ footer.bg-dark { background-color: var(--bg-dark) !important; }
 footer.bg-dark .text-muted { color: rgba(255, 255, 255, 0.75) !important; }
 
 /* ----- Responsive tweaks ----- */
+@media (max-width: 992px) {
+  .hero .display-2 { font-size: 3.25rem; }
+  .hero .lead { font-size: 1.1rem; }
+  .hero .fs-5 { font-size: 1.05rem !important; }
+  .section-title { font-size: 2.2rem; }
+  .section-subtitle { font-size: 1rem; }
+  h3.mb-3 { font-size: 1.4rem; }
+}
 @media (max-width: 768px) {
-  .hero .display-2 { font-size: 3rem; }
+  .hero .display-2 { font-size: 2.75rem; }
+  .hero .lead { font-size: 1rem; }
+  .hero .fs-5 { font-size: 1rem !important; }
   .section-padding { padding: 4rem 0; }
-  .section-title { font-size: 2rem; }
+  .section-title { font-size: 1.9rem; }
   .profile-img { width: 180px; height: 180px; }
+}
+@media (max-width: 576px) {
+  .hero .display-2 { font-size: 2.4rem; }
+  .hero .lead { font-size: 0.95rem; }
+  .hero .fs-5 { font-size: 0.95rem !important; }
+  .section-title { font-size: 1.7rem; }
+  .section-subtitle { font-size: 0.95rem; }
+  h3.mb-3 { font-size: 1.25rem; }
 }
