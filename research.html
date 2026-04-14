@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Research — Jangseop Park</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body>
+
+  <!-- ========================= NAVBAR ========================= -->
+  <nav id="mainNav" class="navbar navbar-expand-lg navbar-dark fixed-top scrolled">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="index.html">JANGSEOP PARK</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu"
+              aria-controls="navMenu" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navMenu">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link active" href="research.html">Research</a></li>
+          <li class="nav-item"><a class="nav-link" href="publications.html">Publications</a></li>
+          <li class="nav-item"><a class="nav-link" href="projects.html">Projects</a></li>
+          <li class="nav-item"><a class="nav-link" href="index.html#contact">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container" style="padding-top: 120px; padding-bottom: 60px;">
+
+    <div class="row justify-content-center mb-5">
+      <div class="col-lg-9 text-center">
+        <h1 class="fw-bold mb-2">Research</h1>
+        <p class="text-muted">
+          LLM for Engineering Applications · Multi-Agent Systems ·
+          3D Deep Learning · Surrogate Modeling · Data-driven Design Optimization
+        </p>
+      </div>
+    </div>
+
+    <!-- ========================= RESEARCH INTERESTS ========================= -->
+    <h2 class="fw-bold mb-3 mt-4">Research Interests</h2>
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4 mb-5">
+      <div class="col">
+        <div class="card h-100 shadow-sm border-0">
+          <div class="card-body">
+            <div class="research-icon text-accent mb-3"><i class="bi bi-chat-square-dots"></i></div>
+            <h5 class="card-title">LLM for Engineering</h5>
+            <p class="card-text">
+              Leveraging large language models to inject domain knowledge into engineering
+              workflows, enabling automated reasoning and decision-making for design tasks.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card h-100 shadow-sm border-0">
+          <div class="card-body">
+            <div class="research-icon text-accent mb-3"><i class="bi bi-people-fill"></i></div>
+            <h5 class="card-title">Multi-Agent Systems</h5>
+            <p class="card-text">
+              Designing cooperating AI agents that decompose and solve complex
+              multi-disciplinary engineering problems — the foundation of autonomous design systems.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card h-100 shadow-sm border-0">
+          <div class="card-body">
+            <div class="research-icon text-accent mb-3"><i class="bi bi-box"></i></div>
+            <h5 class="card-title">3D Deep Learning</h5>
+            <p class="card-text">
+              Developing deep learning models for point clouds, meshes, and graphs,
+              applied to engineering shapes and physical simulations.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card h-100 shadow-sm border-0">
+          <div class="card-body">
+            <div class="research-icon text-accent mb-3"><i class="bi bi-cpu"></i></div>
+            <h5 class="card-title">Surrogate Modeling &amp; Optimization</h5>
+            <p class="card-text">
+              Building data-driven surrogates that replace costly physics simulations,
+              and using them to drive scalable design optimization.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================= FRAMEWORKS ========================= -->
+    <h2 class="fw-bold mb-3 mt-5">Selected Frameworks</h2>
+    <p class="text-muted mb-4">Ongoing work from the Smart Design Lab</p>
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+      <div class="col">
+        <div class="card h-100 border-0 bg-white shadow-sm">
+          <div class="card-body">
+            <span class="badge bg-dark mb-2">LLM · Multi-Agent</span>
+            <h6 class="fw-bold">AutoATC</h6>
+            <p class="small text-muted mb-0">
+              LLM-based multi-agent framework that automates Analytical Target Cascading
+              decomposition for multidisciplinary design problems.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card h-100 border-0 bg-white shadow-sm">
+          <div class="card-body">
+            <span class="badge bg-dark mb-2">3D DL · Operator Learning</span>
+            <h6 class="fw-bold">Point-DeepONet</h6>
+            <p class="small text-muted mb-0">
+              Predicts nonlinear fields on non-parametric 3D geometries under variable load
+              conditions — published in <em>Neural Networks</em>.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card h-100 border-0 bg-white shadow-sm">
+          <div class="card-body">
+            <span class="badge bg-dark mb-2">GNN · Bayesian Optimization</span>
+            <h6 class="fw-bold">BMO-GNN</h6>
+            <p class="small text-muted mb-0">
+              Bayesian Mesh Optimization for graph neural networks to enhance engineering
+              performance prediction (JCDE, 2024).
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card h-100 border-0 bg-white shadow-sm">
+          <div class="card-body">
+            <span class="badge bg-dark mb-2">Physics-guided · GNN</span>
+            <h6 class="fw-bold">Physics-constrained GNNs</h6>
+            <p class="small text-muted mb-0">
+              Spatio-temporal prediction of drop impact on OLED display panels
+              (Expert Systems with Applications, 2025).
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card h-100 border-0 bg-white shadow-sm">
+          <div class="card-body">
+            <span class="badge bg-dark mb-2">LLM · Constrained Optimization</span>
+            <h6 class="fw-bold">LLM-guided Adaptive Penalty</h6>
+            <p class="small text-muted mb-0">
+              Uses LLMs to adaptively update penalty parameters within Analytical Target
+              Cascading for constrained engineering optimization.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card h-100 border-0 bg-white shadow-sm">
+          <div class="card-body">
+            <span class="badge bg-dark mb-2">LLM · CAD</span>
+            <h6 class="fw-bold">DialogCAD</h6>
+            <p class="small text-muted mb-0">
+              Interactive CAD generation framework with a multi-agent system via Model
+              Context Protocol (KSME, 2025).
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="text-center mt-5">
+      <a href="publications.html" class="btn btn-accent">See Publications <i class="bi bi-arrow-right"></i></a>
+      <a href="projects.html" class="btn btn-outline-dark ms-2">See Projects <i class="bi bi-arrow-right"></i></a>
+    </div>
+
+  </main>
+
+  <footer class="py-4 text-center">
+    <div class="container">
+      <small class="text-muted">&copy; 2026 Jangseop Park · Smart Design Lab, KAIST. All rights reserved.</small>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/js/main.js"></script>
+</body>
+</html>
