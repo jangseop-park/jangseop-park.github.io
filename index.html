@@ -99,7 +99,7 @@
             3D Surrogate Modeling for Design Optimization
           </p>
           <ul class="list-unstyled mt-3">
-            <li><i class="bi bi-mortarboard-fill text-accent me-2"></i>Ph.D. Candidate · <a href="https://mo.kaist.ac.kr/" target="_blank" rel="noopener">CCS Graduate School of Mobility</a>, <a href="https://www.kaist.ac.kr/en/" target="_blank" rel="noopener">KAIST</a></li>
+            <li><i class="bi bi-mortarboard-fill text-accent me-2"></i>Ph.D. Candidate · <a href="https://mo.kaist.ac.kr/en/" target="_blank" rel="noopener">CCS Graduate School of Mobility</a>, <a href="https://www.kaist.ac.kr/en/" target="_blank" rel="noopener">KAIST</a></li>
             <li><i class="bi bi-person-badge-fill text-accent me-2"></i>Advisor: <a href="https://www.smartdesignlab.org/people/professor" target="_blank" rel="noopener">Prof. Namwoo Kang</a></li>
             <li><i class="bi bi-geo-alt-fill text-accent me-2"></i>Daejeon, South Korea</li>
             <li><i class="bi bi-envelope-fill text-accent me-2"></i><a href="mailto:jangseop@kaist.ac.kr">jangseop@kaist.ac.kr</a></li>
@@ -135,14 +135,14 @@
           <div class="timeline-list">
             <div class="timeline-item">
               <div class="d-flex flex-wrap justify-content-between">
-                <h6 class="mb-1 fw-bold">Ph.D. Candidate, <a href="https://mo.kaist.ac.kr/" target="_blank" rel="noopener" class="text-reset text-decoration-none">CCS Graduate School of Mobility</a></h6>
+                <h6 class="mb-1 fw-bold">Ph.D. Candidate, CCS Graduate School of Mobility</h6>
                 <span class="text-muted small">Mar. 2023 – Feb. 2027</span>
               </div>
               <p class="mb-0 text-muted small">KAIST · Advisor: Prof. Namwoo Kang</p>
             </div>
             <div class="timeline-item">
               <div class="d-flex flex-wrap justify-content-between">
-                <h6 class="mb-1 fw-bold">M.S., <a href="https://mo.kaist.ac.kr/" target="_blank" rel="noopener" class="text-reset text-decoration-none">CCS Graduate School of Mobility</a></h6>
+                <h6 class="mb-1 fw-bold">M.S., CCS Graduate School of Mobility</h6>
                 <span class="text-muted small">Aug. 2020 – Feb. 2023</span>
               </div>
               <p class="mb-0 text-muted small">KAIST · Advisor: Prof. Namwoo Kang</p>
@@ -238,12 +238,12 @@
       <!-- Selected Publications -->
       <h4 class="fw-bold mb-3">Selected Publications</h4>
       <ol class="publication-list">
-        <li class="mb-4" value="1">
+        <li class="mb-4 pub-clickable" value="1" data-href="publications.html">
           <p class="pub-title mb-1"><strong>AutoATC: Automated Analytical Target Cascading Decomposition with LLM-Based Multi-Agent System.</strong></p>
           <p class="pub-authors mb-1"><strong>J. Park</strong>, N. Kang<sup>*</sup>.</p>
           <p class="pub-venue mb-0 text-muted">Under review, 2026.</p>
         </li>
-        <li class="mb-4" value="2">
+        <li class="mb-4 pub-clickable" value="2" data-href="https://doi.org/10.1016/j.neunet.2026.108560">
           <p class="pub-title mb-1"><strong>Point-DeepONet: Predicting Nonlinear Fields on Non-Parametric Geometries under Variable Load Conditions.</strong></p>
           <p class="pub-authors mb-1"><strong>J. Park</strong>, N. Kang<sup>*</sup>.</p>
           <p class="pub-venue mb-1 text-muted">Neural Networks, 108560, 2026.</p>
@@ -364,6 +364,32 @@
       }, { threshold: 0.2 });
       targets.forEach((el) => io.observe(el));
     })();
+
+    // Make publication cards clickable (open paper link in new tab as a real anchor click)
+    document.querySelectorAll('li.pub-clickable[data-href]').forEach((li) => {
+      const href = li.dataset.href;
+      li.setAttribute('role', 'link');
+      li.setAttribute('tabindex', '0');
+      const openLink = () => {
+        const a = document.createElement('a');
+        a.href = href;
+        a.target = '_blank';
+        a.rel = 'noopener';
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+      };
+      li.addEventListener('click', (e) => {
+        if (e.target.closest('a, button')) return;
+        openLink();
+      });
+      li.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          openLink();
+        }
+      });
+    });
   </script>
   <script src="assets/js/main.js"></script>
 </body>
