@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>이상치 탐지 모델을 활용한 고장 예측 알고리즘 개발 — Jangseop Park</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../assets/css/style.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" />
+</head>
+<body>
+
+  <nav id="mainNav" class="navbar navbar-expand-lg navbar-dark fixed-top scrolled">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="../index.html">JANGSEOP PARK</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu"
+              aria-controls="navMenu" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navMenu">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="../index.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="../research.html">Research</a></li>
+          <li class="nav-item"><a class="nav-link" href="../publications.html">Publications</a></li>
+          <li class="nav-item"><a class="nav-link active" href="../projects.html">Projects</a></li>
+          <li class="nav-item"><a class="nav-link" href="../contact.html">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container" style="padding-top: 120px; padding-bottom: 60px;">
+
+    <div class="row justify-content-center mb-4">
+      <div class="col-lg-9">
+        <a href="../projects.html" class="text-muted small text-decoration-none d-block mb-2">
+          <i class="bi bi-arrow-left"></i> Back to Projects
+        </a>
+        <h1 class="section-title mt-3" data-aos="fade-up">이상치 탐지 모델을 활용한 고장 예측 알고리즘 개발</h1>
+        <p class="lead text-muted mb-1" data-aos="fade-up" data-aos-delay="150">
+          <em>Development of a Battery Failure Prediction Algorithm Based on Anomaly Detection</em>
+        </p>
+        <p class="text-muted small mb-0" data-aos="fade-up" data-aos-delay="300">
+          Hyundai Motor Group (Hyundai NGV) · Feb. 2024 – Mar. 2025
+        </p>
+      </div>
+    </div>
+
+    <div class="row justify-content-center mb-5">
+      <div class="col-lg-9" data-aos="fade-up">
+        <img src="framework/HYUNDAI_BATTERY.jpg" alt="이상치 탐지 모델 — 전기차 배터리" class="img-fluid rounded shadow-sm" />
+      </div>
+    </div>
+
+    <div class="row justify-content-center">
+      <div class="col-lg-9">
+        <h3 class="fw-bold heading-navy mt-4 mb-3" data-aos="fade-up">Overview</h3>
+        <p data-aos="fade-up">
+          전기차 배터리의 신뢰성은 차량 안전성과 직결되지만, <strong>실제 고장
+          (비정상) 데이터가 부족</strong>해 정확한 고장 예측이 어렵다. 본 과제는
+          KAIST·현대NGV 공동 연구로, <strong>실험실 데이터를 활용한 정상-비정상
+          식별 프레임워크</strong>를 제안하고, 실시간으로 <strong>팩·셀 단위
+          정밀 진단</strong>이 가능한 이상치 탐지 모델을 개발한다.
+        </p>
+
+        <h3 class="fw-bold heading-navy mt-5 mb-3" data-aos="fade-up">My Role</h3>
+        <ul data-aos="fade-up">
+          <li><strong>역할: 참여연구원(KAIST 박사과정)</strong></li>
+          <li>셀 단위 데이터 전처리 파이프라인 설계 및 시계열 예측 기법 담당</li>
+          <li>셀-셀 관계를 학습하는 그래프 오토인코더(GAE) 기반 이상 탐지 모델 구현·학습</li>
+          <li>셀 단위 이상 식별 결과 검증 및 Python 코드 결과물 패키징</li>
+        </ul>
+
+        <h3 class="fw-bold heading-navy mt-5 mb-3" data-aos="fade-up">Methodology</h3>
+        <p data-aos="fade-up">
+          
+          두 단계 프레임워크로 구성된다.
+          <span class="method-step">(1) <strong>팩 단위 탐지</strong>:
+          AE / VAE / β-VAE 기반 representation에 LSTM을 결합해 시계열 잠재
+          공간에서 비정상 상태를 탐지 (협업 파트).</span><span class="method-step">(2) <strong>셀 단위 탐지 (본인 담당)</strong>:
+          셀-셀 관계를 그래프로 표현하고 그래프 오토인코더(GAE)로 셀 간
+          상호작용을 학습해 개별 셀의 이상을 식별. 두 모델은 정상 데이터만으로
+          학습되어 비정상 데이터 부족 문제를 우회한다.</span>
+        </p>
+
+        <h3 class="fw-bold heading-navy mt-5 mb-3" data-aos="fade-up">Results / Key Outcomes</h3>
+        <ul data-aos="fade-up">
+          <li>비정상 데이터 없이도 높은 예측 성능을 유지하는 이상치 탐지 모델 확보</li>
+          <li>팩·셀 단위 정밀 진단 → 특정 모듈만 교체 가능, 유지보수 비용 절감</li>
+          <li>GCN 기반 셀 단위 분석으로 배터리 성능 저하를 사전 예측 → 차량 수명 연장</li>
+          <li>Python 기반 분석 코드 제공 + 논문/특허 출원 검토</li>
+        </ul>
+
+        <div class="text-center mt-5">
+          <a href="../projects.html" class="btn btn-outline-dark">
+            <i class="bi bi-arrow-left me-1"></i>Back to Projects
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <footer class="py-4 text-center">
+    <div class="container">
+      <small class="text-muted">&copy; 2026 Jangseop Park · Smart Design Lab, KAIST. All rights reserved.</small>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+  <script>
+    AOS.init({ duration: 700, once: true, offset: 80 });
+    (function () {
+      const titles = document.querySelectorAll('.section-title');
+      if (!titles.length || !('IntersectionObserver' in window)) {
+        titles.forEach((el) => el.classList.add('is-revealed'));
+        return;
+      }
+      const io = new IntersectionObserver((entries, obs) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-revealed');
+            obs.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1, rootMargin: '0px 0px -10% 0px' });
+      titles.forEach((el) => io.observe(el));
+    })();
+  </script>
+</body>
+</html>

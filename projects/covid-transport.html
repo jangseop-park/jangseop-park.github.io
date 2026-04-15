@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>감염병을 고려한 수송실적 분석 및 타 교통수단과의 대체성 분석 — Jangseop Park</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../assets/css/style.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" />
+</head>
+<body>
+
+  <nav id="mainNav" class="navbar navbar-expand-lg navbar-dark fixed-top scrolled">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="../index.html">JANGSEOP PARK</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu"
+              aria-controls="navMenu" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navMenu">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="../index.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="../research.html">Research</a></li>
+          <li class="nav-item"><a class="nav-link" href="../publications.html">Publications</a></li>
+          <li class="nav-item"><a class="nav-link active" href="../projects.html">Projects</a></li>
+          <li class="nav-item"><a class="nav-link" href="../contact.html">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container" style="padding-top: 120px; padding-bottom: 60px;">
+
+    <div class="row justify-content-center mb-4">
+      <div class="col-lg-9">
+        <a href="../projects.html" class="text-muted small text-decoration-none d-block mb-2">
+          <i class="bi bi-arrow-left"></i> Back to Projects
+        </a>
+        <h1 class="section-title mt-3" data-aos="fade-up">감염병을 고려한 수송실적 분석 및 타 교통수단과의 대체성 분석</h1>
+        <p class="lead text-muted mb-1" data-aos="fade-up" data-aos-delay="150">
+          <em>Transportation Performance Analysis and Modal Substitutability under COVID-19</em>
+        </p>
+        <p class="text-muted small mb-0" data-aos="fade-up" data-aos-delay="300">
+          KORAIL · Sep. 2020 – Feb. 2021
+        </p>
+      </div>
+    </div>
+
+    <div class="row justify-content-center mb-5">
+      <div class="col-lg-9" data-aos="fade-up">
+        <img src="framework/KORAIL.jpg" alt="COVID-19 철도 수송실적 분석" class="img-fluid rounded shadow-sm" />
+      </div>
+    </div>
+
+    <div class="row justify-content-center">
+      <div class="col-lg-9">
+        <h3 class="fw-bold heading-navy mt-4 mb-3" data-aos="fade-up">Overview</h3>
+        <p data-aos="fade-up">
+          <strong>COVID-19 감염병 확산</strong>은 철도 수송실적에 직접적인 영향을
+          미쳤다. 본 과제는 한국철도공사(KORAIL)와 협력하여, <strong>권역별·주요역별
+          철도-도로 간 수송실적 변화와 대체성</strong>을 분석하고, <strong>확진자
+          추이·거리두기 단계와 승객 수의 상관관계</strong>를 시각화하는 의사결정
+          지원 도구를 개발한다.
+        </p>
+
+        <h3 class="fw-bold heading-navy mt-5 mb-3" data-aos="fade-up">My Role</h3>
+        <ul data-aos="fade-up">
+          <li><strong>역할: 실무책임자(KAIST 석사과정)</strong> — 데이터 분석 및 시각화 모듈 담당</li>
+          <li>권역별·주요역별 통계 검색 인터페이스 설계</li>
+          <li>철도-도로 수송실적 상관성 분석 및 매핑 시각화</li>
+          <li>전염병 단계와 승객수 시계열 비교 차트 자동 생성</li>
+        </ul>
+
+        <h3 class="fw-bold heading-navy mt-5 mb-3" data-aos="fade-up">Methodology</h3>
+        <p data-aos="fade-up">
+          
+          시각화 및 분석 도구를 세 모듈로 구성한다.
+          <span class="method-step">(1) <strong>조회 인터페이스</strong>:
+          출발/도착 권역, 조회 연도/주차, 데이터(철도-도로), 표출(수송실적/상관계수)
+          등 검색 조건 입력.</span><span class="method-step">(2) <strong>권역기준 교통수단별 교통혼잡도 상관성
+          분석</strong>: 출발·도착 권역 선택 시 대한민국 지도 위에 권역간
+          이동량을 시각화하고 두 시점(예: 2019 vs 2020)을 병렬 비교.</span><span class="method-step">(3) <strong>전염병에 따른 수송실적 분석</strong>: 확진자 수·거리두기
+          단계별 승객 수를 일별·월별 차트로 표현해 정책 효과를 정량적으로 확인.</span>
+        </p>
+
+        <h3 class="fw-bold heading-navy mt-5 mb-3" data-aos="fade-up">Results / Key Outcomes</h3>
+        <ul data-aos="fade-up">
+          <li>웹 기반 권역별/주요역별 수송실적 시각화 도구 완성</li>
+          <li>철도-도로 대체성 정량적 분석으로 정책 의사결정 근거 제공</li>
+          <li>거리두기 단계별 승객 수 패턴 도출 → 향후 감염병 대응 시 참조 자료로 활용</li>
+        </ul>
+
+        <div class="text-center mt-5">
+          <a href="../projects.html" class="btn btn-outline-dark">
+            <i class="bi bi-arrow-left me-1"></i>Back to Projects
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <footer class="py-4 text-center">
+    <div class="container">
+      <small class="text-muted">&copy; 2026 Jangseop Park · Smart Design Lab, KAIST. All rights reserved.</small>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+  <script>
+    AOS.init({ duration: 700, once: true, offset: 80 });
+    (function () {
+      const titles = document.querySelectorAll('.section-title');
+      if (!titles.length || !('IntersectionObserver' in window)) {
+        titles.forEach((el) => el.classList.add('is-revealed'));
+        return;
+      }
+      const io = new IntersectionObserver((entries, obs) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-revealed');
+            obs.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1, rootMargin: '0px 0px -10% 0px' });
+      titles.forEach((el) => io.observe(el));
+    })();
+  </script>
+</body>
+</html>
