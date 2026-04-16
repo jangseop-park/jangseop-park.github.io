@@ -8,7 +8,12 @@
     .then((r) => (r.ok ? r.json() : Promise.reject(r.status)))
     .then((data) => {
       const d = new Date(data.commit.committer.date);
-      el.textContent = d.toISOString().split('T')[0];
+      el.textContent = d.toLocaleDateString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric',
+        timeZone: 'UTC',
+      });
     })
     .catch(() => {
       el.textContent = '—';
