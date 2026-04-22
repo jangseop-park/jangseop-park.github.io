@@ -67,8 +67,23 @@
     .news-item a { text-decoration: none; color: #212529; font-weight: 500; }
     .news-item a:hover { text-decoration: underline; color: #0d6efd; }
     .news-item .summary { font-size: .82rem; color: #6c757d; margin-top: .15rem; }
-    @media (max-width: 576px) {
-      .date-sidebar { width: 110px; }
+
+    /* Mobile: dropdown instead of sidebar */
+    .mobile-date-wrap { display: none; }
+
+    @media (max-width: 767px) {
+      .mobile-date-wrap { display: block; }
+      .ai-news-layout {
+        flex-direction: column;
+        border: none;
+        border-radius: 0;
+        min-height: unset;
+      }
+      .date-sidebar { display: none; }
+      .news-panel {
+        max-height: none;
+        padding: 1rem 0;
+      }
     }
   </style>
 </head>
@@ -106,8 +121,14 @@
 
     <div class="row justify-content-center">
       <div class="col-lg-10">
+
+        <!-- Mobile: date dropdown -->
+        <div class="mobile-date-wrap mb-3">
+          <select class="form-select" id="date-select"></select>
+        </div>
+
         <div class="ai-news-layout">
-          <!-- Sidebar -->
+          <!-- Desktop sidebar -->
           <div class="date-sidebar" id="date-sidebar">
             <div class="d-flex align-items-center justify-content-center py-4 text-muted" style="font-size:.8rem">
               <div class="spinner-border spinner-border-sm me-2"></div>
@@ -120,6 +141,7 @@
             </div>
           </div>
         </div>
+
       </div>
     </div>
 
@@ -149,6 +171,7 @@
     }
 
     function renderSidebar(dates, active) {
+      // Desktop sidebar
       const el = document.getElementById('date-sidebar');
       el.innerHTML = dates.map(d => {
         const [y, m, day] = d.split('-');
@@ -161,14 +184,25 @@
         item.addEventListener('click', () => {
           el.querySelectorAll('.date-item').forEach(i => i.classList.remove('active'));
           item.classList.add('active');
+          sel.value = item.dataset.date;
           renderNews(item.dataset.date);
         });
       });
+
+      // Mobile dropdown
+      const sel = document.getElementById('date-select');
+      sel.innerHTML = dates.map(d => `<option value="${d}"${d === active ? ' selected' : ''}>${d}</option>`).join('');
+      sel.onchange = () => {
+        el.querySelectorAll('.date-item').forEach(i => {
+          i.classList.toggle('active', i.dataset.date === sel.value);
+        });
+        renderNews(sel.value);
+      };
     }
 
     async function renderNews(date) {
       const panel = document.getElementById('news-panel');
-      panel.innerHTML = `<div class="d-flex align-items-center justify-content-center h-100 text-muted">
+      panel.innerHTML = `<div class="d-flex align-items-center justify-content-center py-5 text-muted">
         <div class="spinner-border spinner-border-sm me-2"></div>Loading…</div>`;
       const data = await loadDay(date);
       if (!data) {
