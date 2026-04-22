@@ -67,6 +67,7 @@
     .news-item a { text-decoration: none; color: #212529; font-weight: 500; }
     .news-item a:hover { text-decoration: underline; color: #0d6efd; }
     .news-item .summary { font-size: .82rem; color: #6c757d; margin-top: .15rem; }
+    .lang-btn.active { background: #212529 !important; color: #fff !important; }
 
     /* Mobile: dropdown instead of sidebar */
     .mobile-date-wrap { display: none; }
@@ -122,9 +123,17 @@
     <div class="row justify-content-center">
       <div class="col-lg-10">
 
-        <!-- Mobile: date dropdown -->
-        <div class="mobile-date-wrap mb-3">
-          <select class="form-select" id="date-select"></select>
+        <!-- Controls row: mobile date dropdown + language toggle -->
+        <div class="d-flex justify-content-between align-items-center mb-3 gap-2">
+          <div class="mobile-date-wrap flex-grow-1" style="display:none;">
+            <select class="form-select form-select-sm" id="date-select"></select>
+          </div>
+          <div class="ms-auto">
+            <div class="btn-group btn-group-sm" role="group" aria-label="Language">
+              <button type="button" class="btn btn-outline-dark lang-btn active" id="btn-ko" data-lang="ko">한국어</button>
+              <button type="button" class="btn btn-outline-dark lang-btn" id="btn-en" data-lang="en">English</button>
+            </div>
+          </div>
         </div>
 
         <div class="ai-news-layout">
@@ -158,6 +167,14 @@
     const REPO = 'jangseop-park/ai-news-daily';
     const RAW = `https://raw.githubusercontent.com/${REPO}/main`;
 
+    let currentLang = 'ko';
+    let currentDate = null;
+
+    function t(item, koField, enField) {
+      if (currentLang === 'en') return item[enField] || item[koField] || '';
+      return item[koField] || '';
+    }
+
     async function loadIndex() {
       const res = await fetch(`${RAW}/index.json`);
       if (!res.ok) return [];
@@ -171,7 +188,6 @@
     }
 
     function renderSidebar(dates, active) {
-      // Desktop sidebar
       const el = document.getElementById('date-sidebar');
       el.innerHTML = dates.map(d => {
         const [y, m, day] = d.split('-');
@@ -184,19 +200,20 @@
         item.addEventListener('click', () => {
           el.querySelectorAll('.date-item').forEach(i => i.classList.remove('active'));
           item.classList.add('active');
-          sel.value = item.dataset.date;
-          renderNews(item.dataset.date);
+          document.getElementById('date-select').value = item.dataset.date;
+          currentDate = item.dataset.date;
+          renderNews(currentDate);
         });
       });
 
-      // Mobile dropdown
       const sel = document.getElementById('date-select');
       sel.innerHTML = dates.map(d => `<option value="${d}"${d === active ? ' selected' : ''}>${d}</option>`).join('');
       sel.onchange = () => {
         el.querySelectorAll('.date-item').forEach(i => {
           i.classList.toggle('active', i.dataset.date === sel.value);
         });
-        renderNews(sel.value);
+        currentDate = sel.value;
+        renderNews(currentDate);
       };
     }
 
@@ -215,26 +232,36 @@
           ${(data.github_trending || []).map(item => `
             <div class="news-item">
               <a href="${item.url}" target="_blank" rel="noopener">${item.name}</a>
-              <div class="summary">${item.description || ''}</div>
+              <div class="summary">${t(item, 'description', 'description_en')}</div>
             </div>`).join('')}
         </div>
         <div class="news-section">
           <h6>📄 Hugging Face Papers</h6>
           ${(data.huggingface || []).map(item => `
             <div class="news-item">
-              <a href="${item.url}" target="_blank" rel="noopener">${item.title}</a>
-              <div class="summary">${item.summary || ''}</div>
+              <a href="${item.url}" target="_blank" rel="noopener">${t(item, 'title', 'title_en') || item.title}</a>
+              <div class="summary">${t(item, 'summary', 'summary_en')}</div>
             </div>`).join('')}
         </div>
         <div class="news-section">
           <h6>🦉 GeekNews</h6>
           ${(data.geeknews || []).map(item => `
             <div class="news-item">
-              <a href="${item.url}" target="_blank" rel="noopener">${item.title}</a>
-              <div class="summary">${item.summary || ''}</div>
+              <a href="${item.url}" target="_blank" rel="noopener">${t(item, 'title', 'title_en') || item.title}</a>
+              <div class="summary">${t(item, 'summary', 'summary_en')}</div>
             </div>`).join('')}
         </div>`;
     }
+
+    // Language toggle
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentLang = btn.dataset.lang;
+        if (currentDate) renderNews(currentDate);
+      });
+    });
 
     async function init() {
       const dates = await loadIndex();
@@ -243,8 +270,9 @@
         document.getElementById('news-panel').innerHTML = '<p class="text-muted text-center mt-5">Check back tomorrow!</p>';
         return;
       }
-      renderSidebar(dates, dates[0]);
-      await renderNews(dates[0]);
+      currentDate = dates[0];
+      renderSidebar(dates, currentDate);
+      await renderNews(currentDate);
     }
 
     init();
