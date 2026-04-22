@@ -304,7 +304,8 @@ ol.publication-list > li:hover::before {
   flex-shrink: 0;
 }
 @media (max-width: 576px) {
-  .project-logo { width: 120px; height: 70px; padding: 6px; }
+  .project-logo { width: 72px; height: 44px; padding: 4px; }
+  .project-detail { flex-direction: column !important; align-items: flex-start !important; gap: 0.6rem !important; }
 }
 
 /* ----- Project / Award list ----- */
