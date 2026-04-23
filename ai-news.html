@@ -172,6 +172,7 @@
 
     let currentLang = 'ko';
     let currentDate = null;
+    const dataCache = {};   // JS-side cache — avoids re-fetching on lang switch
 
     function t(item, koField, enField) {
       if (currentLang === 'en') return item[enField] || item[koField] || '';
@@ -179,15 +180,50 @@
     }
 
     async function loadIndex() {
-      const res = await fetch(`${RAW}/index.json`);
+      const res = await fetch(`${RAW}/index.json?t=${Date.now()}`);
       if (!res.ok) return [];
       return res.json();
     }
 
     async function loadDay(date) {
-      const res = await fetch(`${RAW}/data/${date}.json`);
+      if (dataCache[date]) return dataCache[date];
+      const res = await fetch(`${RAW}/data/${date}.json?t=${Date.now()}`);
       if (!res.ok) return null;
-      return res.json();
+      dataCache[date] = await res.json();
+      return dataCache[date];
+    }
+
+    function renderPanel(data) {
+      const panel = document.getElementById('news-panel');
+      if (!data) {
+        panel.innerHTML = `<p class="text-muted text-center mt-5">No data for ${currentDate}.</p>`;
+        return;
+      }
+      panel.innerHTML = `
+        <div class="news-section">
+          <h6>🔥 GitHub Trending · Python</h6>
+          ${(data.github_trending || []).map(item => `
+            <div class="news-item">
+              <a href="${item.url}" target="_blank" rel="noopener">${item.name}</a>
+              <div class="summary">${t(item, 'description', 'description_en')}</div>
+            </div>`).join('')}
+        </div>
+        <div class="news-section">
+          <h6>📄 Hugging Face Papers</h6>
+          ${(data.huggingface || []).map(item => `
+            <div class="news-item">
+              <a href="${item.url}" target="_blank" rel="noopener">${t(item, 'title', 'title_en') || item.title}</a>
+              <div class="summary">${t(item, 'summary', 'summary_en')}</div>
+            </div>`).join('')}
+        </div>
+        <div class="news-section">
+          <h6>🦉 GeekNews</h6>
+          ${(data.geeknews || []).map(item => `
+            <div class="news-item">
+              <a href="${item.url}" target="_blank" rel="noopener">${t(item, 'title', 'title_en') || item.title}</a>
+              <div class="summary">${t(item, 'summary', 'summary_en')}</div>
+            </div>`).join('')}
+        </div>`;
     }
 
     function renderSidebar(dates, active) {
@@ -225,44 +261,16 @@
       panel.innerHTML = `<div class="d-flex align-items-center justify-content-center py-5 text-muted">
         <div class="spinner-border spinner-border-sm me-2"></div>Loading…</div>`;
       const data = await loadDay(date);
-      if (!data) {
-        panel.innerHTML = `<p class="text-muted text-center mt-5">No data for ${date}.</p>`;
-        return;
-      }
-      panel.innerHTML = `
-        <div class="news-section">
-          <h6>🔥 GitHub Trending · Python</h6>
-          ${(data.github_trending || []).map(item => `
-            <div class="news-item">
-              <a href="${item.url}" target="_blank" rel="noopener">${item.name}</a>
-              <div class="summary">${t(item, 'description', 'description_en')}</div>
-            </div>`).join('')}
-        </div>
-        <div class="news-section">
-          <h6>📄 Hugging Face Papers</h6>
-          ${(data.huggingface || []).map(item => `
-            <div class="news-item">
-              <a href="${item.url}" target="_blank" rel="noopener">${t(item, 'title', 'title_en') || item.title}</a>
-              <div class="summary">${t(item, 'summary', 'summary_en')}</div>
-            </div>`).join('')}
-        </div>
-        <div class="news-section">
-          <h6>🦉 GeekNews</h6>
-          ${(data.geeknews || []).map(item => `
-            <div class="news-item">
-              <a href="${item.url}" target="_blank" rel="noopener">${t(item, 'title', 'title_en') || item.title}</a>
-              <div class="summary">${t(item, 'summary', 'summary_en')}</div>
-            </div>`).join('')}
-        </div>`;
+      renderPanel(data);
     }
 
-    // Language toggle
+    // Language toggle — re-render from JS cache, no network fetch
     document.querySelectorAll('.lang-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
         currentLang = btn.dataset.lang;
-        if (currentDate) renderNews(currentDate);
+        if (currentDate && dataCache[currentDate]) renderPanel(dataCache[currentDate]);
       });
     });
 
