@@ -322,8 +322,8 @@ ol.publication-list > li:hover::before {
 }
 .project-list li:last-child { border-bottom: none; }
 .project-list li > span:first-child { flex: 1; }
-@media (max-width: 576px) {
-  .project-list li { flex-direction: column; gap: 0.25rem; }
+@media (max-width: 575.98px) {
+  .project-list li { flex-direction: column; justify-content: flex-start; gap: 0.25rem; }
 }
 
 /* ----- Backgrounds ----- */
