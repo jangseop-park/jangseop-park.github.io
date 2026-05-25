@@ -13,3 +13,8 @@ cv/
 JCR/
 projects/documents/
 scholar/
+
+# Private repo guard (절대 public으로 push되면 안 됨)
+.git-private/
+.gitignore-private
+README-private.md
