@@ -9,7 +9,8 @@ Jangseop_Park.jpg
 editor.html
 README.md
 serve.py
-cv/
+cv/*.aux
+cv/*.out
 JCR/
 projects/documents/
 scholar/
