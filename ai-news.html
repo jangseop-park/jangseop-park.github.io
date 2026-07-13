@@ -182,7 +182,8 @@
     async function loadIndex() {
       const res = await fetch(`${RAW}/index.json?t=${Date.now()}`);
       if (!res.ok) return [];
-      return res.json();
+      const data = await res.json();
+      return Array.isArray(data) ? data : (data.dates || []);
     }
 
     async function loadDay(date) {
