@@ -49,6 +49,47 @@
       color: #fff;
       font-weight: 600;
     }
+    .date-sidebar .month-header {
+      padding: .55rem 1rem;
+      font-size: .78rem;
+      font-weight: 700;
+      color: #495057;
+      background: #eceff2;
+      border-top: 1px solid #dee2e6;
+      border-bottom: 1px solid #dee2e6;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      user-select: none;
+    }
+    .date-sidebar .month-header:first-child { border-top: none; }
+    .date-sidebar .month-header .chev {
+      transition: transform .15s;
+      font-size: .7rem;
+      opacity: .6;
+    }
+    .date-sidebar .month-group.collapsed .chev { transform: rotate(-90deg); }
+    .date-sidebar .month-group.collapsed .date-item { display: none; }
+    .trend-card {
+      border: 1px solid #dee2e6;
+      border-radius: .5rem;
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.25rem;
+      background: #fff;
+    }
+    .trend-card h6 {
+      font-size: .85rem;
+      font-weight: 700;
+      color: #495057;
+      margin-bottom: .75rem;
+      text-transform: uppercase;
+      letter-spacing: .03em;
+    }
+    .trend-card .chart-wrap {
+      position: relative;
+      height: 180px;
+    }
     .news-panel {
       flex: 1;
       padding: 1.5rem;
@@ -139,6 +180,11 @@
           </div>
         </div>
 
+        <div class="trend-card">
+          <h6><i class="bi bi-graph-up me-1"></i>Category Activity — last 30 days</h6>
+          <div class="chart-wrap"><canvas id="trend-chart"></canvas></div>
+        </div>
+
         <div class="ai-news-layout">
           <!-- Desktop sidebar -->
           <div class="date-sidebar" id="date-sidebar">
@@ -166,6 +212,7 @@
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
   <script>
     const REPO = 'jangseop-park/ai-news-daily';
     const RAW = `https://raw.githubusercontent.com/${REPO}/main`;
@@ -227,34 +274,117 @@
         </div>`;
     }
 
+    const MONTH_NAMES = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+    function selectDate(date) {
+      const el = document.getElementById('date-sidebar');
+      el.querySelectorAll('.date-item').forEach(i => {
+        i.classList.toggle('active', i.dataset.date === date);
+      });
+      const sel = document.getElementById('date-select');
+      if (sel) sel.value = date;
+      currentDate = date;
+      renderNews(date);
+      if (trendChart) highlightTrendPoint(date);
+    }
+
     function renderSidebar(dates, active) {
       const el = document.getElementById('date-sidebar');
-      el.innerHTML = dates.map(d => {
-        const [y, m, day] = d.split('-');
-        return `<div class="date-item${d === active ? ' active' : ''}" data-date="${d}">
-          <div class="fw-semibold">${m}/${day}</div>
-          <div style="font-size:.75rem;opacity:.7">${y}</div>
-        </div>`;
-      }).join('');
+      const groups = new Map();
+      dates.forEach(d => {
+        const key = d.slice(0, 7);
+        if (!groups.has(key)) groups.set(key, []);
+        groups.get(key).push(d);
+      });
+      const activeMonth = active.slice(0, 7);
+      const html = [];
+      for (const [monthKey, ds] of groups) {
+        const [y, m] = monthKey.split('-');
+        const label = `${MONTH_NAMES[parseInt(m, 10) - 1]} ${y}`;
+        const collapsed = monthKey !== activeMonth ? ' collapsed' : '';
+        html.push(`<div class="month-group${collapsed}" data-month="${monthKey}">
+          <div class="month-header">
+            <span>${label} <span class="text-muted fw-normal">· ${ds.length}</span></span>
+            <span class="chev"><i class="bi bi-chevron-down"></i></span>
+          </div>
+          ${ds.map(d => {
+            const [, mm, day] = d.split('-');
+            return `<div class="date-item${d === active ? ' active' : ''}" data-date="${d}">
+              <div class="fw-semibold">${mm}/${day}</div>
+            </div>`;
+          }).join('')}
+        </div>`);
+      }
+      el.innerHTML = html.join('');
+
+      el.querySelectorAll('.month-header').forEach(h => {
+        h.addEventListener('click', () => h.parentElement.classList.toggle('collapsed'));
+      });
       el.querySelectorAll('.date-item').forEach(item => {
-        item.addEventListener('click', () => {
-          el.querySelectorAll('.date-item').forEach(i => i.classList.remove('active'));
-          item.classList.add('active');
-          document.getElementById('date-select').value = item.dataset.date;
-          currentDate = item.dataset.date;
-          renderNews(currentDate);
-        });
+        item.addEventListener('click', () => selectDate(item.dataset.date));
       });
 
       const sel = document.getElementById('date-select');
       sel.innerHTML = dates.map(d => `<option value="${d}"${d === active ? ' selected' : ''}>${d}</option>`).join('');
-      sel.onchange = () => {
-        el.querySelectorAll('.date-item').forEach(i => {
-          i.classList.toggle('active', i.dataset.date === sel.value);
-        });
-        currentDate = sel.value;
-        renderNews(currentDate);
-      };
+      sel.onchange = () => selectDate(sel.value);
+    }
+
+    let trendChart = null;
+
+    function highlightTrendPoint(date) {
+      if (!trendChart) return;
+      const idx = trendChart.data.labels.indexOf(date);
+      trendChart.setActiveElements(idx >= 0 ? [
+        { datasetIndex: 0, index: idx },
+        { datasetIndex: 1, index: idx },
+        { datasetIndex: 2, index: idx },
+      ] : []);
+      trendChart.update('none');
+    }
+
+    async function renderTrendChart(dates) {
+      const ordered = [...dates].reverse();
+      const results = await Promise.all(ordered.map(d => loadDay(d)));
+      const gh = results.map(r => (r?.github_trending || []).length);
+      const hf = results.map(r => (r?.huggingface || []).length);
+      const gn = results.map(r => (r?.geeknews || []).length);
+
+      const ctx = document.getElementById('trend-chart').getContext('2d');
+      trendChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: ordered,
+          datasets: [
+            { label: 'GitHub Trending', data: gh, borderColor: '#f97316', backgroundColor: 'rgba(249,115,22,.15)', tension: .3, fill: true, borderWidth: 2, pointRadius: 2, pointHoverRadius: 5 },
+            { label: 'HF Papers',       data: hf, borderColor: '#0d6efd', backgroundColor: 'rgba(13,110,253,.15)',  tension: .3, fill: true, borderWidth: 2, pointRadius: 2, pointHoverRadius: 5 },
+            { label: 'GeekNews',        data: gn, borderColor: '#198754', backgroundColor: 'rgba(25,135,84,.15)',   tension: .3, fill: true, borderWidth: 2, pointRadius: 2, pointHoverRadius: 5 },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          interaction: { mode: 'index', intersect: false },
+          plugins: {
+            legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 11 } } },
+            tooltip: { callbacks: { title: items => items[0].label } },
+          },
+          scales: {
+            x: { ticks: { font: { size: 10 }, maxRotation: 0, autoSkip: true, maxTicksLimit: 8 }, grid: { display: false } },
+            y: { beginAtZero: true, ticks: { font: { size: 10 }, precision: 0 }, grid: { color: '#f0f0f0' } },
+          },
+          onClick: (evt, elements) => {
+            const points = trendChart.getElementsAtEventForMode(evt, 'index', { intersect: false }, false);
+            if (points.length) {
+              const date = trendChart.data.labels[points[0].index];
+              selectDate(date);
+              const monthKey = date.slice(0, 7);
+              const group = document.querySelector(`.month-group[data-month="${monthKey}"]`);
+              if (group) group.classList.remove('collapsed');
+            }
+          },
+        },
+      });
+      highlightTrendPoint(currentDate);
     }
 
     async function renderNews(date) {
@@ -285,6 +415,7 @@
       currentDate = dates[0];
       renderSidebar(dates, currentDate);
       await renderNews(currentDate);
+      renderTrendChart(dates).catch(err => console.error('trend chart failed', err));
     }
 
     init();
