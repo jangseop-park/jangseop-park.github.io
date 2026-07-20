@@ -216,6 +216,20 @@ ol.publication-list > li:hover::before {
 .role-lead { background: #eaf4fb; color: #1f6f9e; }
 /* Contributor — neutral grey (supporting role) */
 .role-contrib { background: #eef0f3; color: #5a6472; }
+/* Affiliation tag — outlined, sits next to the role tag */
+.affil-tag {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 600;
+  line-height: 1.4;
+  padding: 0.15rem 0.6rem;
+  border-radius: 999px;
+  border: 1px solid #d7dce3;
+  color: #5a6472;
+  background: #fff;
+  white-space: nowrap;
+  margin-left: 0.3rem;
+}
 @media (max-width: 576px) {
   ol.publication-list > li {
     padding: 3.6rem 1rem 1rem 1rem;
