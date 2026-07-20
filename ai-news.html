@@ -789,15 +789,20 @@
       dailyNetwork.on('click', params => {
         const related = document.getElementById('daily-related');
         if (!params.nodes.length) {
-          if (related) related.style.display = 'none';
+          if (related && related.style.display !== 'none') collapseDailyRelated();
           return;
         }
-        const node = nodes.find(n => n.id === params.nodes[0]);
+        const clickedId = params.nodes[0];
+        if (related && related.style.display !== 'none' && related.dataset.itemId === clickedId) {
+          collapseDailyRelated();
+          return;
+        }
+        const node = nodes.find(n => n.id === clickedId);
         if (!node) return;
         showRelatedItems(node, items, itemConcepts, sourceName);
       });
       const relatedEl = document.getElementById('daily-related');
-      if (relatedEl) relatedEl.style.display = 'none';
+      if (relatedEl) { relatedEl.style.display = 'none'; relatedEl.dataset.itemId = ''; }
     }
 
     function showRelatedItems(clickedNode, items, itemConcepts, sourceName) {
@@ -840,11 +845,28 @@
         </div>
         ${rows}`;
       el.style.display = 'block';
-      el.querySelector('.daily-close').addEventListener('click', () => {
-        el.style.display = 'none';
-        if (dailyNetwork) dailyNetwork.unselectAll();
-      });
+      el.dataset.itemId = clickedNode.id;
+      el.querySelector('.daily-close').addEventListener('click', collapseDailyRelated);
+      showFloatingCollapse();
       el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function collapseDailyRelated() {
+      const el = document.getElementById('daily-related');
+      if (!el) return;
+      el.style.display = 'none';
+      el.dataset.itemId = '';
+      if (dailyNetwork) dailyNetwork.unselectAll();
+      if (!isOverviewOpen()) hideFloatingCollapse();
+    }
+
+    function isOverviewOpen() {
+      const el = document.getElementById('overview-related');
+      return el && el.style.display !== 'none';
+    }
+    function isDailyOpen() {
+      const el = document.getElementById('daily-related');
+      return el && el.style.display !== 'none';
     }
 
     // ---- Overview (30-day concept graph) ----
@@ -1002,7 +1024,7 @@
       el.style.display = 'none';
       el.dataset.concept = '';
       if (overviewNetwork) overviewNetwork.unselectAll();
-      hideFloatingCollapse();
+      if (!isDailyOpen()) hideFloatingCollapse();
     }
 
     function showFloatingCollapse() {
@@ -1015,9 +1037,13 @@
     }
 
     document.getElementById('floating-collapse').addEventListener('click', () => {
+      // Scroll target = the graph whose panel is open (before we close it)
+      const scrollTarget = isOverviewOpen()
+        ? document.getElementById('overview-graph')
+        : (isDailyOpen() ? document.getElementById('daily-graph') : null);
       collapseOverviewRelated();
-      const overview = document.querySelector('.graph-card');
-      if (overview) overview.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      collapseDailyRelated();
+      if (scrollTarget) scrollTarget.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
 
     // Language toggle — re-render from JS cache, no network fetch
