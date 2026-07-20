@@ -18,26 +18,199 @@
   <link rel="stylesheet" href="assets/css/style.css" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" />
   <style>
+    /* ---------- Hero ---------- */
+    .research-hero {
+      position: relative;
+      background:
+        radial-gradient(1200px 400px at 15% -10%, rgba(74,155,206,.18), transparent 60%),
+        radial-gradient(900px 500px at 100% 0%, rgba(74,155,206,.10), transparent 55%),
+        linear-gradient(180deg, #0a1929 0%, #14253c 100%);
+      color: #fff;
+      border-radius: 1rem;
+      padding: 3.25rem 2rem 2.5rem;
+      overflow: hidden;
+    }
+    .research-hero .eyebrow {
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      font-size: .72rem;
+      font-weight: 600;
+      color: #7fc0e6;
+    }
+    .research-hero h1 {
+      font-weight: 800;
+      font-size: clamp(2rem, 4vw, 2.9rem);
+      margin: .35rem 0 .6rem;
+      letter-spacing: -.01em;
+    }
+    .research-hero .hero-sub {
+      color: #c3d2e2;
+      max-width: 640px;
+      margin: 0 auto;
+    }
+    .research-hero .hero-sub strong { color: #fff; font-weight: 600; }
+    /* stat row */
+    .hero-stats {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1.6rem;
+      margin-top: 1.8rem;
+    }
+    .hero-stat { text-align: center; min-width: 84px; }
+    .hero-stat .num {
+      font-size: 1.7rem;
+      font-weight: 800;
+      line-height: 1;
+      color: #fff;
+    }
+    .hero-stat .lbl {
+      font-size: .7rem;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: #90a6bd;
+      margin-top: .35rem;
+    }
+    .hero-stat .num .unit { font-size: .95rem; font-weight: 600; color: #7fc0e6; }
+
+    /* ---------- Filter tabs ---------- */
+    .track-filter {
+      display: inline-flex;
+      gap: .25rem;
+      background: #eef2f6;
+      border-radius: 999px;
+      padding: .3rem;
+    }
+    .track-filter button {
+      border: none;
+      background: transparent;
+      border-radius: 999px;
+      padding: .4rem 1.1rem;
+      font-size: .85rem;
+      font-weight: 600;
+      color: #55617a;
+      cursor: pointer;
+      transition: background .15s, color .15s;
+    }
+    .track-filter button.active { background: #0a1929; color: #fff; }
+
+    /* ---------- Track header ---------- */
+    .track-head {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      margin: 2.5rem 0 1.25rem;
+    }
+    .track-head .track-icon {
+      width: 44px; height: 44px;
+      flex-shrink: 0;
+      display: grid; place-items: center;
+      border-radius: 12px;
+      background: rgba(74,155,206,.12);
+      color: var(--accent-color);
+      font-size: 1.35rem;
+    }
+    .track-head h3 { font-weight: 800; margin: 0; color: var(--bg-dark); font-size: 1.2rem; }
+    .track-head p { margin: 0; font-size: .84rem; color: #6b7688; }
+    .track-head .count-pill {
+      margin-left: auto;
+      font-size: .72rem;
+      font-weight: 600;
+      color: #55617a;
+      background: #eef2f6;
+      border-radius: 999px;
+      padding: .25rem .7rem;
+    }
+
+    /* ---------- Research cards ---------- */
+    .rcard {
+      border: 1px solid #e7ecf2;
+      border-radius: .85rem;
+      background: #fff;
+      overflow: hidden;
+      transition: transform .22s ease, box-shadow .22s ease, border-color .22s;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+    .rcard:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 14px 32px rgba(10,25,41,.13);
+      border-color: rgba(74,155,206,.5);
+    }
     .figure-btn {
       display: block;
       width: 100%;
       padding: 0;
       border: none;
       background: #f6f8fa;
-      border-radius: .5rem .5rem 0 0;
       overflow: hidden;
       cursor: zoom-in;
+      position: relative;
     }
     .research-thumb {
       width: 100%;
-      height: 150px;
+      height: 168px;
       object-fit: contain;
       object-position: center;
-      padding: .6rem;
-      transition: transform .25s ease;
+      padding: .7rem;
+      transition: transform .3s ease;
       background: #fff;
     }
-    .figure-btn:hover .research-thumb { transform: scale(1.03); }
+    .rcard:hover .research-thumb { transform: scale(1.045); }
+    .figure-btn .zoom-hint {
+      position: absolute;
+      top: .55rem; right: .55rem;
+      width: 26px; height: 26px;
+      display: grid; place-items: center;
+      border-radius: 50%;
+      background: rgba(10,25,41,.55);
+      color: #fff;
+      font-size: .8rem;
+      opacity: 0;
+      transition: opacity .2s;
+    }
+    .rcard:hover .zoom-hint { opacity: 1; }
+    .rcard-body { padding: 1rem 1.1rem 1.15rem; display: flex; flex-direction: column; flex: 1; }
+    .rcard-venue {
+      font-size: .72rem;
+      font-weight: 600;
+      letter-spacing: .02em;
+      color: var(--accent-dark);
+      text-transform: uppercase;
+      margin-bottom: .3rem;
+    }
+    .rcard h6 { font-weight: 700; color: var(--bg-dark); margin-bottom: .4rem; }
+    .rcard .desc { font-size: .84rem; color: #5b6675; margin-bottom: .75rem; }
+    .rcard .pill-row { display: flex; flex-wrap: wrap; gap: .35rem; margin-top: auto; }
+    .pill {
+      font-size: .68rem;
+      font-weight: 600;
+      padding: .2rem .55rem;
+      border-radius: 999px;
+      line-height: 1.4;
+      white-space: nowrap;
+    }
+    .pill-if     { background: #eaf4fb; color: #1f6f9e; }
+    .pill-q1     { background: #e8f6ee; color: #1c8a4e; }
+    .pill-top    { background: #fdf0e8; color: #c2691f; }
+    .pill-author { background: #eef0f4; color: #4b5568; }
+    .pill-review { background: #f3edfa; color: #7b4bc4; }
+    .rcard .doi-link {
+      display: inline-flex;
+      align-items: center;
+      gap: .3rem;
+      font-size: .78rem;
+      font-weight: 600;
+      color: var(--accent-dark);
+      text-decoration: none;
+      margin-top: .7rem;
+    }
+    .rcard .doi-link:hover { text-decoration: underline; }
+
+    /* filter hide animation */
+    .rcard-col.is-hidden { display: none; }
+
     #figModalImg { max-height: 80vh; }
   </style>
 </head>
@@ -64,174 +237,197 @@
     </div>
   </nav>
 
-  <main class="container" style="padding-top: 120px; padding-bottom: 60px;">
+  <main class="container" style="padding-top: 110px; padding-bottom: 60px;">
 
-    <div class="row justify-content-center mb-5">
-      <div class="col-lg-9 text-center">
-        <h1 class="section-title" data-aos="fade-up" data-aos-delay="0">Research</h1>
-        <p class="lead text-muted mb-0" data-aos="fade-up" data-aos-delay="150">
-          Connecting <strong class="lead-emphasis">large language models</strong> with <strong class="lead-emphasis">mechanical engineering</strong><br>
-          to build autonomous design systems.
-        </p>
+    <!-- ========================= HERO ========================= -->
+    <div class="research-hero text-center mb-5" data-aos="fade-up">
+      <div class="eyebrow">Research</div>
+      <h1>Autonomous Systems for Engineering Design</h1>
+      <p class="hero-sub">
+        Connecting <strong>large language models</strong> with <strong>mechanical engineering</strong>
+        — from <strong>agentic AI</strong> that reasons about and decomposes design problems
+        to <strong>3D neural surrogates</strong> that replace costly simulations.
+      </p>
+      <div class="hero-stats">
+        <div class="hero-stat"><div class="num">6</div><div class="lbl">Frameworks</div></div>
+        <div class="hero-stat"><div class="num">3</div><div class="lbl">Journal Papers</div></div>
+        <div class="hero-stat"><div class="num">100<span class="unit">%</span></div><div class="lbl">JCR Q1</div></div>
+        <div class="hero-stat"><div class="num">6.5</div><div class="lbl">Avg Impact Factor</div></div>
+        <div class="hero-stat"><div class="num">2</div><div class="lbl">Under Review</div></div>
       </div>
     </div>
 
-    <!-- ========================= RESEARCH INTERESTS ========================= -->
-    <h2 class="fw-bold heading-navy mb-4 mt-4" data-aos="fade-up">Research Interests</h2>
-    <div class="row row-cols-1 row-cols-md-2 g-4 mb-5">
-      <div class="col" data-aos="fade-up" data-aos-delay="0">
-        <div class="card h-100 shadow-sm border-0">
-          <div class="card-body">
-            <div class="research-icon text-accent mb-3"><i class="bi bi-chat-square-dots"></i></div>
-            <h5 class="card-title fw-bold">Agentic AI for Engineering Design</h5>
-            <p class="card-text small text-muted mb-0">
-              <strong>LLM-based multi-agent systems</strong> that reason
-              about, decompose, and autonomously solve multidisciplinary
-              engineering design problems.
-            </p>
-          </div>
-        </div>
-      </div>
-      <div class="col" data-aos="fade-up" data-aos-delay="0">
-        <div class="card h-100 shadow-sm border-0">
-          <div class="card-body">
-            <div class="research-icon text-accent mb-3"><i class="bi bi-box"></i></div>
-            <h5 class="card-title fw-bold">3D Surrogate Modeling for Design Optimization</h5>
-            <p class="card-text small text-muted mb-0">
-              <strong>Data-driven surrogates</strong> built on geometry-aware
-              neural networks (point clouds, meshes, graphs) that replace
-              costly simulations and enable <strong>scalable design
-              optimization</strong>.
-            </p>
-          </div>
-        </div>
+    <!-- ========================= FILTER ========================= -->
+    <div class="d-flex justify-content-center mb-4" data-aos="fade-up">
+      <div class="track-filter" role="tablist" aria-label="Filter research by area">
+        <button class="active" data-filter="all">All</button>
+        <button data-filter="agentic">Agentic AI</button>
+        <button data-filter="surrogate">3D Surrogate</button>
       </div>
     </div>
 
-    <!-- ========================= FRAMEWORKS ========================= -->
-    <h2 class="fw-bold heading-navy mb-4 mt-5" data-aos="fade-up">Proposed Frameworks</h2>
-    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-
-      <!-- LLM & Multi-Agent Systems for Engineering -->
-      <div class="col" data-aos="fade-up">
-        <div class="card h-100 border-0 bg-white shadow-sm">
-          <button type="button" class="figure-btn" data-bs-toggle="modal" data-bs-target="#figModal"
-                  data-fig="assets/img/research/llm-adaptive-penalty.webp"
-                  data-title="LLM-Guided Adaptive Penalty — LLM-ADMM architecture">
-            <img src="assets/img/research/llm-adaptive-penalty.webp" class="card-img-top research-thumb" alt="LLM-Guided Adaptive Penalty framework" loading="lazy">
-          </button>
-          <div class="card-body">
-            <span class="badge text-bg-light text-muted mb-2">Agentic AI</span>
-            <h6 class="fw-bold">LLM-Guided Adaptive Penalty</h6>
-            <p class="small text-muted mb-0">
-              An <strong>LLM adaptively tunes penalty parameters</strong>
-              inside <strong>Analytical Target Cascading</strong> for
-              constrained design.
-            </p>
-          </div>
+    <!-- ========================= TRACK 1 · AGENTIC AI ========================= -->
+    <div class="track-block" data-track="agentic">
+      <div class="track-head" data-aos="fade-up">
+        <div class="track-icon"><i class="bi bi-chat-square-dots"></i></div>
+        <div>
+          <h3>Agentic AI for Engineering Design</h3>
+          <p>LLM-based multi-agent systems that reason about, decompose, and autonomously solve multidisciplinary design problems.</p>
         </div>
+        <span class="count-pill">3 works</span>
       </div>
 
-      <!-- LLM & Multi-Agent Systems for Engineering -->
-      <div class="col" data-aos="fade-up">
-        <div class="card h-100 border-0 bg-white shadow-sm">
-          <button type="button" class="figure-btn" data-bs-toggle="modal" data-bs-target="#figModal"
-                  data-fig="assets/img/research/autoatc.webp"
-                  data-title="AutoATC — multi-agent decomposition framework">
-            <img src="assets/img/research/autoatc.webp" class="card-img-top research-thumb" alt="AutoATC framework" loading="lazy">
-          </button>
-          <div class="card-body">
-            <span class="badge text-bg-light text-muted mb-2">Agentic AI</span>
-            <h6 class="fw-bold">AutoATC</h6>
-            <p class="small text-muted mb-0">
-              <strong>Automatically decomposes</strong> complex
-              multidisciplinary design problems using
-              <strong>LLM-based agents</strong>.
-            </p>
-          </div>
-        </div>
-      </div>
-      <div class="col" data-aos="fade-up">
-        <div class="card h-100 border-0 bg-white shadow-sm">
-          <button type="button" class="figure-btn" data-bs-toggle="modal" data-bs-target="#figModal"
-                  data-fig="assets/img/research/dialogcad.webp"
-                  data-title="DialogCAD — MCP-based multi-agent CAD generation framework">
-            <img src="assets/img/research/dialogcad.webp" class="card-img-top research-thumb" alt="DialogCAD framework" loading="lazy">
-          </button>
-          <div class="card-body">
-            <span class="badge text-bg-light text-muted mb-2">Agentic AI</span>
-            <h6 class="fw-bold">DialogCAD</h6>
-            <p class="small text-muted mb-0">
-              A <strong>dialogue-driven CAD generation</strong> framework
-              powered by a <strong>multi-agent system</strong> over the
-              Model Context Protocol.
-            </p>
-          </div>
-        </div>
-      </div>
+      <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
 
-      <!-- 3D Surrogate Modeling -->
-      <div class="col" data-aos="fade-up">
-        <div class="card h-100 border-0 bg-white shadow-sm">
-          <button type="button" class="figure-btn" data-bs-toggle="modal" data-bs-target="#figModal"
-                  data-fig="assets/img/research/point-deeponet.webp"
-                  data-title="Point-DeepONet — architecture for 3D physical-field prediction">
-            <img src="assets/img/research/point-deeponet.webp" class="card-img-top research-thumb" alt="Point-DeepONet architecture" loading="lazy">
-          </button>
-          <div class="card-body">
-            <span class="badge text-bg-light text-muted mb-2">3D Surrogate Modeling</span>
-            <h6 class="fw-bold">Point-DeepONet</h6>
-            <p class="small text-muted mb-0">
-              Predicts <strong>nonlinear physical fields</strong> on
-              arbitrary <strong>3D shapes</strong> under varying load
-              conditions.
-            </p>
+        <div class="col rcard-col" data-cat="agentic" data-aos="fade-up">
+          <div class="rcard">
+            <button type="button" class="figure-btn" data-bs-toggle="modal" data-bs-target="#figModal"
+                    data-fig="assets/img/research/llm-adaptive-penalty.webp"
+                    data-title="LLM-Guided Adaptive Penalty — LLM-ADMM architecture">
+              <img src="assets/img/research/llm-adaptive-penalty.webp" class="research-thumb" alt="LLM-Guided Adaptive Penalty framework" loading="lazy">
+              <span class="zoom-hint"><i class="bi bi-arrows-fullscreen"></i></span>
+            </button>
+            <div class="rcard-body">
+              <div class="rcard-venue">Under Review · 2026</div>
+              <h6>LLM-Guided Adaptive Penalty</h6>
+              <p class="desc">An <strong>LLM adaptively tunes penalty parameters</strong> inside <strong>Analytical Target Cascading</strong> for constrained design.</p>
+              <div class="pill-row">
+                <span class="pill pill-author">1st author</span>
+                <span class="pill pill-review">Under Review</span>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="col" data-aos="fade-up">
-        <div class="card h-100 border-0 bg-white shadow-sm">
-          <button type="button" class="figure-btn" data-bs-toggle="modal" data-bs-target="#figModal"
-                  data-fig="assets/img/research/physics-constrained-gnn.webp"
-                  data-title="Physics-Constrained GNN — training / inference pipeline">
-            <img src="assets/img/research/physics-constrained-gnn.webp" class="card-img-top research-thumb" alt="Physics-Constrained GNN pipeline" loading="lazy">
-          </button>
-          <div class="card-body">
-            <span class="badge text-bg-light text-muted mb-2">3D Surrogate Modeling</span>
-            <h6 class="fw-bold">Physics-Constrained GNN</h6>
-            <p class="small text-muted mb-0">
-              <strong>Spatio-temporal prediction</strong> of drop impact
-              on OLED display panels with <strong>physics
-              constraints</strong>.
-            </p>
-          </div>
-        </div>
-      </div>
 
-      <!-- 3D Surrogate Modeling -->
-      <div class="col" data-aos="fade-up">
-        <div class="card h-100 border-0 bg-white shadow-sm">
-          <button type="button" class="figure-btn" data-bs-toggle="modal" data-bs-target="#figModal"
-                  data-fig="assets/img/research/bmo-gnn.webp"
-                  data-title="BMO-GNN — Bayesian mesh optimization framework">
-            <img src="assets/img/research/bmo-gnn.webp" class="card-img-top research-thumb" alt="BMO-GNN framework" loading="lazy">
-          </button>
-          <div class="card-body">
-            <span class="badge text-bg-light text-muted mb-2">3D Surrogate Modeling</span>
-            <h6 class="fw-bold">BMO-GNN</h6>
-            <p class="small text-muted mb-0">
-              <strong>Bayesian mesh optimization</strong> that boosts
-              engineering performance prediction with <strong>graph
-              neural networks</strong>.
-            </p>
+        <div class="col rcard-col" data-cat="agentic" data-aos="fade-up">
+          <div class="rcard">
+            <button type="button" class="figure-btn" data-bs-toggle="modal" data-bs-target="#figModal"
+                    data-fig="assets/img/research/autoatc.webp"
+                    data-title="AutoATC — multi-agent decomposition framework">
+              <img src="assets/img/research/autoatc.webp" class="research-thumb" alt="AutoATC framework" loading="lazy">
+              <span class="zoom-hint"><i class="bi bi-arrows-fullscreen"></i></span>
+            </button>
+            <div class="rcard-body">
+              <div class="rcard-venue">Under Review · 2026</div>
+              <h6>AutoATC</h6>
+              <p class="desc"><strong>Automatically decomposes</strong> complex multidisciplinary design problems using <strong>LLM-based agents</strong>.</p>
+              <div class="pill-row">
+                <span class="pill pill-author">1st author</span>
+                <span class="pill pill-review">Under Review</span>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
 
+        <div class="col rcard-col" data-cat="agentic" data-aos="fade-up">
+          <div class="rcard">
+            <button type="button" class="figure-btn" data-bs-toggle="modal" data-bs-target="#figModal"
+                    data-fig="assets/img/research/dialogcad.webp"
+                    data-title="DialogCAD — MCP-based multi-agent CAD generation framework">
+              <img src="assets/img/research/dialogcad.webp" class="research-thumb" alt="DialogCAD framework" loading="lazy">
+              <span class="zoom-hint"><i class="bi bi-arrows-fullscreen"></i></span>
+            </button>
+            <div class="rcard-body">
+              <div class="rcard-venue">KSME · 2025</div>
+              <h6>DialogCAD</h6>
+              <p class="desc">A <strong>dialogue-driven CAD generation</strong> framework powered by a <strong>multi-agent system</strong> over the Model Context Protocol.</p>
+              <div class="pill-row">
+                <span class="pill pill-author">1st author</span>
+                <span class="pill pill-top">KR Patent filed</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
     </div>
 
-    <div class="text-center mt-5">
-      <a href="publications.html" class="btn btn-accent">See Publications <i class="bi bi-arrow-right"></i></a>
+    <!-- ========================= TRACK 2 · 3D SURROGATE ========================= -->
+    <div class="track-block" data-track="surrogate">
+      <div class="track-head" data-aos="fade-up">
+        <div class="track-icon"><i class="bi bi-box"></i></div>
+        <div>
+          <h3>3D Surrogate Modeling for Design Optimization</h3>
+          <p>Geometry-aware neural networks (point clouds, meshes, graphs) that replace costly simulations and enable scalable optimization.</p>
+        </div>
+        <span class="count-pill">3 works</span>
+      </div>
+
+      <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+
+        <div class="col rcard-col" data-cat="surrogate" data-aos="fade-up">
+          <div class="rcard">
+            <button type="button" class="figure-btn" data-bs-toggle="modal" data-bs-target="#figModal"
+                    data-fig="assets/img/research/point-deeponet.webp"
+                    data-title="Point-DeepONet — architecture for 3D physical-field prediction">
+              <img src="assets/img/research/point-deeponet.webp" class="research-thumb" alt="Point-DeepONet architecture" loading="lazy">
+              <span class="zoom-hint"><i class="bi bi-arrows-fullscreen"></i></span>
+            </button>
+            <div class="rcard-body">
+              <div class="rcard-venue">Neural Networks · 2026</div>
+              <h6>Point-DeepONet</h6>
+              <p class="desc">Predicts <strong>nonlinear physical fields</strong> on arbitrary <strong>3D shapes</strong> under varying load conditions.</p>
+              <div class="pill-row">
+                <span class="pill pill-author">1st author</span>
+                <span class="pill pill-if">IF 6.0</span>
+                <span class="pill pill-q1">Q1</span>
+                <span class="pill pill-top">Top 6.5%</span>
+              </div>
+              <a class="doi-link" href="https://doi.org/10.1016/j.neunet.2026.108560" target="_blank" rel="noopener"><i class="bi bi-link-45deg"></i>View paper</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="col rcard-col" data-cat="surrogate" data-aos="fade-up">
+          <div class="rcard">
+            <button type="button" class="figure-btn" data-bs-toggle="modal" data-bs-target="#figModal"
+                    data-fig="assets/img/research/physics-constrained-gnn.webp"
+                    data-title="Physics-Constrained GNN — training / inference pipeline">
+              <img src="assets/img/research/physics-constrained-gnn.webp" class="research-thumb" alt="Physics-Constrained GNN pipeline" loading="lazy">
+              <span class="zoom-hint"><i class="bi bi-arrows-fullscreen"></i></span>
+            </button>
+            <div class="rcard-body">
+              <div class="rcard-venue">Expert Systems w/ Applications · 2025</div>
+              <h6>Physics-Constrained GNN</h6>
+              <p class="desc"><strong>Spatio-temporal prediction</strong> of drop impact on OLED display panels with <strong>physics constraints</strong>.</p>
+              <div class="pill-row">
+                <span class="pill pill-if">IF 7.5</span>
+                <span class="pill pill-q1">Q1</span>
+                <span class="pill pill-top">Top 6.1%</span>
+              </div>
+              <a class="doi-link" href="https://doi.org/10.1016/j.eswa.2025.126907" target="_blank" rel="noopener"><i class="bi bi-link-45deg"></i>View paper</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="col rcard-col" data-cat="surrogate" data-aos="fade-up">
+          <div class="rcard">
+            <button type="button" class="figure-btn" data-bs-toggle="modal" data-bs-target="#figModal"
+                    data-fig="assets/img/research/bmo-gnn.webp"
+                    data-title="BMO-GNN — Bayesian mesh optimization framework">
+              <img src="assets/img/research/bmo-gnn.webp" class="research-thumb" alt="BMO-GNN framework" loading="lazy">
+              <span class="zoom-hint"><i class="bi bi-arrows-fullscreen"></i></span>
+            </button>
+            <div class="rcard-body">
+              <div class="rcard-venue">J. Computational Design &amp; Eng. · 2024</div>
+              <h6>BMO-GNN</h6>
+              <p class="desc"><strong>Bayesian mesh optimization</strong> that boosts engineering performance prediction with <strong>graph neural networks</strong>.</p>
+              <div class="pill-row">
+                <span class="pill pill-author">1st author</span>
+                <span class="pill pill-if">IF 6.1</span>
+                <span class="pill pill-q1">Q1</span>
+                <span class="pill pill-top">Top 6.4%</span>
+              </div>
+              <a class="doi-link" href="https://doi.org/10.1093/jcde/qwae102" target="_blank" rel="noopener"><i class="bi bi-link-45deg"></i>View paper</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="text-center mt-5" data-aos="fade-up">
+      <a href="publications.html" class="btn btn-accent">See All Publications <i class="bi bi-arrow-right"></i></a>
       <a href="projects.html" class="btn btn-outline-dark ms-2">See Projects <i class="bi bi-arrow-right"></i></a>
     </div>
 
@@ -294,6 +490,27 @@
         title.textContent = btn.getAttribute('data-title') || '';
       });
       modal.addEventListener('hidden.bs.modal', () => { img.src = ''; });
+    })();
+  </script>
+  <script>
+    // Track filter: All / Agentic AI / 3D Surrogate
+    (function () {
+      const buttons = document.querySelectorAll('.track-filter button');
+      const blocks = document.querySelectorAll('.track-block');
+      if (!buttons.length) return;
+
+      function apply(filter) {
+        blocks.forEach(block => {
+          const track = block.dataset.track;
+          const show = filter === 'all' || filter === track;
+          block.style.display = show ? '' : 'none';
+        });
+        buttons.forEach(b => b.classList.toggle('active', b.dataset.filter === filter));
+      }
+
+      buttons.forEach(btn => {
+        btn.addEventListener('click', () => apply(btn.dataset.filter));
+      });
     })();
   </script>
   <script src="assets/js/last-updated.js"></script>
