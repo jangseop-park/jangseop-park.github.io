@@ -205,9 +205,10 @@
     }
     .floating-collapse {
       position: fixed;
-      right: 1.25rem;
-      top: 50%;
-      transform: translateY(-50%);
+      top: 140px;
+      /* Sit just outside the left edge of the col-lg-10 content box (~830px wide).
+         (100vw - 830px) / 2 = left gutter; then step ~10px further left. */
+      left: calc((100vw - 830px) / 2 - 90px);
       z-index: 1050;
       background: #212529;
       color: #fff;
@@ -226,13 +227,22 @@
     .floating-collapse i { font-size: 1rem; }
     .floating-collapse:hover {
       background: #000;
-      transform: translateY(-50%) scale(1.04);
+      transform: scale(1.04);
       box-shadow: 0 10px 26px rgba(0,0,0,.35);
     }
     .floating-collapse.visible { display: inline-flex; }
+    /* Narrower viewports where there's no room to the left of the content box —
+       fall back to the top-left corner with a small margin. */
+    @media (max-width: 991px) {
+      .floating-collapse {
+        left: 1rem;
+        top: 90px;
+      }
+    }
     @media (max-width: 575px) {
       .floating-collapse {
-        right: .75rem;
+        left: .75rem;
+        top: 80px;
         padding: .55rem .85rem;
         font-size: .75rem;
       }
