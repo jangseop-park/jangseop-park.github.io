@@ -202,6 +202,18 @@ ol.publication-list > li:hover::before {
 .metric-q2  { background: #eef4e8; color: #5a7a1e; }
 .metric-q3  { background: #f6f1e8; color: #97701c; }
 .metric-top { background: #fdf0e8; color: #c2691f; }
+/* ----- Project role tag (shown on project cards) ----- */
+.role-tag {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 600;
+  line-height: 1.4;
+  padding: 0.15rem 0.6rem;
+  border-radius: 999px;
+  background: #eaf4fb;
+  color: #1f6f9e;
+  white-space: nowrap;
+}
 @media (max-width: 576px) {
   ol.publication-list > li {
     padding: 3.6rem 1rem 1rem 1rem;
