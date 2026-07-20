@@ -685,18 +685,23 @@
       return hits;
     }
 
+    // Node labels stay English-only for visual consistency.
+    const HANGUL_RE = /[ㄱ-ㆎ가-힣]/;
+    const isEnglishToken = t => !!t && !HANGUL_RE.test(t);
+
     // Hybrid label:
-    //   1) Try concept whitelist (curated AI/ML categories)
-    //   2) Fall back to most-shared distinctive tokens
-    //   3) Fall back to a shortened title
+    //   1) Try concept whitelist (curated AI/ML categories — all English)
+    //   2) Fall back to most-shared distinctive tokens (English only)
+    //   3) Fall back to a shortened English title
     function pickKeywordLabel(item, docTokens, df, k = 2) {
       const combined = `${item.title} ${item.title_en} ${item.summary} ${item.summary_en}`;
       const concepts = matchConcepts(combined, k);
       if (concepts.length) return concepts.join(' · ');
 
-      // fallback: shared tokens (high df) preferred, title tokens preferred
+      // fallback: shared tokens (high df) preferred, title tokens preferred, English only
       const titleTokens = new Set(tokenize(`${item.title} ${item.title_en}`));
       const scored = [...docTokens]
+        .filter(isEnglishToken)
         .map(w => ({
           w,
           score: (titleTokens.has(w) ? 0 : 5) - (df.get(w) || 0),
@@ -711,8 +716,12 @@
         seen.add(s.w);
         picked.push(s.w);
       }
-      if (!picked.length) return shortenLabel(item.title || item.title_en, 18);
-      return picked.join(' · ');
+      if (picked.length) return picked.join(' · ');
+
+      // last resort: use whichever title looks like English
+      const englishTitle = HANGUL_RE.test(item.title_en) ? '' : item.title_en;
+      const koreanTitle = item.title || '';
+      return shortenLabel(englishTitle || (HANGUL_RE.test(koreanTitle) ? '' : koreanTitle), 18) || '—';
     }
 
     let network = null;
