@@ -74,12 +74,20 @@
       font-weight: 700;
       letter-spacing: .05em;
       text-transform: uppercase;
-      color: var(--accent-dark);
-      background: rgba(74, 155, 206, .12);
       padding: .2rem .6rem;
       border-radius: 999px;
       display: inline-block;
       margin-bottom: .6rem;
+    }
+    /* Agentic AI — blue accent */
+    .fw-cat.cat-agentic {
+      color: var(--accent-dark);
+      background: rgba(74, 155, 206, .12);
+    }
+    /* 3D Surrogate Modeling — teal / green */
+    .fw-cat.cat-surrogate {
+      color: #0f766e;
+      background: rgba(13, 148, 136, .12);
     }
     #figModalImg { max-height: 80vh; }
   </style>
@@ -164,7 +172,7 @@
             <span class="zoom-hint"><i class="bi bi-arrows-fullscreen"></i></span>
           </button>
           <div class="card-body">
-            <span class="fw-cat">Agentic AI</span>
+            <span class="fw-cat cat-agentic">Agentic AI</span>
             <h6 class="fw-bold mb-2">LLM-Guided Adaptive Penalty</h6>
             <p class="small text-muted mb-0">
               An <strong>LLM adaptively tunes penalty parameters</strong>
@@ -185,7 +193,7 @@
             <span class="zoom-hint"><i class="bi bi-arrows-fullscreen"></i></span>
           </button>
           <div class="card-body">
-            <span class="fw-cat">Agentic AI</span>
+            <span class="fw-cat cat-agentic">Agentic AI</span>
             <h6 class="fw-bold mb-2">AutoATC</h6>
             <p class="small text-muted mb-0">
               <strong>Automatically decomposes</strong> complex
@@ -206,7 +214,7 @@
             <span class="zoom-hint"><i class="bi bi-arrows-fullscreen"></i></span>
           </button>
           <div class="card-body">
-            <span class="fw-cat">Agentic AI</span>
+            <span class="fw-cat cat-agentic">Agentic AI</span>
             <h6 class="fw-bold mb-2">DialogCAD</h6>
             <p class="small text-muted mb-0">
               A <strong>dialogue-driven CAD generation</strong> framework
@@ -227,7 +235,7 @@
             <span class="zoom-hint"><i class="bi bi-arrows-fullscreen"></i></span>
           </button>
           <div class="card-body">
-            <span class="fw-cat">3D Surrogate Modeling</span>
+            <span class="fw-cat cat-surrogate">3D Surrogate Modeling</span>
             <h6 class="fw-bold mb-2">Point-DeepONet</h6>
             <p class="small text-muted mb-0">
               Predicts <strong>nonlinear physical fields</strong> on
@@ -248,7 +256,7 @@
             <span class="zoom-hint"><i class="bi bi-arrows-fullscreen"></i></span>
           </button>
           <div class="card-body">
-            <span class="fw-cat">3D Surrogate Modeling</span>
+            <span class="fw-cat cat-surrogate">3D Surrogate Modeling</span>
             <h6 class="fw-bold mb-2">Physics-Constrained GNN</h6>
             <p class="small text-muted mb-0">
               <strong>Spatio-temporal prediction</strong> of drop impact
@@ -269,7 +277,7 @@
             <span class="zoom-hint"><i class="bi bi-arrows-fullscreen"></i></span>
           </button>
           <div class="card-body">
-            <span class="fw-cat">3D Surrogate Modeling</span>
+            <span class="fw-cat cat-surrogate">3D Surrogate Modeling</span>
             <h6 class="fw-bold mb-2">BMO-GNN</h6>
             <p class="small text-muted mb-0">
               <strong>Bayesian mesh optimization</strong> that boosts
