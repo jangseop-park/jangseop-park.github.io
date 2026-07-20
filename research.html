@@ -90,6 +90,110 @@
       background: rgba(13, 148, 136, .12);
     }
     #figModalImg { max-height: 80vh; }
+
+    /* ===== Research overview pipeline ===== */
+    .overview-mission {
+      text-align: center;
+      font-size: 1.05rem;
+      color: #47526a;
+      max-width: 760px;
+      margin: 0 auto 2.2rem;
+    }
+    .overview-mission strong { color: var(--bg-dark); font-weight: 700; }
+    .pipeline {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr auto 1fr;
+      align-items: stretch;
+      gap: .25rem;
+    }
+    .pipe-stage {
+      border: 1px solid #e7ecf2;
+      border-radius: .85rem;
+      padding: 1.25rem 1.1rem;
+      background: #fff;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+    }
+    .pipe-stage .stage-num {
+      width: 30px; height: 30px;
+      margin: 0 auto .6rem;
+      border-radius: 50%;
+      display: grid; place-items: center;
+      font-weight: 700; font-size: .85rem; color: #fff;
+    }
+    .pipe-stage h5 {
+      font-weight: 800;
+      font-size: 1.02rem;
+      margin-bottom: .1rem;
+      color: var(--bg-dark);
+    }
+    .pipe-stage .stage-sub {
+      font-size: .78rem;
+      color: #8b97a8;
+      margin-bottom: .9rem;
+    }
+    .pipe-stage .stage-works {
+      list-style: none;
+      padding: 0; margin: 0 0 .1rem;
+      font-size: .82rem;
+      color: #47526a;
+      line-height: 1.7;
+    }
+    .pipe-stage .stage-works .co {
+      font-size: .68rem;
+      color: #99a3b2;
+      margin-left: .15rem;
+    }
+    /* stage accent colors */
+    .stage-gen    { border-top: 3px solid #7c5cbf; }
+    .stage-gen    .stage-num { background: #7c5cbf; }
+    .stage-pred   { border-top: 3px solid var(--accent-color); }
+    .stage-pred   .stage-num { background: var(--accent-color); }
+    .stage-opt    { border-top: 3px solid #0d9488; }
+    .stage-opt    .stage-num { background: #0d9488; }
+    .pipe-arrow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #c2ccd8;
+      font-size: 1.3rem;
+    }
+    /* autonomous banner + industry line */
+    .overview-flow-down {
+      text-align: center;
+      color: #c2ccd8;
+      font-size: 1.3rem;
+      margin: .5rem 0;
+    }
+    .autonomous-banner {
+      border: 1px dashed #b9a6e0;
+      background: rgba(124, 92, 191, .06);
+      border-radius: .75rem;
+      padding: .9rem 1.25rem;
+      text-align: center;
+      max-width: 620px;
+      margin: 0 auto;
+    }
+    .autonomous-banner .lead-line {
+      font-weight: 700;
+      color: #5b3ea6;
+    }
+    .autonomous-banner .sub-line {
+      font-size: .82rem;
+      color: #6b7688;
+    }
+    .industry-line {
+      text-align: center;
+      font-size: .82rem;
+      color: #8b97a8;
+      margin-top: 1.4rem;
+    }
+    .industry-line strong { color: #47526a; font-weight: 600; }
+    @media (max-width: 767px) {
+      .pipeline { grid-template-columns: 1fr; }
+      .pipe-arrow { transform: rotate(90deg); padding: .1rem 0; }
+    }
   </style>
 </head>
 <body>
@@ -127,36 +231,63 @@
       </div>
     </div>
 
-    <!-- ========================= RESEARCH INTERESTS ========================= -->
-    <h2 class="fw-bold heading-navy mb-4 mt-4" data-aos="fade-up">Research Interests</h2>
-    <div class="row row-cols-1 row-cols-md-2 g-4 mb-5">
-      <div class="col" data-aos="fade-up" data-aos-delay="0">
-        <div class="card h-100 shadow-sm border-0">
-          <div class="card-body">
-            <div class="research-icon text-accent mb-3"><i class="bi bi-chat-square-dots"></i></div>
-            <h5 class="card-title fw-bold">Agentic AI for Engineering Design</h5>
-            <p class="card-text small text-muted mb-0">
-              <strong>LLM-based multi-agent systems</strong> that reason
-              about, decompose, and autonomously solve multidisciplinary
-              design problems.
-            </p>
-          </div>
-        </div>
+    <!-- ========================= RESEARCH OVERVIEW ========================= -->
+    <h2 class="fw-bold heading-navy mb-4 mt-4" data-aos="fade-up">Research Overview</h2>
+
+    <p class="overview-mission" data-aos="fade-up">
+      I build AI that <strong>automates engineering design</strong> — generating design
+      candidates, replacing costly simulation with <strong>neural surrogates</strong>,
+      and letting <strong>LLM agents</strong> orchestrate the whole loop.
+    </p>
+
+    <div class="pipeline" data-aos="fade-up">
+      <div class="pipe-stage stage-gen">
+        <div class="stage-num">1</div>
+        <h5>Generative Design</h5>
+        <div class="stage-sub">Creating design candidates</div>
+        <ul class="stage-works">
+          <li>DialogCAD</li>
+          <li>DeepJEB <span class="co">(co-author)</span></li>
+        </ul>
       </div>
-      <div class="col" data-aos="fade-up" data-aos-delay="0">
-        <div class="card h-100 shadow-sm border-0">
-          <div class="card-body">
-            <div class="research-icon text-accent mb-3"><i class="bi bi-box"></i></div>
-            <h5 class="card-title fw-bold">3D Surrogate Modeling for Design Optimization</h5>
-            <p class="card-text small text-muted mb-0">
-              <strong>Geometry-aware neural networks</strong> (point clouds,
-              meshes, graphs) that replace costly simulations and enable
-              <strong>scalable optimization</strong>.
-            </p>
-          </div>
-        </div>
+
+      <div class="pipe-arrow"><i class="bi bi-arrow-right"></i></div>
+
+      <div class="pipe-stage stage-pred">
+        <div class="stage-num">2</div>
+        <h5>Predictive Surrogate</h5>
+        <div class="stage-sub">Replacing simulation</div>
+        <ul class="stage-works">
+          <li>Point-DeepONet</li>
+          <li>BMO-GNN</li>
+          <li>Physics-Constrained GNN <span class="co">(co-author)</span></li>
+        </ul>
+      </div>
+
+      <div class="pipe-arrow"><i class="bi bi-arrow-right"></i></div>
+
+      <div class="pipe-stage stage-opt">
+        <div class="stage-num">3</div>
+        <h5>Optimization &amp; Agentic</h5>
+        <div class="stage-sub">Optimizing &amp; orchestrating</div>
+        <ul class="stage-works">
+          <li>AutoATC</li>
+          <li>LLM-Guided Adaptive Penalty</li>
+        </ul>
       </div>
     </div>
+
+    <div class="overview-flow-down" data-aos="fade-up"><i class="bi bi-arrow-down"></i></div>
+
+    <div class="autonomous-banner" data-aos="fade-up">
+      <div class="lead-line">Toward Autonomous Design</div>
+      <div class="sub-line">LLM agents that generate, predict, and optimize with minimal human intervention</div>
+    </div>
+
+    <p class="industry-line mb-5" data-aos="fade-up">
+      Applied with <strong>Hyundai Motor</strong> · <strong>Samsung Heavy Industries</strong> ·
+      <strong>LG Display</strong> · <strong>KORAIL</strong>
+    </p>
 
     <!-- ========================= FRAMEWORKS ========================= -->
     <h2 class="fw-bold heading-navy mb-4 mt-5" data-aos="fade-up">Proposed Frameworks</h2>
