@@ -210,10 +210,12 @@ ol.publication-list > li:hover::before {
   line-height: 1.4;
   padding: 0.15rem 0.6rem;
   border-radius: 999px;
-  background: #eaf4fb;
-  color: #1f6f9e;
   white-space: nowrap;
 }
+/* Lead — accent blue (primary role) */
+.role-lead { background: #eaf4fb; color: #1f6f9e; }
+/* Contributor — neutral grey (supporting role) */
+.role-contrib { background: #eef0f3; color: #5a6472; }
 @media (max-width: 576px) {
   ol.publication-list > li {
     padding: 3.6rem 1rem 1rem 1rem;
