@@ -18,26 +18,71 @@
   <link rel="stylesheet" href="assets/css/style.css" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" />
   <style>
+    /* Framework cards: figure on top, subtle lift on hover */
+    .framework-card {
+      border: 1px solid #e7ecf2;
+      border-radius: .8rem;
+      background: #fff;
+      overflow: hidden;
+      transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease;
+    }
+    .framework-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 14px 30px rgba(10, 25, 41, .12);
+      border-color: rgba(74, 155, 206, .45);
+    }
     .figure-btn {
       display: block;
       width: 100%;
       padding: 0;
       border: none;
-      background: #f6f8fa;
-      border-radius: .5rem .5rem 0 0;
+      background: linear-gradient(180deg, #fbfcfe 0%, #f4f7fa 100%);
       overflow: hidden;
       cursor: zoom-in;
+      position: relative;
+      border-bottom: 1px solid #eef2f6;
     }
     .research-thumb {
       width: 100%;
-      height: 150px;
+      height: 190px;
       object-fit: contain;
       object-position: center;
-      padding: .6rem;
-      transition: transform .25s ease;
-      background: #fff;
+      padding: .85rem;
+      transition: transform .3s ease;
+      background: transparent;
     }
-    .figure-btn:hover .research-thumb { transform: scale(1.03); }
+    .framework-card:hover .research-thumb { transform: scale(1.045); }
+    .figure-btn .zoom-hint {
+      position: absolute;
+      top: .6rem; right: .6rem;
+      width: 27px; height: 27px;
+      display: grid; place-items: center;
+      border-radius: 50%;
+      background: rgba(10, 25, 41, .5);
+      color: #fff;
+      font-size: .78rem;
+      opacity: 0;
+      transition: opacity .2s ease;
+    }
+    .framework-card:hover .zoom-hint { opacity: 1; }
+    .framework-card .card-body { padding: 1rem 1.15rem 1.15rem; }
+    .fw-venue {
+      font-size: .72rem;
+      font-weight: 600;
+      letter-spacing: .02em;
+      text-transform: uppercase;
+      color: var(--accent-dark);
+      margin-bottom: .35rem;
+    }
+    .fw-cat {
+      font-size: .68rem;
+      font-weight: 600;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      color: #8b97a8;
+      display: inline-block;
+      margin-bottom: .55rem;
+    }
     #figModalImg { max-height: 80vh; }
   </style>
 </head>
@@ -111,17 +156,19 @@
     <h2 class="fw-bold heading-navy mb-4 mt-5" data-aos="fade-up">Proposed Frameworks</h2>
     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
 
-      <!-- LLM & Multi-Agent Systems for Engineering -->
+      <!-- LLM-Guided Adaptive Penalty -->
       <div class="col" data-aos="fade-up">
-        <div class="card h-100 border-0 bg-white shadow-sm">
+        <div class="framework-card h-100">
           <button type="button" class="figure-btn" data-bs-toggle="modal" data-bs-target="#figModal"
                   data-fig="assets/img/research/llm-adaptive-penalty.webp"
                   data-title="LLM-Guided Adaptive Penalty — LLM-ADMM architecture">
-            <img src="assets/img/research/llm-adaptive-penalty.webp" class="card-img-top research-thumb" alt="LLM-Guided Adaptive Penalty framework" loading="lazy">
+            <img src="assets/img/research/llm-adaptive-penalty.webp" class="research-thumb" alt="LLM-Guided Adaptive Penalty framework" loading="lazy">
+            <span class="zoom-hint"><i class="bi bi-arrows-fullscreen"></i></span>
           </button>
           <div class="card-body">
-            <span class="badge text-bg-light text-muted mb-2">Agentic AI</span>
-            <h6 class="fw-bold">LLM-Guided Adaptive Penalty</h6>
+            <span class="fw-cat">Agentic AI</span>
+            <div class="fw-venue">Under Review · 2026</div>
+            <h6 class="fw-bold mb-2">LLM-Guided Adaptive Penalty</h6>
             <p class="small text-muted mb-0">
               An <strong>LLM adaptively tunes penalty parameters</strong>
               inside <strong>Analytical Target Cascading</strong> for
@@ -131,17 +178,19 @@
         </div>
       </div>
 
-      <!-- LLM & Multi-Agent Systems for Engineering -->
+      <!-- AutoATC -->
       <div class="col" data-aos="fade-up">
-        <div class="card h-100 border-0 bg-white shadow-sm">
+        <div class="framework-card h-100">
           <button type="button" class="figure-btn" data-bs-toggle="modal" data-bs-target="#figModal"
                   data-fig="assets/img/research/autoatc.webp"
                   data-title="AutoATC — multi-agent decomposition framework">
-            <img src="assets/img/research/autoatc.webp" class="card-img-top research-thumb" alt="AutoATC framework" loading="lazy">
+            <img src="assets/img/research/autoatc.webp" class="research-thumb" alt="AutoATC framework" loading="lazy">
+            <span class="zoom-hint"><i class="bi bi-arrows-fullscreen"></i></span>
           </button>
           <div class="card-body">
-            <span class="badge text-bg-light text-muted mb-2">Agentic AI</span>
-            <h6 class="fw-bold">AutoATC</h6>
+            <span class="fw-cat">Agentic AI</span>
+            <div class="fw-venue">Under Review · 2026</div>
+            <h6 class="fw-bold mb-2">AutoATC</h6>
             <p class="small text-muted mb-0">
               <strong>Automatically decomposes</strong> complex
               multidisciplinary design problems using
@@ -150,16 +199,20 @@
           </div>
         </div>
       </div>
+
+      <!-- DialogCAD -->
       <div class="col" data-aos="fade-up">
-        <div class="card h-100 border-0 bg-white shadow-sm">
+        <div class="framework-card h-100">
           <button type="button" class="figure-btn" data-bs-toggle="modal" data-bs-target="#figModal"
                   data-fig="assets/img/research/dialogcad.webp"
                   data-title="DialogCAD — MCP-based multi-agent CAD generation framework">
-            <img src="assets/img/research/dialogcad.webp" class="card-img-top research-thumb" alt="DialogCAD framework" loading="lazy">
+            <img src="assets/img/research/dialogcad.webp" class="research-thumb" alt="DialogCAD framework" loading="lazy">
+            <span class="zoom-hint"><i class="bi bi-arrows-fullscreen"></i></span>
           </button>
           <div class="card-body">
-            <span class="badge text-bg-light text-muted mb-2">Agentic AI</span>
-            <h6 class="fw-bold">DialogCAD</h6>
+            <span class="fw-cat">Agentic AI</span>
+            <div class="fw-venue">KSME · 2025</div>
+            <h6 class="fw-bold mb-2">DialogCAD</h6>
             <p class="small text-muted mb-0">
               A <strong>dialogue-driven CAD generation</strong> framework
               powered by a <strong>multi-agent system</strong> over the
@@ -169,17 +222,19 @@
         </div>
       </div>
 
-      <!-- 3D Surrogate Modeling -->
+      <!-- Point-DeepONet -->
       <div class="col" data-aos="fade-up">
-        <div class="card h-100 border-0 bg-white shadow-sm">
+        <div class="framework-card h-100">
           <button type="button" class="figure-btn" data-bs-toggle="modal" data-bs-target="#figModal"
                   data-fig="assets/img/research/point-deeponet.webp"
                   data-title="Point-DeepONet — architecture for 3D physical-field prediction">
-            <img src="assets/img/research/point-deeponet.webp" class="card-img-top research-thumb" alt="Point-DeepONet architecture" loading="lazy">
+            <img src="assets/img/research/point-deeponet.webp" class="research-thumb" alt="Point-DeepONet architecture" loading="lazy">
+            <span class="zoom-hint"><i class="bi bi-arrows-fullscreen"></i></span>
           </button>
           <div class="card-body">
-            <span class="badge text-bg-light text-muted mb-2">3D Surrogate Modeling</span>
-            <h6 class="fw-bold">Point-DeepONet</h6>
+            <span class="fw-cat">3D Surrogate Modeling</span>
+            <div class="fw-venue">Neural Networks · 2026</div>
+            <h6 class="fw-bold mb-2">Point-DeepONet</h6>
             <p class="small text-muted mb-0">
               Predicts <strong>nonlinear physical fields</strong> on
               arbitrary <strong>3D shapes</strong> under varying load
@@ -188,16 +243,20 @@
           </div>
         </div>
       </div>
+
+      <!-- Physics-Constrained GNN -->
       <div class="col" data-aos="fade-up">
-        <div class="card h-100 border-0 bg-white shadow-sm">
+        <div class="framework-card h-100">
           <button type="button" class="figure-btn" data-bs-toggle="modal" data-bs-target="#figModal"
                   data-fig="assets/img/research/physics-constrained-gnn.webp"
                   data-title="Physics-Constrained GNN — training / inference pipeline">
-            <img src="assets/img/research/physics-constrained-gnn.webp" class="card-img-top research-thumb" alt="Physics-Constrained GNN pipeline" loading="lazy">
+            <img src="assets/img/research/physics-constrained-gnn.webp" class="research-thumb" alt="Physics-Constrained GNN pipeline" loading="lazy">
+            <span class="zoom-hint"><i class="bi bi-arrows-fullscreen"></i></span>
           </button>
           <div class="card-body">
-            <span class="badge text-bg-light text-muted mb-2">3D Surrogate Modeling</span>
-            <h6 class="fw-bold">Physics-Constrained GNN</h6>
+            <span class="fw-cat">3D Surrogate Modeling</span>
+            <div class="fw-venue">Expert Systems w/ Applications · 2025</div>
+            <h6 class="fw-bold mb-2">Physics-Constrained GNN</h6>
             <p class="small text-muted mb-0">
               <strong>Spatio-temporal prediction</strong> of drop impact
               on OLED display panels with <strong>physics
@@ -207,17 +266,19 @@
         </div>
       </div>
 
-      <!-- 3D Surrogate Modeling -->
+      <!-- BMO-GNN -->
       <div class="col" data-aos="fade-up">
-        <div class="card h-100 border-0 bg-white shadow-sm">
+        <div class="framework-card h-100">
           <button type="button" class="figure-btn" data-bs-toggle="modal" data-bs-target="#figModal"
                   data-fig="assets/img/research/bmo-gnn.webp"
                   data-title="BMO-GNN — Bayesian mesh optimization framework">
-            <img src="assets/img/research/bmo-gnn.webp" class="card-img-top research-thumb" alt="BMO-GNN framework" loading="lazy">
+            <img src="assets/img/research/bmo-gnn.webp" class="research-thumb" alt="BMO-GNN framework" loading="lazy">
+            <span class="zoom-hint"><i class="bi bi-arrows-fullscreen"></i></span>
           </button>
           <div class="card-body">
-            <span class="badge text-bg-light text-muted mb-2">3D Surrogate Modeling</span>
-            <h6 class="fw-bold">BMO-GNN</h6>
+            <span class="fw-cat">3D Surrogate Modeling</span>
+            <div class="fw-venue">J. Computational Design &amp; Eng. · 2024</div>
+            <h6 class="fw-bold mb-2">BMO-GNN</h6>
             <p class="small text-muted mb-0">
               <strong>Bayesian mesh optimization</strong> that boosts
               engineering performance prediction with <strong>graph

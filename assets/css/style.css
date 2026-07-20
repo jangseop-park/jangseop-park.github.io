@@ -181,6 +181,26 @@ ol.publication-list > li:hover::before {
 }
 .pub-authors { font-size: 0.95rem; }
 .pub-venue { font-size: 0.92rem; }
+/* ----- Metric tags (IF / JCR quartile / percentile) ----- */
+.pub-metrics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: 0.45rem;
+}
+.metric-tag {
+  font-size: 0.7rem;
+  font-weight: 600;
+  line-height: 1.4;
+  padding: 0.15rem 0.55rem;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+.metric-if  { background: #eaf4fb; color: #1f6f9e; }
+.metric-q1  { background: #e8f6ee; color: #1c8a4e; }
+.metric-q2  { background: #eef4e8; color: #5a7a1e; }
+.metric-q3  { background: #f6f1e8; color: #97701c; }
+.metric-top { background: #fdf0e8; color: #c2691f; }
 @media (max-width: 576px) {
   ol.publication-list > li {
     padding: 3.6rem 1rem 1rem 1rem;
