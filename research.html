@@ -180,13 +180,16 @@
       color: #99a3b2;
       margin-left: .15rem;
     }
-    /* stage accent colors */
-    .stage-gen    { border-top: 3px solid #7c5cbf; }
-    .stage-gen    .stage-num { background: #7c5cbf; }
-    .stage-pred   { border-top: 3px solid var(--accent-color); }
-    .stage-pred   .stage-num { background: var(--accent-color); }
-    .stage-opt    { border-top: 3px solid #0d9488; }
-    .stage-opt    .stage-num { background: #0d9488; }
+    /* stage pastel themes — soft tinted background + matching dark text */
+    .stage-gen  { background: #f3eefb; border-color: #e2d6f4; }
+    .stage-gen  h5, .stage-gen .stage-works { color: #5b3ea6; }
+    .stage-gen  .stage-num { background: #7c5cbf; }
+    .stage-pred { background: #e9f5fc; border-color: #cfe6f5; }
+    .stage-pred h5, .stage-pred .stage-works { color: #1f6f9e; }
+    .stage-pred .stage-num { background: var(--accent-color); }
+    .stage-opt  { background: #e7f8f2; border-color: #cceee2; }
+    .stage-opt  h5, .stage-opt .stage-works { color: #0f766e; }
+    .stage-opt  .stage-num { background: #0d9488; }
     .pipe-arrow {
       display: flex;
       align-items: center;
