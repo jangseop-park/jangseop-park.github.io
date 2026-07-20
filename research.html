@@ -145,10 +145,6 @@
       text-align: center;
       display: flex;
       flex-direction: column;
-      border: 1px solid #e7ecf2;
-      border-radius: .85rem;
-      background: #fff;
-      padding: .55rem .55rem 1.1rem;
     }
     /* only the head (number + title + sub) is tinted */
     .pipe-stage .stage-head {
@@ -172,14 +168,27 @@
       margin: 0;
       opacity: .85;
     }
-    /* works list sits below the head, on plain background */
+    /* works list sits below the head — left-aligned with a colored dot */
     .pipe-stage .stage-works {
       list-style: none;
-      padding: 0; margin: .9rem 0 0;
+      text-align: left;
+      padding: 0 0 0 .9rem;
+      margin: .9rem 0 0;
       font-size: .84rem;
       color: #47526a;
-      line-height: 1.8;
+      line-height: 1.9;
     }
+    .pipe-stage .stage-works li::before {
+      content: "";
+      display: inline-block;
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      margin-right: .55rem;
+      vertical-align: 2px;
+    }
+    .stage-gen  .stage-works li::before { background: #7c5cbf; }
+    .stage-pred .stage-works li::before { background: var(--accent-color); }
+    .stage-opt  .stage-works li::before { background: #0d9488; }
     .pipe-stage .stage-works .co {
       font-size: .68rem;
       color: #99a3b2;
@@ -203,7 +212,7 @@
       align-items: flex-start;
       justify-content: center;
       /* align with the vertical center of the pastel heads, not the full box */
-      padding-top: 56px;
+      padding-top: 47px;
       color: #c2ccd8;
       font-size: 1.3rem;
     }

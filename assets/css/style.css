@@ -231,10 +231,9 @@ ol.publication-list > li:hover::before {
   margin-left: 0.3rem;
 }
 .affil-tag::before { content: "@ "; opacity: 0.55; }
-/* KAIST — cool slate */
-.affil-kaist  { color: #3f5a78; border-color: #c9d6e4; }
-/* Narnia Labs — warm violet */
-.affil-narnia { color: #6b4aa0; border-color: #d9cdee; }
+/* Affiliations share one cool-slate look */
+.affil-kaist,
+.affil-narnia { color: #3f5a78; border-color: #c9d6e4; }
 @media (max-width: 576px) {
   ol.publication-list > li {
     padding: 3.6rem 1rem 1rem 1rem;
