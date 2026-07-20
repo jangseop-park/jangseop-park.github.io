@@ -216,7 +216,8 @@ ol.publication-list > li:hover::before {
 .role-lead { background: #eaf4fb; color: #1f6f9e; }
 /* Contributor — neutral grey (supporting role) */
 .role-contrib { background: #eef0f3; color: #5a6472; }
-/* Affiliation tag — outlined, sits next to the role tag */
+/* Affiliation tag — outlined, sits next to the role tag.
+   The leading "@" signals this is the researcher's own affiliation. */
 .affil-tag {
   display: inline-block;
   font-size: 0.72rem;
@@ -225,11 +226,15 @@ ol.publication-list > li:hover::before {
   padding: 0.15rem 0.6rem;
   border-radius: 999px;
   border: 1px solid #d7dce3;
-  color: #5a6472;
   background: #fff;
   white-space: nowrap;
   margin-left: 0.3rem;
 }
+.affil-tag::before { content: "@ "; opacity: 0.55; }
+/* KAIST — cool slate */
+.affil-kaist  { color: #3f5a78; border-color: #c9d6e4; }
+/* Narnia Labs — warm violet */
+.affil-narnia { color: #6b4aa0; border-color: #d9cdee; }
 @media (max-width: 576px) {
   ol.publication-list > li {
     padding: 3.6rem 1rem 1rem 1rem;

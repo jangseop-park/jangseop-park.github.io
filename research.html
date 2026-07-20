@@ -142,53 +142,57 @@
       gap: .25rem;
     }
     .pipe-stage {
-      border: 1px solid #e7ecf2;
-      border-radius: .85rem;
-      padding: 1.25rem 1.1rem;
-      background: #fff;
       text-align: center;
       display: flex;
       flex-direction: column;
     }
+    /* only the head (number + title + sub) is tinted */
+    .pipe-stage .stage-head {
+      border-radius: .8rem;
+      padding: 1rem .9rem 1.1rem;
+    }
     .pipe-stage .stage-num {
-      width: 30px; height: 30px;
-      margin: 0 auto .6rem;
+      width: 28px; height: 28px;
+      margin: 0 auto .5rem;
       border-radius: 50%;
       display: grid; place-items: center;
-      font-weight: 700; font-size: .85rem; color: #fff;
+      font-weight: 700; font-size: .82rem; color: #fff;
     }
     .pipe-stage h5 {
       font-weight: 800;
       font-size: 1.02rem;
       margin-bottom: .1rem;
-      color: var(--bg-dark);
     }
     .pipe-stage .stage-sub {
-      font-size: .78rem;
-      color: #8b97a8;
-      margin-bottom: .9rem;
+      font-size: .77rem;
+      margin: 0;
+      opacity: .85;
     }
+    /* works list sits below the head, on plain background */
     .pipe-stage .stage-works {
       list-style: none;
-      padding: 0; margin: 0 0 .1rem;
-      font-size: .82rem;
+      padding: 0; margin: .9rem 0 0;
+      font-size: .84rem;
       color: #47526a;
-      line-height: 1.7;
+      line-height: 1.8;
     }
     .pipe-stage .stage-works .co {
       font-size: .68rem;
       color: #99a3b2;
       margin-left: .15rem;
     }
-    /* stage pastel themes — soft tinted background + matching dark text */
-    .stage-gen  { background: #f3eefb; border-color: #e2d6f4; }
-    .stage-gen  h5, .stage-gen .stage-works { color: #5b3ea6; }
+    /* stage pastel head themes */
+    .stage-gen  .stage-head { background: #f3eefb; }
+    .stage-gen  h5 { color: #5b3ea6; }
+    .stage-gen  .stage-sub { color: #7c5cbf; }
     .stage-gen  .stage-num { background: #7c5cbf; }
-    .stage-pred { background: #e9f5fc; border-color: #cfe6f5; }
-    .stage-pred h5, .stage-pred .stage-works { color: #1f6f9e; }
+    .stage-pred .stage-head { background: #e9f5fc; }
+    .stage-pred h5 { color: #1f6f9e; }
+    .stage-pred .stage-sub { color: #3f8fbf; }
     .stage-pred .stage-num { background: var(--accent-color); }
-    .stage-opt  { background: #e7f8f2; border-color: #cceee2; }
-    .stage-opt  h5, .stage-opt .stage-works { color: #0f766e; }
+    .stage-opt  .stage-head { background: #e7f8f2; }
+    .stage-opt  h5 { color: #0f766e; }
+    .stage-opt  .stage-sub { color: #2a9d8a; }
     .stage-opt  .stage-num { background: #0d9488; }
     .pipe-arrow {
       display: flex;
@@ -204,8 +208,8 @@
       margin: .5rem 0;
     }
     .autonomous-banner {
-      border: 1px dashed #b9a6e0;
-      background: rgba(124, 92, 191, .06);
+      border: 1px dashed #f0b9c4;
+      background: rgba(225, 82, 112, .06);
       border-radius: .75rem;
       padding: .9rem 1.25rem;
       text-align: center;
@@ -214,7 +218,7 @@
     }
     .autonomous-banner .lead-line {
       font-weight: 700;
-      color: #5b3ea6;
+      color: #c04a63;
     }
     .autonomous-banner .sub-line {
       font-size: .82rem;
@@ -278,9 +282,11 @@
 
     <div class="pipeline" data-aos="fade-up">
       <div class="pipe-stage stage-gen">
-        <div class="stage-num">1</div>
-        <h5>Generative AI</h5>
-        <div class="stage-sub">Creating design candidates</div>
+        <div class="stage-head">
+          <div class="stage-num">1</div>
+          <h5>Generative AI</h5>
+          <div class="stage-sub">Creating design candidates</div>
+        </div>
         <ul class="stage-works">
           <li>DialogCAD</li>
           <li>DeepJEB <span class="co">(co-author)</span></li>
@@ -290,9 +296,11 @@
       <div class="pipe-arrow"><i class="bi bi-arrow-right"></i></div>
 
       <div class="pipe-stage stage-pred">
-        <div class="stage-num">2</div>
-        <h5>Predictive AI</h5>
-        <div class="stage-sub">Replacing simulation with neural surrogates</div>
+        <div class="stage-head">
+          <div class="stage-num">2</div>
+          <h5>Predictive AI</h5>
+          <div class="stage-sub">Replacing simulation with neural surrogates</div>
+        </div>
         <ul class="stage-works">
           <li>Point-DeepONet</li>
           <li>BMO-GNN</li>
@@ -303,9 +311,11 @@
       <div class="pipe-arrow"><i class="bi bi-arrow-right"></i></div>
 
       <div class="pipe-stage stage-opt">
-        <div class="stage-num">3</div>
-        <h5>Optimization AI</h5>
-        <div class="stage-sub">Optimizing &amp; orchestrating with LLM agents</div>
+        <div class="stage-head">
+          <div class="stage-num">3</div>
+          <h5>Optimization AI</h5>
+          <div class="stage-sub">Optimizing &amp; orchestrating with LLM agents</div>
+        </div>
         <ul class="stage-works">
           <li>AutoATC</li>
           <li>LLM-Guided Adaptive Penalty</li>
