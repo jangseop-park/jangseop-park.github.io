@@ -305,23 +305,7 @@
           <div id="overview-related" class="concept-related mt-3" style="display:none"></div>
         </div>
 
-        <!-- Section 2 · News list for the selected day -->
-        <div class="ai-news-layout">
-          <!-- Desktop sidebar -->
-          <div class="date-sidebar" id="date-sidebar">
-            <div class="d-flex align-items-center justify-content-center py-4 text-muted" style="font-size:.8rem">
-              <div class="spinner-border spinner-border-sm me-2"></div>
-            </div>
-          </div>
-          <!-- Content -->
-          <div class="news-panel" id="news-panel">
-            <div class="d-flex align-items-center justify-content-center h-100 text-muted">
-              <div class="spinner-border spinner-border-sm me-2"></div>Loading…
-            </div>
-          </div>
-        </div>
-
-        <!-- Section 3 · Item-level relationship graph for the selected day -->
+        <!-- Section 2 · Item-level relationship graph for the selected day -->
         <div class="graph-card mt-4">
           <h6>
             <span><i class="bi bi-diagram-3 me-1"></i>Daily <span class="subtitle" id="daily-subtitle">— shared keywords across the selected day's items</span></span>
@@ -334,6 +318,22 @@
             <span class="text-muted">— node size = shared-keyword links · click a node to see related items</span>
           </div>
           <div id="daily-related" class="concept-related mt-3" style="display:none"></div>
+        </div>
+
+        <!-- Section 3 · News list for the selected day -->
+        <div class="ai-news-layout mt-4">
+          <!-- Desktop sidebar -->
+          <div class="date-sidebar" id="date-sidebar">
+            <div class="d-flex align-items-center justify-content-center py-4 text-muted" style="font-size:.8rem">
+              <div class="spinner-border spinner-border-sm me-2"></div>
+            </div>
+          </div>
+          <!-- Content -->
+          <div class="news-panel" id="news-panel">
+            <div class="d-flex align-items-center justify-content-center h-100 text-muted">
+              <div class="spinner-border spinner-border-sm me-2"></div>Loading…
+            </div>
+          </div>
         </div>
 
       </div>
@@ -905,7 +905,15 @@
           if (related) related.style.display = 'none';
           return;
         }
-        showOverviewRelated(params.nodes[0]);
+        const clicked = params.nodes[0];
+        // Toggle: clicking the same concept again collapses the list.
+        if (related && related.style.display !== 'none' && related.dataset.concept === clicked) {
+          related.style.display = 'none';
+          related.dataset.concept = '';
+          overviewNetwork.unselectAll();
+          return;
+        }
+        showOverviewRelated(clicked);
       });
       const relatedEl = document.getElementById('overview-related');
       if (relatedEl) relatedEl.style.display = 'none';
@@ -947,8 +955,10 @@
         </div>
         ${rows.join('')}`;
       el.style.display = 'block';
+      el.dataset.concept = concept;
       el.querySelector('.overview-close').addEventListener('click', () => {
         el.style.display = 'none';
+        el.dataset.concept = '';
         if (overviewNetwork) overviewNetwork.unselectAll();
       });
       el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
