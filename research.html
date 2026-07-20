@@ -200,8 +200,10 @@
     .stage-opt  .stage-num { background: #0d9488; }
     .pipe-arrow {
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       justify-content: center;
+      /* align with the vertical center of the pastel heads, not the full box */
+      padding-top: 56px;
       color: #c2ccd8;
       font-size: 1.3rem;
     }
@@ -237,7 +239,7 @@
     .industry-line strong { color: #47526a; font-weight: 600; }
     @media (max-width: 767px) {
       .pipeline { grid-template-columns: 1fr; }
-      .pipe-arrow { transform: rotate(90deg); padding: .1rem 0; }
+      .pipe-arrow { transform: rotate(90deg); padding: .1rem 0; align-items: center; }
     }
   </style>
 </head>
