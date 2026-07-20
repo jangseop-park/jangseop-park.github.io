@@ -301,18 +301,18 @@
           <h6>
             <span><i class="bi bi-diagram-3 me-1"></i>Concept Graph <span class="subtitle" id="graph-subtitle">— shared keywords across today's items</span></span>
             <span class="btn-group btn-group-sm" role="group" aria-label="Graph view">
-              <button type="button" class="btn btn-outline-dark view-btn active" data-view="daily">Daily</button>
-              <button type="button" class="btn btn-outline-dark view-btn" data-view="overview">Overview</button>
+              <button type="button" class="btn btn-outline-dark view-btn" data-view="daily">Daily</button>
+              <button type="button" class="btn btn-outline-dark view-btn active" data-view="overview">Overview</button>
             </span>
           </h6>
           <div id="concept-graph"></div>
-          <div class="graph-legend" id="graph-legend-daily">
+          <div class="graph-legend" id="graph-legend-daily" style="display:none">
             <span><span class="dot" style="background:#f97316"></span>GitHub Trending</span>
             <span><span class="dot" style="background:#0d6efd"></span>HF Papers</span>
             <span><span class="dot" style="background:#198754"></span>GeekNews</span>
             <span class="text-muted">— node size = shared-keyword links · click a node to see related items</span>
           </div>
-          <div class="graph-legend" id="graph-legend-overview" style="display:none">
+          <div class="graph-legend" id="graph-legend-overview">
             <span class="text-muted">Nodes = AI/ML concepts across the last 30 days · node size = mentions · edge thickness = how often the two concepts co-appear · click a concept to see every item that mentions it</span>
           </div>
           <div id="concept-related" class="concept-related mt-3" style="display:none"></div>
@@ -468,6 +468,14 @@
       const data = await loadDay(date);
       renderPanel(data);
       renderGraph(date, data);
+    }
+
+    // Used at first load when Overview owns the graph — populate the news panel
+    // (hidden in Overview mode but ready when the user switches to Daily) without
+    // touching the graph area.
+    async function renderNewsPanelOnly(date) {
+      const data = await loadDay(date);
+      renderPanel(data);
     }
 
     // ---- Concept graph ----
@@ -808,7 +816,7 @@
 
     // ---- Overview (30-day concept graph) ----
     let allDates = [];
-    let currentView = 'daily';
+    let currentView = 'overview';
     let overviewBuilt = false;
 
     // Aggregated overview state — filled once, reused on relayout.
@@ -999,9 +1007,12 @@
       }
       allDates = dates;
       currentDate = dates[0];
-      document.body.classList.add('view-daily');
+      document.body.classList.add('view-overview');
       renderSidebar(dates, currentDate);
-      await renderNews(currentDate);
+      // Prime the daily side (news panel + cached data) but don't render its graph;
+      // Overview takes over the graph area on first load.
+      await renderNewsPanelOnly(currentDate);
+      await renderOverview();
     }
 
     init();
