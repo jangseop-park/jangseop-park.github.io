@@ -97,14 +97,15 @@
       text-transform: none;
       letter-spacing: 0;
     }
-    #overview-graph, #daily-graph {
+    #concept-graph {
       width: 100%;
+      height: 560px;
       border: 1px solid #f0f0f0;
       border-radius: .375rem;
       background: #fafbfc;
     }
-    #overview-graph { height: 560px; }
-    #daily-graph    { height: 460px; }
+    .view-btn { font-size: .7rem !important; font-weight: 600 !important; text-transform: none !important; letter-spacing: 0 !important; padding: .2rem .6rem !important; }
+    .view-btn.active { background: #212529 !important; color: #fff !important; }
     .vis-network:focus { outline: none; }
     div.vis-tooltip {
       max-width: 320px;
@@ -305,9 +306,8 @@
     <div class="row justify-content-center mb-4">
       <div class="col-lg-10 text-center">
         <h1 class="section-title">AI News Daily</h1>
-        <p class="lead text-muted mb-1">Curated daily AI updates</p>
-        <p class="text-muted mb-1">GitHub Trending · Hugging Face Papers · GeekNews</p>
-        <p class="text-muted small">Automatically collected and updated every morning</p>
+        <p class="lead text-muted mb-1">GitHub Trending · Hugging Face Papers · GeekNews</p>
+        <p class="text-muted small mb-0">Automatically collected and updated every morning</p>
       </div>
     </div>
 
@@ -327,30 +327,25 @@
           </div>
         </div>
 
-        <!-- Section 1 · Overview map of concepts across the last N days -->
+        <!-- Concept graph — Overview (30d) / Daily toggle -->
         <div class="graph-card">
           <h6>
-            <span><i class="bi bi-diagram-3 me-1"></i>Overview <span class="subtitle" id="overview-subtitle">— concepts across the last 30 days</span></span>
+            <span><i class="bi bi-diagram-3 me-1"></i>Concept Graph <span class="subtitle" id="graph-subtitle">— concepts across the last 30 days</span></span>
+            <span class="btn-group btn-group-sm" role="group" aria-label="Graph view">
+              <button type="button" class="btn btn-outline-dark view-btn active" data-view="overview">Overview</button>
+              <button type="button" class="btn btn-outline-dark view-btn" data-view="daily">Daily</button>
+            </span>
           </h6>
-          <div id="overview-graph"></div>
-          <div id="overview-related" class="concept-related mt-3" style="display:none"></div>
-        </div>
-
-        <!-- Section 2 · Item-level relationship graph for the selected day -->
-        <div class="graph-card mt-4">
-          <h6>
-            <span><i class="bi bi-diagram-3 me-1"></i>Daily <span class="subtitle" id="daily-subtitle">— shared keywords across the selected day's items</span></span>
-          </h6>
-          <div id="daily-graph"></div>
-          <div class="graph-legend">
+          <div id="concept-graph"></div>
+          <div class="graph-legend" id="graph-legend-daily" style="display:none">
             <span><span class="dot" style="background:#f97316"></span>GitHub Trending</span>
             <span><span class="dot" style="background:#0d6efd"></span>HF Papers</span>
             <span><span class="dot" style="background:#198754"></span>GeekNews</span>
           </div>
-          <div id="daily-related" class="concept-related mt-3" style="display:none"></div>
+          <div id="concept-related" class="concept-related mt-3" style="display:none"></div>
         </div>
 
-        <!-- Section 3 · News list for the selected day -->
+        <!-- News list for the selected day (always shown, under either view) -->
         <div class="ai-news-layout mt-4">
           <!-- Desktop sidebar -->
           <div class="date-sidebar" id="date-sidebar">
@@ -455,6 +450,8 @@
       if (sel) sel.value = date;
       currentDate = date;
       renderNews(date);
+      // If the Daily graph is currently on screen, refresh it for the new date.
+      if (currentView === 'daily' && dataCache[date]) renderGraph(date, dataCache[date]);
     }
 
     function renderSidebar(dates, active) {
@@ -498,13 +495,14 @@
       sel.onchange = () => selectDate(sel.value);
     }
 
+    // Renders ONLY the day's news list (GitHub / HF / GeekNews). The graph area
+    // is driven separately by the Overview/Daily toggle.
     async function renderNews(date) {
       const panel = document.getElementById('news-panel');
       panel.innerHTML = `<div class="d-flex align-items-center justify-content-center py-5 text-muted">
         <div class="spinner-border spinner-border-sm me-2"></div>Loading…</div>`;
       const data = await loadDay(date);
       renderPanel(data);
-      renderGraph(date, data);
     }
 
     // ---- Concept graph ----
@@ -688,12 +686,12 @@
       return shortenLabel(englishTitle || (HANGUL_RE.test(koreanTitle) ? '' : koreanTitle), 18) || '—';
     }
 
-    let dailyNetwork = null;
-    let overviewNetwork = null;
+    // One graph container shared by both views; only one view is shown at a time.
+    let network = null;
 
     function renderGraph(date, data) {
-      const container = document.getElementById('daily-graph');
-      const subtitle = document.getElementById('daily-subtitle');
+      const container = document.getElementById('concept-graph');
+      const subtitle = document.getElementById('graph-subtitle');
       if (!container) return;
       if (!data) {
         container.innerHTML = '<div class="d-flex align-items-center justify-content-center h-100 text-muted small">No data.</div>';
@@ -770,8 +768,8 @@
       const edgeCount = edges.length;
       if (subtitle) subtitle.textContent = `— ${nodeCount} items · ${edgeCount} keyword links · ${date}`;
 
-      if (dailyNetwork) { dailyNetwork.destroy(); dailyNetwork = null; }
-      dailyNetwork = new vis.Network(container, { nodes, edges }, {
+      if (network) { network.destroy(); network = null; }
+      network = new vis.Network(container, { nodes, edges }, {
         layout: { randomSeed: 7, improvedLayout: true },
         physics: {
           enabled: true,
@@ -782,27 +780,27 @@
         interaction: { hover: true, tooltipDelay: 150, zoomView: true, dragView: true },
         edges: { width: 1, scaling: { min: 1, max: 6 } },
       });
-      dailyNetwork.on('click', params => {
-        const related = document.getElementById('daily-related');
+      network.on('click', params => {
+        const related = document.getElementById('concept-related');
         if (!params.nodes.length) {
-          if (related && related.style.display !== 'none') collapseDailyRelated();
+          if (related && related.style.display !== 'none') collapseRelated();
           return;
         }
         const clickedId = params.nodes[0];
         if (related && related.style.display !== 'none' && related.dataset.itemId === clickedId) {
-          collapseDailyRelated();
+          collapseRelated();
           return;
         }
         const node = nodes.find(n => n.id === clickedId);
         if (!node) return;
         showRelatedItems(node, items, itemConcepts, sourceName);
       });
-      const relatedEl = document.getElementById('daily-related');
-      if (relatedEl) { relatedEl.style.display = 'none'; relatedEl.dataset.itemId = ''; }
+      const relatedEl = document.getElementById('concept-related');
+      if (relatedEl) { relatedEl.style.display = 'none'; relatedEl.dataset.itemId = ''; relatedEl.dataset.concept = ''; }
     }
 
     function showRelatedItems(clickedNode, items, itemConcepts, sourceName) {
-      const el = document.getElementById('daily-related');
+      const el = document.getElementById('concept-related');
       if (!el) return;
       const concepts = clickedNode._concepts || [];
       const primary = concepts[0];
@@ -837,32 +835,26 @@
       el.innerHTML = `
         <div class="related-header">
           <div class="title">${headerTitle} <span class="text-muted fw-normal">· ${related.length}</span></div>
-          <button type="button" class="close-btn daily-close" aria-label="close">&times;</button>
+          <button type="button" class="close-btn related-close" aria-label="close">&times;</button>
         </div>
         ${rows}`;
       el.style.display = 'block';
       el.dataset.itemId = clickedNode.id;
-      el.querySelector('.daily-close').addEventListener('click', collapseDailyRelated);
+      el.dataset.concept = '';
+      el.querySelector('.related-close').addEventListener('click', collapseRelated);
       showFloatingCollapse();
       el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
 
-    function collapseDailyRelated() {
-      const el = document.getElementById('daily-related');
+    // Shared collapse for both views (single related panel + single network).
+    function collapseRelated() {
+      const el = document.getElementById('concept-related');
       if (!el) return;
       el.style.display = 'none';
       el.dataset.itemId = '';
-      if (dailyNetwork) dailyNetwork.unselectAll();
-      if (!isOverviewOpen()) hideFloatingCollapse();
-    }
-
-    function isOverviewOpen() {
-      const el = document.getElementById('overview-related');
-      return el && el.style.display !== 'none';
-    }
-    function isDailyOpen() {
-      const el = document.getElementById('daily-related');
-      return el && el.style.display !== 'none';
+      el.dataset.concept = '';
+      if (network) network.unselectAll();
+      hideFloatingCollapse();
     }
 
     // ---- Overview (30-day concept graph) ----
@@ -890,8 +882,8 @@
     }
 
     async function renderOverview() {
-      const container = document.getElementById('overview-graph');
-      const subtitle = document.getElementById('overview-subtitle');
+      const container = document.getElementById('concept-graph');
+      const subtitle = document.getElementById('graph-subtitle');
       container.innerHTML = '<div class="d-flex align-items-center justify-content-center h-100 text-muted small"><div class="spinner-border spinner-border-sm me-2"></div>Aggregating 30 days…</div>';
 
       await buildOverviewData();
@@ -942,8 +934,8 @@
 
       if (subtitle) subtitle.textContent = `— ${nodes.length} concepts · ${edges.length} co-occurrence links · last ${allDates.length} days`;
 
-      if (overviewNetwork) { overviewNetwork.destroy(); overviewNetwork = null; }
-      overviewNetwork = new vis.Network(container, { nodes, edges }, {
+      if (network) { network.destroy(); network = null; }
+      network = new vis.Network(container, { nodes, edges }, {
         layout: { randomSeed: 42, improvedLayout: true },
         nodes: { scaling: { min: 10, max: 44, label: { enabled: false } } },
         edges: { width: 1, scaling: { min: 1, max: 8 } },
@@ -955,27 +947,27 @@
         },
         interaction: { hover: true, tooltipDelay: 150, zoomView: true, dragView: true },
       });
-      overviewNetwork.on('click', params => {
-        const related = document.getElementById('overview-related');
+      network.on('click', params => {
+        const related = document.getElementById('concept-related');
         if (!params.nodes.length) {
-          if (related && related.style.display !== 'none') collapseOverviewRelated();
+          if (related && related.style.display !== 'none') collapseRelated();
           return;
         }
         const clicked = params.nodes[0];
         if (related && related.style.display !== 'none' && related.dataset.concept === clicked) {
-          collapseOverviewRelated();
+          collapseRelated();
           return;
         }
         showOverviewRelated(clicked);
       });
-      const relatedEl = document.getElementById('overview-related');
-      if (relatedEl) relatedEl.style.display = 'none';
+      const relatedEl = document.getElementById('concept-related');
+      if (relatedEl) { relatedEl.style.display = 'none'; relatedEl.dataset.itemId = ''; relatedEl.dataset.concept = ''; }
     }
 
     const SOURCE_NAME = { gh: 'GitHub Trending', hf: 'HF Papers', gn: 'GeekNews' };
 
     function showOverviewRelated(concept) {
-      const el = document.getElementById('overview-related');
+      const el = document.getElementById('concept-related');
       if (!el) return;
       const related = overviewItems.filter((_, idx) => overviewItemConcepts[idx].includes(concept));
       // Sort newest first, group by date
@@ -1004,23 +996,15 @@
       el.innerHTML = `
         <div class="related-header">
           <div class="title"><span class="concept-chip">${concept}</span> <span class="text-muted fw-normal">· ${related.length} across ${allDates.length} days</span></div>
-          <button type="button" class="close-btn overview-close" aria-label="close">&times;</button>
+          <button type="button" class="close-btn related-close" aria-label="close">&times;</button>
         </div>
         ${rows.join('')}`;
       el.style.display = 'block';
       el.dataset.concept = concept;
-      el.querySelector('.overview-close').addEventListener('click', collapseOverviewRelated);
+      el.dataset.itemId = '';
+      el.querySelector('.related-close').addEventListener('click', collapseRelated);
       showFloatingCollapse();
       el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    }
-
-    function collapseOverviewRelated() {
-      const el = document.getElementById('overview-related');
-      if (!el) return;
-      el.style.display = 'none';
-      el.dataset.concept = '';
-      if (overviewNetwork) overviewNetwork.unselectAll();
-      if (!isDailyOpen()) hideFloatingCollapse();
     }
 
     function showFloatingCollapse() {
@@ -1033,13 +1017,29 @@
     }
 
     document.getElementById('floating-collapse').addEventListener('click', () => {
-      // Scroll target = the graph whose panel is open (before we close it)
-      const scrollTarget = isOverviewOpen()
-        ? document.getElementById('overview-graph')
-        : (isDailyOpen() ? document.getElementById('daily-graph') : null);
-      collapseOverviewRelated();
-      collapseDailyRelated();
-      if (scrollTarget) scrollTarget.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      const graph = document.getElementById('concept-graph');
+      collapseRelated();
+      if (graph) graph.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+
+    // ---- View toggle: Overview (default) / Daily ----
+    let currentView = 'overview';
+
+    async function setView(view) {
+      if (view === currentView) return;
+      currentView = view;
+      document.querySelectorAll('.view-btn').forEach(b => b.classList.toggle('active', b.dataset.view === view));
+      document.getElementById('graph-legend-daily').style.display = view === 'daily' ? '' : 'none';
+      collapseRelated();
+      if (view === 'overview') {
+        await renderOverview();
+      } else if (currentDate && dataCache[currentDate]) {
+        renderGraph(currentDate, dataCache[currentDate]);
+      }
+    }
+
+    document.querySelectorAll('.view-btn').forEach(btn => {
+      btn.addEventListener('click', () => setView(btn.dataset.view));
     });
 
     // Language toggle — re-render from JS cache, no network fetch
@@ -1048,13 +1048,15 @@
         document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
         currentLang = btn.dataset.lang;
-        if (currentDate && dataCache[currentDate]) {
-          renderPanel(dataCache[currentDate]);
-          renderGraph(currentDate, dataCache[currentDate]);
+        // News list is always visible — refresh it.
+        if (currentDate && dataCache[currentDate]) renderPanel(dataCache[currentDate]);
+        // Refresh the graph / open related list for the active view.
+        if (currentView === 'daily') {
+          if (currentDate && dataCache[currentDate]) renderGraph(currentDate, dataCache[currentDate]);
+        } else {
+          const selected = network && network.getSelectedNodes && network.getSelectedNodes()[0];
+          if (selected) showOverviewRelated(selected);
         }
-        // Overview graph itself is language-agnostic; just refresh any open related list.
-        const selected = overviewNetwork && overviewNetwork.getSelectedNodes && overviewNetwork.getSelectedNodes()[0];
-        if (selected) showOverviewRelated(selected);
       });
     });
 
@@ -1068,8 +1070,8 @@
       allDates = dates;
       currentDate = dates[0];
       renderSidebar(dates, currentDate);
-      await renderNews(currentDate);          // fills news panel + daily graph
-      renderOverview().catch(err => console.error('overview failed', err));
+      await renderNews(currentDate);      // news list (always visible)
+      await renderOverview();             // Overview is the default graph view
     }
 
     init();
