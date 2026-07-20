@@ -302,7 +302,7 @@
             <span><i class="bi bi-diagram-3 me-1"></i>Concept Graph <span class="subtitle" id="graph-subtitle">— shared keywords across today's items</span></span>
             <span class="btn-group btn-group-sm" role="group" aria-label="Graph view">
               <button type="button" class="btn btn-outline-dark view-btn active" data-view="daily">Daily</button>
-              <button type="button" class="btn btn-outline-dark view-btn" data-view="overview">Overview · 30d</button>
+              <button type="button" class="btn btn-outline-dark view-btn" data-view="overview">Overview</button>
             </span>
           </h6>
           <div id="concept-graph"></div>
@@ -734,6 +734,7 @@
 
       if (network) { network.destroy(); network = null; }
       network = new vis.Network(container, { nodes, edges }, {
+        layout: { randomSeed: 7, improvedLayout: true },
         physics: {
           enabled: true,
           solver: 'forceAtlas2Based',
@@ -863,8 +864,8 @@
         label: c,
         title: `${c} — ${count} mention${count === 1 ? '' : 's'} across ${allDates.length} days`,
         value: count,
-        color: { background: '#0d6efd', border: '#0d6efd', highlight: { background: '#0d6efd', border: '#212529' } },
-        font: { color: '#fff', size: 12 + Math.round((count / maxCount) * 6), face: 'Inter, sans-serif', vadjust: 0, strokeWidth: 0 },
+        color: { background: '#e7f0ff', border: '#0d6efd', highlight: { background: '#cfe0ff', border: '#212529' } },
+        font: { color: '#212529', size: 12 + Math.round((count / maxCount) * 6), face: 'Inter, sans-serif', vadjust: 0, strokeWidth: 0 },
         shape: 'dot',
         _concept: c,
       }));
@@ -885,6 +886,7 @@
 
       if (network) { network.destroy(); network = null; }
       network = new vis.Network(container, { nodes, edges }, {
+        layout: { randomSeed: 42, improvedLayout: true },
         nodes: { scaling: { min: 10, max: 44, label: { enabled: false } } },
         edges: { width: 1, scaling: { min: 1, max: 8 } },
         physics: {
