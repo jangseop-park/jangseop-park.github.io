@@ -153,6 +153,74 @@
       margin-right: .35rem;
       vertical-align: middle;
     }
+    .concept-related {
+      border-top: 1px solid #e9ecef;
+      padding-top: .9rem;
+    }
+    .concept-related .related-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: .6rem;
+    }
+    .concept-related .related-header .title {
+      font-size: .85rem;
+      font-weight: 700;
+      color: #212529;
+    }
+    .concept-related .related-header .title .concept-chip {
+      display: inline-block;
+      background: #212529;
+      color: #fff;
+      padding: .1rem .5rem;
+      border-radius: 999px;
+      font-size: .75rem;
+      margin-right: .35rem;
+    }
+    .concept-related .related-header .close-btn {
+      background: transparent;
+      border: none;
+      color: #6c757d;
+      font-size: 1.1rem;
+      line-height: 1;
+      cursor: pointer;
+      padding: 0 .3rem;
+    }
+    .concept-related .related-header .close-btn:hover { color: #212529; }
+    .concept-related .related-item {
+      padding: .55rem 0;
+      border-bottom: 1px solid #f0f0f0;
+      display: flex;
+      gap: .6rem;
+      align-items: flex-start;
+    }
+    .concept-related .related-item:last-child { border-bottom: none; }
+    .concept-related .related-item .src-dot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      margin-top: .45rem;
+      flex-shrink: 0;
+    }
+    .concept-related .related-item .content { flex: 1; min-width: 0; }
+    .concept-related .related-item a {
+      text-decoration: none;
+      color: #212529;
+      font-weight: 500;
+      font-size: .88rem;
+    }
+    .concept-related .related-item a:hover { text-decoration: underline; color: #0d6efd; }
+    .concept-related .related-item .meta {
+      font-size: .72rem;
+      color: #6c757d;
+      margin-top: .1rem;
+    }
+    .concept-related .related-item .summary {
+      font-size: .8rem;
+      color: #495057;
+      margin-top: .2rem;
+    }
     .news-panel {
       flex: 1;
       padding: 1.5rem;
@@ -258,8 +326,9 @@
             <span><span class="dot" style="background:#f97316"></span>GitHub Trending</span>
             <span><span class="dot" style="background:#0d6efd"></span>HF Papers</span>
             <span><span class="dot" style="background:#198754"></span>GeekNews</span>
-            <span class="text-muted">— node size = shared-keyword links · edge thickness = shared count · hover for full title</span>
+            <span class="text-muted">— node size = shared-keyword links · click a node to see related items</span>
           </div>
+          <div id="concept-related" class="concept-related mt-3" style="display:none"></div>
         </div>
 
         <div class="ai-news-layout">
@@ -545,41 +614,62 @@
     // Order matters slightly — more specific concepts should come before more general ones.
     const CONCEPTS = [
       { label: 'Multi-Agent',   patterns: [/\bmulti[- ]?agent\b/, '멀티 에이전트', '멀티에이전트'] },
-      { label: 'Agent',         patterns: [/\bagents?\b/, '에이전트'] },
+      { label: 'Agent',         patterns: [/\bagents?\b/, /agentic/, '에이전트', '에이전틱'] },
       { label: 'RAG',           patterns: [/\brag\b/, /retrieval[- ]?augmented/, '검색 증강'] },
       { label: 'LLM',           patterns: [/\bllms?\b/, /large language model/, '대규모 언어 모델', '거대 언어 모델'] },
-      { label: 'Reasoning',     patterns: [/\breasoning\b/, /chain[- ]of[- ]thought/, /\bcot\b/, '추론'] },
-      { label: 'Fine-tuning',   patterns: [/fine[- ]?tun(ing|e)/, /\bpeft\b/, /\blora\b/, '파인튜닝', '미세조정'] },
-      { label: 'RL',            patterns: [/\brl\b/, /reinforcement learning/, /\brlhf\b/, /\bdpo\b/, '강화학습'] },
-      { label: 'Diffusion',     patterns: [/diffusion/, '디퓨전'] },
-      { label: 'Vision',        patterns: [/\bvision\b/, /\bvlm\b/, /vision[- ]language/, /\bimage\b/, '비전', '이미지'] },
-      { label: 'Video',         patterns: [/\bvideo\b/, '비디오', '영상'] },
-      { label: 'Speech',        patterns: [/\bspeech\b/, /\btts\b/, /\basr\b/, /\baudio\b/, '음성', '오디오'] },
-      { label: 'Robotics',      patterns: [/\brobot(ics|s)?\b/, '로봇'] },
-      { label: '3D',            patterns: [/\b3d\b/, /nerf/, /gaussian splatting/, '3d'] },
+      { label: 'SLM',           patterns: [/\bslm\b/, /small language model/, '소형 언어 모델'] },
+      { label: 'Reasoning',     patterns: [/\breasoning\b/, /chain[- ]of[- ]thought/, /\bcot\b/, /reason(er|ing)/, '추론'] },
+      { label: 'Fine-tuning',   patterns: [/fine[- ]?tun(ing|e|ed)/, /\bpeft\b/, /\blora\b/, /\bqlora\b/, '파인튜닝', '미세조정'] },
+      { label: 'RL',            patterns: [/\brl\b/, /reinforcement learning/, /\brlhf\b/, /\bdpo\b/, /\bppo\b/, /\bgrpo\b/, '강화학습'] },
+      { label: 'Diffusion',     patterns: [/diffusion/, /flow matching/, '디퓨전'] },
+      { label: 'Vision',        patterns: [/\bvision\b/, /\bvlm\b/, /vision[- ]language/, /\bimage\b/, /\bocr\b/, '비전', '이미지'] },
+      { label: 'Video',         patterns: [/\bvideo\b/, /text[- ]?to[- ]?video/, /\bt2v\b/, '비디오', '영상'] },
+      { label: 'Speech',        patterns: [/\bspeech\b/, /\btts\b/, /\basr\b/, /\baudio\b/, /voice/, '음성', '오디오'] },
+      { label: 'Music',         patterns: [/\bmusic\b/, /\bsinging\b/, '음악'] },
+      { label: 'Robotics',      patterns: [/\brobot(ics|s)?\b/, /manipulation/, /embodied/, '로봇', '체화'] },
+      { label: '3D',            patterns: [/\b3d\b/, /\bnerf\b/, /gaussian splatting/, /\bmesh\b/, '3d'] },
       { label: 'MoE',           patterns: [/\bmoe\b/, /mixture[- ]of[- ]experts/] },
-      { label: 'Quantization',  patterns: [/quantiz(ation|ed)/, /\bgptq\b/, /\bawq\b/, '양자화'] },
+      { label: 'Quantization',  patterns: [/quantiz(ation|ed)/, /\bgptq\b/, /\bawq\b/, /\bint4\b/, /\bint8\b/, '양자화'] },
       { label: 'Distillation',  patterns: [/distill(ation|ed|ing)?/, '증류'] },
-      { label: 'Benchmark',     patterns: [/benchmark/, /evaluation/, '벤치마크', '평가'] },
-      { label: 'Dataset',       patterns: [/dataset/, '데이터셋'] },
+      { label: 'Pruning',       patterns: [/prun(ing|ed)/, /sparsit(y|ies)/, '가지치기', '희소'] },
+      { label: 'Benchmark',     patterns: [/benchmark/, /evaluation/, /\beval\b/, /leaderboard/, '벤치마크', '평가'] },
+      { label: 'Dataset',       patterns: [/dataset/, /corpus/, '데이터셋', '말뭉치'] },
+      { label: 'Synthetic Data',patterns: [/synthetic data/, /data generation/, '합성 데이터'] },
       { label: 'Transformer',   patterns: [/\btransformer/, '트랜스포머'] },
+      { label: 'State Space',   patterns: [/\bmamba\b/, /state[- ]space/, /\bssm\b/, /\brwkv\b/] },
       { label: 'GNN',           patterns: [/\bgnn\b/, /graph neural/] },
       { label: 'MCP',           patterns: [/\bmcp\b/, /model context protocol/] },
-      { label: 'Code',          patterns: [/\bcode\s+(gen|generation|assistant|llm)/, /\bcopilot\b/, '코드 생성', '코드 어시스턴트'] },
-      { label: 'Search',        patterns: [/\bsearch\b/, /\bretrieval\b/, '검색'] },
+      { label: 'Tool Use',      patterns: [/tool[- ]use/, /function calling/, /tool calling/, '도구 사용', '함수 호출'] },
+      { label: 'Code',          patterns: [/\bcode\s+(gen|generation|assistant|llm)/, /\bcopilot\b/, /coding agent/, /vibe coding/, '코드 생성', '코드 어시스턴트', '바이브 코딩'] },
+      { label: 'Search',        patterns: [/\bsearch\b/, /\bretrieval\b/, /vector search/, '검색'] },
+      { label: 'Vector DB',     patterns: [/vector\s?(db|database|store)/, /faiss/, /pinecone/, /chroma\b/, /qdrant/, /milvus/, /weaviate/, '벡터 db', '벡터 데이터베이스'] },
       { label: 'Prompt',        patterns: [/prompt(ing)?/, '프롬프트'] },
-      { label: 'Safety',        patterns: [/\bsafety\b/, /\balignment\b/, /jailbreak/, '안전', '정렬'] },
+      { label: 'Safety',        patterns: [/\bsafety\b/, /\balignment\b/, /jailbreak/, /red[- ]?team/, /guardrail/, '안전', '정렬', '탈옥'] },
+      { label: 'Privacy',       patterns: [/\bprivacy\b/, /federated learning/, /differential privacy/, '프라이버시', '연합 학습'] },
       { label: 'Training',      patterns: [/pre[- ]?train(ing|ed)?/, /post[- ]?training/, '학습', '사전학습'] },
-      { label: 'Inference',     patterns: [/\binference\b/, /\bserving\b/, /\bvllm\b/, '추론 최적화'] },
+      { label: 'Inference',     patterns: [/\binference\b/, /\bserving\b/, /\bvllm\b/, /\bsglang\b/, /\btgi\b/, '추론 최적화', '서빙'] },
+      { label: 'Long Context',  patterns: [/long context/, /context window/, /\b\d{2,}k?\s?tokens?\b/i, '롱 컨텍스트', '긴 문맥'] },
       { label: 'Multimodal',    patterns: [/multi[- ]?modal/, '멀티모달'] },
-      { label: 'Embedding',     patterns: [/embedding/, '임베딩'] },
-      { label: 'Chatbot',       patterns: [/chatbot/, /\bassistant\b/, '챗봇'] },
-      { label: 'Trading',       patterns: [/\btrading\b/, /\bfinance\b/, '트레이딩', '금융', '매매'] },
-      { label: 'Workflow',      patterns: [/workflow/, /orchestrat(ion|or)/, '워크플로'] },
-      { label: 'Framework',     patterns: [/framework/, '프레임워크'] },
+      { label: 'Embedding',     patterns: [/embedding/, /re[- ]?ranker/, '임베딩', '리랭커'] },
+      { label: 'Chatbot',       patterns: [/chatbot/, /\bassistant\b/, /conversational/, '챗봇', '대화형'] },
+      { label: 'Trading',       patterns: [/\btrading\b/, /\bfinance\b/, /market/, '트레이딩', '금융', '매매', '주식'] },
+      { label: 'Healthcare',    patterns: [/\bmedical\b/, /healthcare/, /clinical/, /biomedical/, '의료', '헬스케어', '임상'] },
+      { label: 'Science',       patterns: [/\bscience\b/, /scientific/, /physics/, /chemistry/, /biology/, /materials/, '과학', '물리', '화학', '생물', '재료'] },
+      { label: 'Education',     patterns: [/\beducation\b/, /learning platform/, /tutor/, '교육', '학습 플랫폼', '튜터'] },
+      { label: 'Workflow',      patterns: [/workflow/, /orchestrat(ion|or)/, /pipeline/, '워크플로', '파이프라인'] },
+      { label: 'Framework',     patterns: [/framework/, /\bsdk\b/, '프레임워크'] },
+      { label: 'Open Source',   patterns: [/open[- ]source/, /\bopen weights?\b/, '오픈소스', '오픈 소스'] },
+      { label: 'GPU',           patterns: [/\bgpu\b/, /\bcuda\b/, /nvidia/, /\btpu\b/, /\btriton\b/, /\bkernel\b/] },
+      { label: 'On-Device',     patterns: [/on[- ]device/, /edge (ai|computing)/, /mobile ai/, '온디바이스', '엣지'] },
+      { label: 'Security',      patterns: [/\bsecurity\b/, /vulnerab(ility|ilities)/, /\bcve\b/, /malware/, '보안', '취약점'] },
+      { label: 'Browser Agent', patterns: [/browser (agent|automation)/, /web agent/, '브라우저 에이전트'] },
+      { label: 'GUI Agent',     patterns: [/gui agent/, /computer use/, /screen (agent|understanding)/, 'gui 에이전트', '컴퓨터 사용'] },
+      { label: 'Simulation',    patterns: [/simulation/, /simulator/, /physics engine/, '시뮬레이션'] },
+      { label: 'World Model',   patterns: [/world model/, '월드 모델'] },
+      { label: 'Memory',        patterns: [/\bmemory\b/, /long[- ]?term memory/, /\bkv cache\b/, '메모리'] },
     ];
 
-    function matchConcepts(text, max = 2) {
+    function matchConcepts(text, max = Infinity) {
       if (!text) return [];
       const lower = text.toLowerCase();
       const hits = [];
@@ -648,6 +738,9 @@
       // Keywords that appear in more than half the items are too generic
       const maxDf = Math.max(2, Math.floor(items.length * 0.5));
 
+      // Precompute full concept list per item (all matches, no cap)
+      const itemConcepts = items.map(it => matchConcepts(`${it.title} ${it.title_en} ${it.summary} ${it.summary_en}`));
+
       // Build edges from shared keywords (weighted, ignore too-common ones)
       const sourceName = { gh: 'GitHub Trending', hf: 'HF Papers', gn: 'GeekNews' };
       const nodes = items.map((it, idx) => {
@@ -656,12 +749,13 @@
         return {
           id: it.id,
           label: shortLabel,
-          title: `${fullTitle}\n\n(${sourceName[it.source]})`,
+          title: `${fullTitle}\n\n(${sourceName[it.source]}) — click for related items`,
           color: { background: it.color, border: it.color, highlight: { background: it.color, border: '#212529' } },
           font: { color: '#212529', size: 11, face: 'Inter, sans-serif' },
           shape: 'dot',
           size: 14,
-          _url: it.url,
+          _itemIdx: idx,
+          _concepts: itemConcepts[idx],
         };
       });
 
@@ -714,11 +808,65 @@
         edges: { width: 1, scaling: { min: 1, max: 6 } },
       });
       network.on('click', params => {
-        if (params.nodes.length) {
-          const node = nodes.find(n => n.id === params.nodes[0]);
-          if (node && node._url) window.open(node._url, '_blank', 'noopener');
+        const related = document.getElementById('concept-related');
+        if (!params.nodes.length) {
+          if (related) related.style.display = 'none';
+          return;
         }
+        const node = nodes.find(n => n.id === params.nodes[0]);
+        if (!node) return;
+        showRelatedItems(node, items, itemConcepts, sourceName);
       });
+      // Hide any stale related panel when the graph re-renders
+      const relatedEl = document.getElementById('concept-related');
+      if (relatedEl) relatedEl.style.display = 'none';
+    }
+
+    function showRelatedItems(clickedNode, items, itemConcepts, sourceName) {
+      const el = document.getElementById('concept-related');
+      if (!el) return;
+      const concepts = clickedNode._concepts || [];
+      const primary = concepts[0];
+      const clickedItem = items[clickedNode._itemIdx];
+
+      // Gather items that share the primary concept; if no concept matched,
+      // fall back to just the clicked item.
+      let related = [];
+      let headerTitle = '';
+      if (primary) {
+        related = items.filter((_, idx) => itemConcepts[idx].includes(primary));
+        headerTitle = `Related items — <span class="concept-chip">${primary}</span>`;
+      } else {
+        related = [clickedItem];
+        headerTitle = 'Selected item';
+      }
+
+      const rows = related.map(it => {
+        const title = currentLang === 'en' ? (it.title_en || it.title) : (it.title || it.title_en);
+        const summary = currentLang === 'en' ? (it.summary_en || it.summary) : (it.summary || it.summary_en);
+        return `
+          <div class="related-item">
+            <span class="src-dot" style="background:${it.color}"></span>
+            <div class="content">
+              <a href="${it.url}" target="_blank" rel="noopener">${title}</a>
+              <div class="meta">${sourceName[it.source]}</div>
+              ${summary ? `<div class="summary">${summary}</div>` : ''}
+            </div>
+          </div>`;
+      }).join('');
+
+      el.innerHTML = `
+        <div class="related-header">
+          <div class="title">${headerTitle} <span class="text-muted fw-normal">· ${related.length}</span></div>
+          <button type="button" class="close-btn" id="related-close" aria-label="close">&times;</button>
+        </div>
+        ${rows}`;
+      el.style.display = 'block';
+      document.getElementById('related-close').addEventListener('click', () => {
+        el.style.display = 'none';
+        if (network) network.unselectAll();
+      });
+      el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
 
     // Language toggle — re-render from JS cache, no network fetch
