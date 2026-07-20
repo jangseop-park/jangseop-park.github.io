@@ -97,6 +97,8 @@
       text-transform: none;
       letter-spacing: 0;
     }
+    .view-btn { font-size: .7rem !important; font-weight: 600 !important; text-transform: none !important; letter-spacing: 0 !important; padding: .2rem .6rem !important; }
+    .view-btn.active { background: #212529 !important; color: #fff !important; }
     #concept-graph {
       height: 480px;
       width: 100%;
@@ -223,6 +225,9 @@
     .news-item a:hover { text-decoration: underline; color: #0d6efd; }
     .news-item .summary { font-size: .82rem; color: #6c757d; margin-top: .15rem; }
     .lang-btn.active { background: #212529 !important; color: #fff !important; }
+    body.view-overview .ai-news-layout { display: none; }
+    body.view-overview .mobile-date-wrap { display: none !important; }
+    body.view-overview #concept-graph { height: 640px; }
 
     /* Mobile: dropdown instead of sidebar */
     .mobile-date-wrap { display: none; }
@@ -295,14 +300,20 @@
         <div class="graph-card">
           <h6>
             <span><i class="bi bi-diagram-3 me-1"></i>Concept Graph <span class="subtitle" id="graph-subtitle">— shared keywords across today's items</span></span>
-            <span class="subtitle d-none d-md-inline">drag · scroll to zoom · click a node to open</span>
+            <span class="btn-group btn-group-sm" role="group" aria-label="Graph view">
+              <button type="button" class="btn btn-outline-dark view-btn active" data-view="daily">Daily</button>
+              <button type="button" class="btn btn-outline-dark view-btn" data-view="overview">Overview · 30d</button>
+            </span>
           </h6>
           <div id="concept-graph"></div>
-          <div class="graph-legend">
+          <div class="graph-legend" id="graph-legend-daily">
             <span><span class="dot" style="background:#f97316"></span>GitHub Trending</span>
             <span><span class="dot" style="background:#0d6efd"></span>HF Papers</span>
             <span><span class="dot" style="background:#198754"></span>GeekNews</span>
             <span class="text-muted">— node size = shared-keyword links · click a node to see related items</span>
+          </div>
+          <div class="graph-legend" id="graph-legend-overview" style="display:none">
+            <span class="text-muted">Nodes = AI/ML concepts across the last 30 days · node size = mentions · edge thickness = how often the two concepts co-appear · click a concept to see every item that mentions it</span>
           </div>
           <div id="concept-related" class="concept-related mt-3" style="display:none"></div>
         </div>
@@ -794,13 +805,183 @@
       el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
 
+    // ---- Overview (30-day concept graph) ----
+    let allDates = [];
+    let currentView = 'daily';
+    let overviewBuilt = false;
+
+    // Aggregated overview state — filled once, reused on relayout.
+    let overviewItems = [];        // all items across all days, each with .date
+    let overviewItemConcepts = []; // parallel array — concept list per item
+
+    async function buildOverviewData() {
+      if (overviewBuilt) return;
+      const results = await Promise.all(allDates.map(async d => ({ date: d, data: await loadDay(d) })));
+      overviewItems = [];
+      overviewItemConcepts = [];
+      for (const { date, data } of results) {
+        if (!data) continue;
+        const items = collectItems(data).map(it => ({ ...it, date }));
+        for (const it of items) {
+          overviewItems.push(it);
+          overviewItemConcepts.push(matchConcepts(`${it.title} ${it.title_en} ${it.summary} ${it.summary_en}`));
+        }
+      }
+      overviewBuilt = true;
+    }
+
+    async function renderOverview() {
+      const container = document.getElementById('concept-graph');
+      const subtitle = document.getElementById('graph-subtitle');
+      container.innerHTML = '<div class="d-flex align-items-center justify-content-center h-100 text-muted small"><div class="spinner-border spinner-border-sm me-2"></div>Aggregating 30 days…</div>';
+
+      await buildOverviewData();
+
+      // Count concept mentions and co-occurrences
+      const conceptCount = new Map();
+      const coCount = new Map(); // key: "A||B" (sorted) -> count
+      overviewItemConcepts.forEach(concepts => {
+        concepts.forEach(c => conceptCount.set(c, (conceptCount.get(c) || 0) + 1));
+        for (let i = 0; i < concepts.length; i++) {
+          for (let j = i + 1; j < concepts.length; j++) {
+            const [a, b] = [concepts[i], concepts[j]].sort();
+            const key = `${a}||${b}`;
+            coCount.set(key, (coCount.get(key) || 0) + 1);
+          }
+        }
+      });
+
+      if (!conceptCount.size) {
+        container.innerHTML = '<div class="d-flex align-items-center justify-content-center h-100 text-muted small">No concepts matched across the last 30 days.</div>';
+        if (subtitle) subtitle.textContent = '— no concepts matched';
+        return;
+      }
+
+      const maxCount = Math.max(...conceptCount.values());
+      const nodes = [...conceptCount.entries()].map(([c, count]) => ({
+        id: c,
+        label: c,
+        title: `${c} — ${count} mention${count === 1 ? '' : 's'} across ${allDates.length} days`,
+        value: count,
+        color: { background: '#0d6efd', border: '#0d6efd', highlight: { background: '#0d6efd', border: '#212529' } },
+        font: { color: '#fff', size: 12 + Math.round((count / maxCount) * 6), face: 'Inter, sans-serif', vadjust: 0, strokeWidth: 0 },
+        shape: 'dot',
+        _concept: c,
+      }));
+
+      const edges = [...coCount.entries()].map(([key, count]) => {
+        const [a, b] = key.split('||');
+        return {
+          from: a,
+          to: b,
+          value: count,
+          title: `${a} ↔ ${b} — co-appeared in ${count} item${count === 1 ? '' : 's'}`,
+          color: { color: '#c9ccd1', opacity: 0.5, highlight: '#495057' },
+          smooth: false,
+        };
+      });
+
+      if (subtitle) subtitle.textContent = `— ${nodes.length} concepts · ${edges.length} co-occurrence links · last ${allDates.length} days`;
+
+      if (network) { network.destroy(); network = null; }
+      network = new vis.Network(container, { nodes, edges }, {
+        nodes: { scaling: { min: 10, max: 44, label: { enabled: false } } },
+        edges: { width: 1, scaling: { min: 1, max: 8 } },
+        physics: {
+          enabled: true,
+          solver: 'forceAtlas2Based',
+          forceAtlas2Based: { gravitationalConstant: -80, centralGravity: 0.012, springLength: 120, springConstant: 0.06, damping: 0.6 },
+          stabilization: { iterations: 250, updateInterval: 25 },
+        },
+        interaction: { hover: true, tooltipDelay: 150, zoomView: true, dragView: true },
+      });
+      network.on('click', params => {
+        const related = document.getElementById('concept-related');
+        if (!params.nodes.length) {
+          if (related) related.style.display = 'none';
+          return;
+        }
+        showOverviewRelated(params.nodes[0]);
+      });
+      const relatedEl = document.getElementById('concept-related');
+      if (relatedEl) relatedEl.style.display = 'none';
+    }
+
+    const SOURCE_NAME = { gh: 'GitHub Trending', hf: 'HF Papers', gn: 'GeekNews' };
+
+    function showOverviewRelated(concept) {
+      const el = document.getElementById('concept-related');
+      if (!el) return;
+      const related = overviewItems.filter((_, idx) => overviewItemConcepts[idx].includes(concept));
+      // Sort newest first, group by date
+      related.sort((a, b) => b.date.localeCompare(a.date));
+
+      let currentDateHeader = null;
+      const rows = [];
+      for (const it of related) {
+        if (it.date !== currentDateHeader) {
+          rows.push(`<div class="text-muted small fw-bold mt-3 mb-1" style="letter-spacing:.03em">${it.date}</div>`);
+          currentDateHeader = it.date;
+        }
+        const title = currentLang === 'en' ? (it.title_en || it.title) : (it.title || it.title_en);
+        const summary = currentLang === 'en' ? (it.summary_en || it.summary) : (it.summary || it.summary_en);
+        rows.push(`
+          <div class="related-item">
+            <span class="src-dot" style="background:${it.color}"></span>
+            <div class="content">
+              <a href="${it.url}" target="_blank" rel="noopener">${title}</a>
+              <div class="meta">${SOURCE_NAME[it.source]}</div>
+              ${summary ? `<div class="summary">${summary}</div>` : ''}
+            </div>
+          </div>`);
+      }
+
+      el.innerHTML = `
+        <div class="related-header">
+          <div class="title"><span class="concept-chip">${concept}</span> <span class="text-muted fw-normal">· ${related.length} across ${allDates.length} days</span></div>
+          <button type="button" class="close-btn" id="related-close" aria-label="close">&times;</button>
+        </div>
+        ${rows.join('')}`;
+      el.style.display = 'block';
+      document.getElementById('related-close').addEventListener('click', () => {
+        el.style.display = 'none';
+        if (network) network.unselectAll();
+      });
+      el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    async function setView(view) {
+      if (view === currentView) return;
+      currentView = view;
+      document.body.classList.toggle('view-overview', view === 'overview');
+      document.body.classList.toggle('view-daily', view === 'daily');
+      document.querySelectorAll('.view-btn').forEach(b => b.classList.toggle('active', b.dataset.view === view));
+      document.getElementById('graph-legend-daily').style.display    = view === 'daily'    ? '' : 'none';
+      document.getElementById('graph-legend-overview').style.display = view === 'overview' ? '' : 'none';
+      const related = document.getElementById('concept-related');
+      if (related) related.style.display = 'none';
+      if (view === 'overview') {
+        await renderOverview();
+      } else if (currentDate && dataCache[currentDate]) {
+        renderGraph(currentDate, dataCache[currentDate]);
+      }
+    }
+
+    document.querySelectorAll('.view-btn').forEach(btn => {
+      btn.addEventListener('click', () => setView(btn.dataset.view));
+    });
+
     // Language toggle — re-render from JS cache, no network fetch
     document.querySelectorAll('.lang-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
         currentLang = btn.dataset.lang;
-        if (currentDate && dataCache[currentDate]) {
+        if (currentView === 'overview') {
+          // Only relist related items in the new language, graph itself is language-agnostic
+          const selected = network && network.getSelectedNodes && network.getSelectedNodes()[0];
+          if (selected) showOverviewRelated(selected);
+        } else if (currentDate && dataCache[currentDate]) {
           renderPanel(dataCache[currentDate]);
           renderGraph(currentDate, dataCache[currentDate]);
         }
@@ -814,7 +995,9 @@
         document.getElementById('news-panel').innerHTML = '<p class="text-muted text-center mt-5">Check back tomorrow!</p>';
         return;
       }
+      allDates = dates;
       currentDate = dates[0];
+      document.body.classList.add('view-daily');
       renderSidebar(dates, currentDate);
       await renderNews(currentDate);
     }
