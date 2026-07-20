@@ -540,15 +540,76 @@
       return clean.length > max ? clean.slice(0, max - 1) + '…' : clean;
     }
 
-    // Pick the most "distinctive" keywords for an item — tokens with lowest
-    // document frequency within the day's items (i.e. this item's uniqueness).
-    // Prefer tokens that appear in the title over ones only in the summary.
+    // Concept whitelist — hand-curated AI/ML category labels.
+    // Each entry: { label: display text, patterns: [regex or lowercase substring] }
+    // Order matters slightly — more specific concepts should come before more general ones.
+    const CONCEPTS = [
+      { label: 'Multi-Agent',   patterns: [/\bmulti[- ]?agent\b/, '멀티 에이전트', '멀티에이전트'] },
+      { label: 'Agent',         patterns: [/\bagents?\b/, '에이전트'] },
+      { label: 'RAG',           patterns: [/\brag\b/, /retrieval[- ]?augmented/, '검색 증강'] },
+      { label: 'LLM',           patterns: [/\bllms?\b/, /large language model/, '대규모 언어 모델', '거대 언어 모델'] },
+      { label: 'Reasoning',     patterns: [/\breasoning\b/, /chain[- ]of[- ]thought/, /\bcot\b/, '추론'] },
+      { label: 'Fine-tuning',   patterns: [/fine[- ]?tun(ing|e)/, /\bpeft\b/, /\blora\b/, '파인튜닝', '미세조정'] },
+      { label: 'RL',            patterns: [/\brl\b/, /reinforcement learning/, /\brlhf\b/, /\bdpo\b/, '강화학습'] },
+      { label: 'Diffusion',     patterns: [/diffusion/, '디퓨전'] },
+      { label: 'Vision',        patterns: [/\bvision\b/, /\bvlm\b/, /vision[- ]language/, /\bimage\b/, '비전', '이미지'] },
+      { label: 'Video',         patterns: [/\bvideo\b/, '비디오', '영상'] },
+      { label: 'Speech',        patterns: [/\bspeech\b/, /\btts\b/, /\basr\b/, /\baudio\b/, '음성', '오디오'] },
+      { label: 'Robotics',      patterns: [/\brobot(ics|s)?\b/, '로봇'] },
+      { label: '3D',            patterns: [/\b3d\b/, /nerf/, /gaussian splatting/, '3d'] },
+      { label: 'MoE',           patterns: [/\bmoe\b/, /mixture[- ]of[- ]experts/] },
+      { label: 'Quantization',  patterns: [/quantiz(ation|ed)/, /\bgptq\b/, /\bawq\b/, '양자화'] },
+      { label: 'Distillation',  patterns: [/distill(ation|ed|ing)?/, '증류'] },
+      { label: 'Benchmark',     patterns: [/benchmark/, /evaluation/, '벤치마크', '평가'] },
+      { label: 'Dataset',       patterns: [/dataset/, '데이터셋'] },
+      { label: 'Transformer',   patterns: [/\btransformer/, '트랜스포머'] },
+      { label: 'GNN',           patterns: [/\bgnn\b/, /graph neural/] },
+      { label: 'MCP',           patterns: [/\bmcp\b/, /model context protocol/] },
+      { label: 'Code',          patterns: [/\bcode\s+(gen|generation|assistant|llm)/, /\bcopilot\b/, '코드 생성', '코드 어시스턴트'] },
+      { label: 'Search',        patterns: [/\bsearch\b/, /\bretrieval\b/, '검색'] },
+      { label: 'Prompt',        patterns: [/prompt(ing)?/, '프롬프트'] },
+      { label: 'Safety',        patterns: [/\bsafety\b/, /\balignment\b/, /jailbreak/, '안전', '정렬'] },
+      { label: 'Training',      patterns: [/pre[- ]?train(ing|ed)?/, /post[- ]?training/, '학습', '사전학습'] },
+      { label: 'Inference',     patterns: [/\binference\b/, /\bserving\b/, /\bvllm\b/, '추론 최적화'] },
+      { label: 'Multimodal',    patterns: [/multi[- ]?modal/, '멀티모달'] },
+      { label: 'Embedding',     patterns: [/embedding/, '임베딩'] },
+      { label: 'Chatbot',       patterns: [/chatbot/, /\bassistant\b/, '챗봇'] },
+      { label: 'Trading',       patterns: [/\btrading\b/, /\bfinance\b/, '트레이딩', '금융', '매매'] },
+      { label: 'Workflow',      patterns: [/workflow/, /orchestrat(ion|or)/, '워크플로'] },
+      { label: 'Framework',     patterns: [/framework/, '프레임워크'] },
+    ];
+
+    function matchConcepts(text, max = 2) {
+      if (!text) return [];
+      const lower = text.toLowerCase();
+      const hits = [];
+      const seen = new Set();
+      for (const c of CONCEPTS) {
+        if (seen.has(c.label)) continue;
+        for (const p of c.patterns) {
+          const matched = p instanceof RegExp ? p.test(lower) : lower.includes(p);
+          if (matched) { hits.push(c.label); seen.add(c.label); break; }
+        }
+        if (hits.length >= max) break;
+      }
+      return hits;
+    }
+
+    // Hybrid label:
+    //   1) Try concept whitelist (curated AI/ML categories)
+    //   2) Fall back to most-shared distinctive tokens
+    //   3) Fall back to a shortened title
     function pickKeywordLabel(item, docTokens, df, k = 2) {
+      const combined = `${item.title} ${item.title_en} ${item.summary} ${item.summary_en}`;
+      const concepts = matchConcepts(combined, k);
+      if (concepts.length) return concepts.join(' · ');
+
+      // fallback: shared tokens (high df) preferred, title tokens preferred
       const titleTokens = new Set(tokenize(`${item.title} ${item.title_en}`));
       const scored = [...docTokens]
         .map(w => ({
           w,
-          score: (titleTokens.has(w) ? 0 : 5) + (df.get(w) || 99),
+          score: (titleTokens.has(w) ? 0 : 5) - (df.get(w) || 0),
           len: w.length,
         }))
         .sort((a, b) => a.score - b.score || b.len - a.len);
@@ -560,9 +621,7 @@
         seen.add(s.w);
         picked.push(s.w);
       }
-      if (!picked.length) {
-        return shortenLabel(item.title || item.title_en, 18);
-      }
+      if (!picked.length) return shortenLabel(item.title || item.title_en, 18);
       return picked.join(' · ');
     }
 
