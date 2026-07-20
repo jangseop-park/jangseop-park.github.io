@@ -17,6 +17,13 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="assets/css/style.css" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" />
+  <style>
+    .lang-btn.active { background: #212529 !important; color: #fff !important; }
+    /* Only one language variant shows at a time */
+    [data-lang-en] { display: none; }
+    body.lang-en [data-lang-ko] { display: none; }
+    body.lang-en [data-lang-en] { display: revert; }
+  </style>
 </head>
 <body>
 
@@ -43,45 +50,55 @@
 
   <main class="container" style="padding-top: 120px; padding-bottom: 60px;">
 
+    <!-- Language toggle -->
+    <div class="d-flex justify-content-end mb-2">
+      <div class="btn-group btn-group-sm" role="group" aria-label="Language">
+        <button type="button" class="btn btn-outline-dark lang-btn active" data-lang="ko">Korean</button>
+        <button type="button" class="btn btn-outline-dark lang-btn" data-lang="en">English</button>
+      </div>
+    </div>
+
     <div class="row justify-content-center mb-5">
       <div class="col-lg-9 text-center">
         <h1 class="section-title" data-aos="fade-up" data-aos-delay="0">Projects</h1>
-        <p class="lead text-muted mb-1" data-aos="fade-up" data-aos-delay="150">Industrial collaborations and applied R&amp;D projects</p>
+        <p class="lead text-muted mb-1" data-aos="fade-up" data-aos-delay="150">
+          <span data-lang-ko>산업체 협력 및 응용 R&amp;D 프로젝트</span>
+          <span data-lang-en>Industrial collaborations and applied R&amp;D projects</span>
+        </p>
         <p class="text-muted small mb-0" data-aos="fade-up" data-aos-delay="300">
-          conducted as an AI Researcher at <a href="https://www.narnia.ai/?r=0" target="_blank" rel="noopener">Narnia Labs</a>
-          and the <a href="https://www.smartdesignlab.org/" target="_blank" rel="noopener">Smart Design Lab</a>, KAIST.
+          <span data-lang-ko><a href="https://www.narnia.ai/?r=0" target="_blank" rel="noopener">Narnia Labs</a> 및 KAIST <a href="https://www.smartdesignlab.org/" target="_blank" rel="noopener">Smart Design Lab</a>에서 AI 연구원으로 수행.</span>
+          <span data-lang-en>conducted as an AI Researcher at <a href="https://www.narnia.ai/?r=0" target="_blank" rel="noopener">Narnia Labs</a>
+          and the <a href="https://www.smartdesignlab.org/" target="_blank" rel="noopener">Smart Design Lab</a>, KAIST.</span>
         </p>
       </div>
     </div>
 
     <!-- ========================= ON-GOING PROJECTS ========================= -->
     <section class="mb-5">
-      <h3 data-aos="fade-up" class="fw-bold heading-navy mt-4 mb-4">On-going Projects</h3>
+      <h3 data-aos="fade-up" class="fw-bold heading-navy mt-4 mb-4"><span data-lang-ko>진행 중인 프로젝트</span><span data-lang-en>On-going Projects</span></h3>
 
       <article data-aos="fade-up" class="project-detail project-clickable mb-4 p-4 border rounded d-flex gap-3 align-items-center" data-href="projects/sloshing.html">
         <img src="projects/logo/SAMSUNG_HEAVY.jpg" alt="Samsung Heavy Industries" class="project-logo flex-shrink-0" />
         <div class="flex-grow-1">
           <div class="d-flex flex-wrap justify-content-between align-items-start mb-1">
-            <h5 class="fw-bold mb-0">생성형 AI 기반 슬로싱 하중 예측 및 화물창 형상 최적화</h5>
+            <h5 class="fw-bold mb-0"><span data-lang-ko>생성형 AI 기반 슬로싱 하중 예측 및 화물창 형상 최적화</span><span data-lang-en>Generative AI-Based Sloshing Load Prediction and CCS Configuration Optimization</span></h5>
             <span class="text-muted small">Apr. 2026 – Oct. 2026</span>
           </div>
-          <p class="text-muted small mb-0"><em>Generative AI-Based Sloshing Load Prediction and CCS Configuration Optimization</em></p>
         </div>
       </article>
     </section>
 
     <!-- ========================= COMPLETED PROJECTS ========================= -->
     <section class="mb-5">
-      <h3 data-aos="fade-up" class="fw-bold heading-navy mt-5 mb-4">Completed Projects</h3>
+      <h3 data-aos="fade-up" class="fw-bold heading-navy mt-5 mb-4"><span data-lang-ko>완료된 프로젝트</span><span data-lang-en>Completed Projects</span></h3>
 
       <article data-aos="fade-up" class="project-detail project-clickable mb-4 p-4 border rounded d-flex gap-3 align-items-center" data-href="projects/anomaly-detection.html">
         <img src="projects/logo/HYUNDAI.jpg" alt="Hyundai Motor Group" class="project-logo flex-shrink-0" />
         <div class="flex-grow-1">
           <div class="d-flex flex-wrap justify-content-between align-items-start mb-1">
-            <h5 class="fw-bold mb-0">이상치 탐지 모델을 활용한 고장 예측 알고리즘 개발</h5>
+            <h5 class="fw-bold mb-0"><span data-lang-ko>이상치 탐지 모델을 활용한 고장 예측 알고리즘 개발</span><span data-lang-en>Development of a Battery Failure Prediction Algorithm Based on Anomaly Detection</span></h5>
             <span class="text-muted small">Feb. 2024 – Mar. 2025</span>
           </div>
-          <p class="text-muted small mb-0"><em>Development of a Battery Failure Prediction Algorithm Based on Anomaly Detection</em></p>
         </div>
       </article>
 
@@ -89,10 +106,9 @@
         <img src="projects/logo/HYUNDAI.jpg" alt="Hyundai Motor Group" class="project-logo flex-shrink-0" />
         <div class="flex-grow-1">
           <div class="d-flex flex-wrap justify-content-between align-items-start mb-1">
-            <h5 class="fw-bold mb-0">GNN기반 충돌해석 예측을 위한 딥러닝 모델링 라이브러리 개발</h5>
+            <h5 class="fw-bold mb-0"><span data-lang-ko>GNN기반 충돌해석 예측을 위한 딥러닝 모델링 라이브러리 개발</span><span data-lang-en>Development of a GNN-Based Deep Learning Library for Collision Analysis Prediction</span></h5>
             <span class="text-muted small">Sep. 2023 – Dec. 2023</span>
           </div>
-          <p class="text-muted small mb-0"><em>Development of a GNN-Based Deep Learning Library for Collision Analysis Prediction</em></p>
         </div>
       </article>
 
@@ -100,10 +116,9 @@
         <img src="projects/logo/HYUNDAI.jpg" alt="Hyundai Motor Group" class="project-logo flex-shrink-0" />
         <div class="flex-grow-1">
           <div class="d-flex flex-wrap justify-content-between align-items-start mb-1">
-            <h5 class="fw-bold mb-0">3D 형상데이터 기반 성능예측 GNN 딥러닝 모델 연구</h5>
+            <h5 class="fw-bold mb-0"><span data-lang-ko>3D 형상데이터 기반 성능예측 GNN 딥러닝 모델 연구</span><span data-lang-en>GNN-Based Deep Learning for Performance Prediction from 3D Geometry Data</span></h5>
             <span class="text-muted small">Jul. 2022 – Jun. 2023</span>
           </div>
-          <p class="text-muted small mb-0"><em>GNN-Based Deep Learning for Performance Prediction from 3D Geometry Data</em></p>
         </div>
       </article>
 
@@ -111,10 +126,9 @@
         <img src="projects/logo/LGDISPLAY.jpg" alt="LG Display" class="project-logo flex-shrink-0" />
         <div class="flex-grow-1">
           <div class="d-flex flex-wrap justify-content-between align-items-start mb-1">
-            <h5 class="fw-bold mb-0">Generative Design과 MeshGraphNet을 활용한 패널 적층 구조 최적화 요소 기술 개발</h5>
+            <h5 class="fw-bold mb-0"><span data-lang-ko>Generative Design과 MeshGraphNet을 활용한 패널 적층 구조 최적화 요소 기술 개발</span><span data-lang-en>Optimization of Panel Layered Structures Using Generative Design and MeshGraphNet</span></h5>
             <span class="text-muted small">May. 2022 – Feb. 2023</span>
           </div>
-          <p class="text-muted small mb-0"><em>Optimization of Panel Layered Structures Using Generative Design and MeshGraphNet</em></p>
         </div>
       </article>
 
@@ -122,10 +136,9 @@
         <img src="projects/logo/HYUNDAI.jpg" alt="Hyundai Motor Group" class="project-logo flex-shrink-0" />
         <div class="flex-grow-1">
           <div class="d-flex flex-wrap justify-content-between align-items-start mb-1">
-            <h5 class="fw-bold mb-0">로드휠의 형상 제시를 위한 디자인 생성 가이드라인과 AI 기반 분류 기법 개발</h5>
+            <h5 class="fw-bold mb-0"><span data-lang-ko>로드휠의 형상 제시를 위한 디자인 생성 가이드라인과 AI 기반 분류 기법 개발</span><span data-lang-en>Generative Design Guidelines and AI-Based Classification for Automotive Road Wheel Shapes</span></h5>
             <span class="text-muted small">Jul. 2021 – Jul. 2022</span>
           </div>
-          <p class="text-muted small mb-0"><em>Generative Design Guidelines and AI-Based Classification for Automotive Road Wheel Shapes</em></p>
         </div>
       </article>
 
@@ -133,10 +146,9 @@
         <img src="projects/logo/EX.jpg" alt="Korea Expressway Corporation" class="project-logo flex-shrink-0" />
         <div class="flex-grow-1">
           <div class="d-flex flex-wrap justify-content-between align-items-start mb-1">
-            <h5 class="fw-bold mb-0">사고위험구간 선정을 위한 고속도로 사고위험도 지표 개발</h5>
+            <h5 class="fw-bold mb-0"><span data-lang-ko>사고위험구간 선정을 위한 고속도로 사고위험도 지표 개발</span><span data-lang-en>Development of an Expressway Accident Risk Index for Identifying Hotspots</span></h5>
             <span class="text-muted small">Mar. 2021 – Dec. 2021</span>
           </div>
-          <p class="text-muted small mb-0"><em>Development of an Expressway Accident Risk Index for Identifying Hotspots</em></p>
         </div>
       </article>
 
@@ -144,17 +156,16 @@
         <img src="projects/logo/KORAIL.jpg" alt="KORAIL" class="project-logo flex-shrink-0" />
         <div class="flex-grow-1">
           <div class="d-flex flex-wrap justify-content-between align-items-start mb-1">
-            <h5 class="fw-bold mb-0">감염병을 고려한 수송실적 분석 및 타 교통수단과의 대체성 분석</h5>
+            <h5 class="fw-bold mb-0"><span data-lang-ko>감염병을 고려한 수송실적 분석 및 타 교통수단과의 대체성 분석</span><span data-lang-en>Transportation Performance Analysis and Modal Substitutability under COVID-19</span></h5>
             <span class="text-muted small">Sep. 2020 – Feb. 2021</span>
           </div>
-          <p class="text-muted small mb-0"><em>Transportation Performance Analysis and Modal Substitutability under COVID-19</em></p>
         </div>
       </article>
     </section>
 
     <div class="text-center mt-5">
-      <a href="research.html" class="btn btn-outline-dark">See Research <i class="bi bi-arrow-right"></i></a>
-      <a href="publications.html" class="btn btn-outline-dark ms-2">See Publications <i class="bi bi-arrow-right"></i></a>
+      <a href="research.html" class="btn btn-outline-dark"><span data-lang-ko>연구 보기</span><span data-lang-en>See Research</span> <i class="bi bi-arrow-right"></i></a>
+      <a href="publications.html" class="btn btn-outline-dark ms-2"><span data-lang-ko>논문 보기</span><span data-lang-en>See Publications</span> <i class="bi bi-arrow-right"></i></a>
     </div>
 
   </main>
@@ -185,6 +196,15 @@
       }, { threshold: 0.1, rootMargin: '0px 0px -10% 0px' });
       titles.forEach((el) => io.observe(el));
     })();
+
+    // Language toggle — Korean (default) / English
+    document.querySelectorAll('.lang-btn').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.lang-btn').forEach((b) => b.classList.remove('active'));
+        btn.classList.add('active');
+        document.body.classList.toggle('lang-en', btn.dataset.lang === 'en');
+      });
+    });
 
     // Make project cards clickable (navigate to detail page in same tab)
     document.querySelectorAll('article.project-clickable[data-href]').forEach((el) => {
