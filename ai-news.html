@@ -303,6 +303,14 @@
 
   <main class="container" style="padding-top: 120px; padding-bottom: 60px;">
 
+    <!-- Language toggle (same position as Projects) -->
+    <div class="d-flex justify-content-end mb-2">
+      <div class="btn-group btn-group-sm" role="group" aria-label="Language">
+        <button type="button" class="btn btn-outline-dark lang-btn active" id="btn-ko" data-lang="ko">Korean</button>
+        <button type="button" class="btn btn-outline-dark lang-btn" id="btn-en" data-lang="en">English</button>
+      </div>
+    </div>
+
     <div class="row justify-content-center mb-4">
       <div class="col-lg-10 text-center">
         <h1 class="section-title">AI News Daily</h1>
@@ -314,17 +322,9 @@
     <div class="row justify-content-center">
       <div class="col-lg-10">
 
-        <!-- Controls row: mobile date dropdown + language toggle -->
-        <div class="d-flex justify-content-between align-items-center mb-3 gap-2">
-          <div class="mobile-date-wrap flex-grow-1">
-            <select class="form-select form-select-sm" id="date-select"></select>
-          </div>
-          <div class="ms-auto">
-            <div class="btn-group btn-group-sm" role="group" aria-label="Language">
-              <button type="button" class="btn btn-outline-dark lang-btn active" id="btn-ko" data-lang="ko">Korean</button>
-              <button type="button" class="btn btn-outline-dark lang-btn" id="btn-en" data-lang="en">English</button>
-            </div>
-          </div>
+        <!-- Mobile date dropdown (hidden on desktop) -->
+        <div class="mobile-date-wrap mb-3">
+          <select class="form-select form-select-sm w-100" id="date-select"></select>
         </div>
 
         <!-- Concept graph — Overview (30d) / Daily toggle -->
@@ -1075,6 +1075,24 @@
     }
 
     init();
+
+    // Reveal the section-title underline (same effect as other pages)
+    (function () {
+      const titles = document.querySelectorAll('.section-title');
+      if (!titles.length || !('IntersectionObserver' in window)) {
+        titles.forEach((el) => el.classList.add('is-revealed'));
+        return;
+      }
+      const io = new IntersectionObserver((entries, obs) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-revealed');
+            obs.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.4 });
+      titles.forEach((el) => io.observe(el));
+    })();
   </script>
   <script src="assets/js/last-updated.js"></script>
 </body>
