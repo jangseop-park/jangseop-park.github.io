@@ -203,6 +203,27 @@
       color: #495057;
       margin-top: .2rem;
     }
+    .floating-collapse {
+      position: fixed;
+      right: 1.5rem;
+      bottom: 1.5rem;
+      z-index: 1050;
+      background: #212529;
+      color: #fff;
+      border: none;
+      border-radius: 999px;
+      padding: .55rem 1rem;
+      font-size: .8rem;
+      font-weight: 600;
+      box-shadow: 0 6px 18px rgba(0,0,0,.2);
+      cursor: pointer;
+      display: none;
+      align-items: center;
+      gap: .35rem;
+      transition: background .15s, transform .15s;
+    }
+    .floating-collapse:hover { background: #000; transform: translateY(-1px); }
+    .floating-collapse.visible { display: inline-flex; }
     .news-panel {
       flex: 1;
       padding: 1.5rem;
@@ -340,6 +361,10 @@
     </div>
 
   </main>
+
+  <button type="button" class="floating-collapse" id="floating-collapse" aria-label="collapse related list">
+    <i class="bi bi-chevron-up"></i>Collapse
+  </button>
 
   <footer class="py-4 text-center">
     <div class="container">
@@ -902,15 +927,12 @@
       overviewNetwork.on('click', params => {
         const related = document.getElementById('overview-related');
         if (!params.nodes.length) {
-          if (related) related.style.display = 'none';
+          if (related && related.style.display !== 'none') collapseOverviewRelated();
           return;
         }
         const clicked = params.nodes[0];
-        // Toggle: clicking the same concept again collapses the list.
         if (related && related.style.display !== 'none' && related.dataset.concept === clicked) {
-          related.style.display = 'none';
-          related.dataset.concept = '';
-          overviewNetwork.unselectAll();
+          collapseOverviewRelated();
           return;
         }
         showOverviewRelated(clicked);
@@ -956,13 +978,34 @@
         ${rows.join('')}`;
       el.style.display = 'block';
       el.dataset.concept = concept;
-      el.querySelector('.overview-close').addEventListener('click', () => {
-        el.style.display = 'none';
-        el.dataset.concept = '';
-        if (overviewNetwork) overviewNetwork.unselectAll();
-      });
+      el.querySelector('.overview-close').addEventListener('click', collapseOverviewRelated);
+      showFloatingCollapse();
       el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
+
+    function collapseOverviewRelated() {
+      const el = document.getElementById('overview-related');
+      if (!el) return;
+      el.style.display = 'none';
+      el.dataset.concept = '';
+      if (overviewNetwork) overviewNetwork.unselectAll();
+      hideFloatingCollapse();
+    }
+
+    function showFloatingCollapse() {
+      const btn = document.getElementById('floating-collapse');
+      if (btn) btn.classList.add('visible');
+    }
+    function hideFloatingCollapse() {
+      const btn = document.getElementById('floating-collapse');
+      if (btn) btn.classList.remove('visible');
+    }
+
+    document.getElementById('floating-collapse').addEventListener('click', () => {
+      collapseOverviewRelated();
+      const overview = document.querySelector('.graph-card');
+      if (overview) overview.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
 
     // Language toggle — re-render from JS cache, no network fetch
     document.querySelectorAll('.lang-btn').forEach(btn => {
