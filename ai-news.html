@@ -124,6 +124,19 @@
       background: #fafbfc;
     }
     #concept-graph .vis-network:focus { outline: none; }
+    div.vis-tooltip {
+      max-width: 320px;
+      white-space: normal !important;
+      background: #212529 !important;
+      color: #fff !important;
+      border: none !important;
+      border-radius: .35rem !important;
+      padding: .5rem .65rem !important;
+      font-family: Inter, sans-serif !important;
+      font-size: .8rem !important;
+      line-height: 1.35 !important;
+      box-shadow: 0 4px 12px rgba(0,0,0,.15) !important;
+    }
     .graph-legend {
       display: flex;
       flex-wrap: wrap;
@@ -245,7 +258,7 @@
             <span><span class="dot" style="background:#f97316"></span>GitHub Trending</span>
             <span><span class="dot" style="background:#0d6efd"></span>HF Papers</span>
             <span><span class="dot" style="background:#198754"></span>GeekNews</span>
-            <span class="text-muted">— thicker edge = more shared keywords</span>
+            <span class="text-muted">— node size = shared-keyword links · edge thickness = shared count · hover for full title</span>
           </div>
         </div>
 
@@ -527,6 +540,32 @@
       return clean.length > max ? clean.slice(0, max - 1) + '…' : clean;
     }
 
+    // Pick the most "distinctive" keywords for an item — tokens with lowest
+    // document frequency within the day's items (i.e. this item's uniqueness).
+    // Prefer tokens that appear in the title over ones only in the summary.
+    function pickKeywordLabel(item, docTokens, df, k = 2) {
+      const titleTokens = new Set(tokenize(`${item.title} ${item.title_en}`));
+      const scored = [...docTokens]
+        .map(w => ({
+          w,
+          score: (titleTokens.has(w) ? 0 : 5) + (df.get(w) || 99),
+          len: w.length,
+        }))
+        .sort((a, b) => a.score - b.score || b.len - a.len);
+      const picked = [];
+      const seen = new Set();
+      for (const s of scored) {
+        if (picked.length >= k) break;
+        if (seen.has(s.w)) continue;
+        seen.add(s.w);
+        picked.push(s.w);
+      }
+      if (!picked.length) {
+        return shortenLabel(item.title || item.title_en, 18);
+      }
+      return picked.join(' · ');
+    }
+
     let network = null;
 
     function renderGraph(date, data) {
@@ -551,16 +590,21 @@
       const maxDf = Math.max(2, Math.floor(items.length * 0.5));
 
       // Build edges from shared keywords (weighted, ignore too-common ones)
-      const nodes = items.map(it => ({
-        id: it.id,
-        label: shortenLabel(currentLang === 'en' ? (it.title_en || it.title) : (it.title || it.title_en)),
-        title: `${it.title || it.title_en}\n\n(${{gh:'GitHub Trending', hf:'HF Papers', gn:'GeekNews'}[it.source]})`,
-        color: { background: it.color, border: it.color, highlight: { background: it.color, border: '#212529' } },
-        font: { color: '#212529', size: 12, face: 'Inter, sans-serif' },
-        shape: 'dot',
-        size: 14,
-        _url: it.url,
-      }));
+      const sourceName = { gh: 'GitHub Trending', hf: 'HF Papers', gn: 'GeekNews' };
+      const nodes = items.map((it, idx) => {
+        const fullTitle = currentLang === 'en' ? (it.title_en || it.title) : (it.title || it.title_en);
+        const shortLabel = pickKeywordLabel(it, docs[idx], df, 2);
+        return {
+          id: it.id,
+          label: shortLabel,
+          title: `${fullTitle}\n\n(${sourceName[it.source]})`,
+          color: { background: it.color, border: it.color, highlight: { background: it.color, border: '#212529' } },
+          font: { color: '#212529', size: 11, face: 'Inter, sans-serif' },
+          shape: 'dot',
+          size: 14,
+          _url: it.url,
+        };
+      });
 
       const edgesMap = new Map();
       for (let i = 0; i < items.length; i++) {
