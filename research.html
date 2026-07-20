@@ -96,83 +96,137 @@
     }
     #figModalImg { max-height: 80vh; }
 
-    /* ===== Research overview — editorial columns ===== */
-    .overview-mission {
-      font-size: 1.08rem;
-      line-height: 1.65;
-      color: #47526a;
-      max-width: 780px;
-      margin: 0 0 2.6rem;
+    /* Framework column headers (one per axis) */
+    .fw-col-head {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      padding-bottom: .55rem;
+      margin-bottom: 1.1rem;
+      border-bottom: 2px solid #eef2f6;
     }
-    .overview-mission strong { color: var(--bg-dark); font-weight: 700; }
-
-    .pipeline {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 2.2rem;
+    .fw-col-head .dot {
+      width: 10px; height: 10px; border-radius: 50%;
+      flex-shrink: 0;
     }
-    .pipe-col { padding-top: 1rem; }
-    .pipe-col .stage-num {
-      font-size: 1.35rem;
+    .fw-col-head h5 {
+      margin: 0;
+      font-size: .95rem;
       font-weight: 800;
       letter-spacing: .02em;
-      line-height: 1;
-      margin-bottom: .55rem;
-    }
-    .pipe-col .stage-rule {
-      height: 2px;
-      width: 100%;
-      border-radius: 2px;
-      margin-bottom: .9rem;
-    }
-    .pipe-col h5 {
-      font-weight: 800;
-      font-size: 1.05rem;
-      margin-bottom: .2rem;
+      text-transform: uppercase;
       color: var(--bg-dark);
     }
-    .pipe-col .stage-sub {
-      font-size: .8rem;
-      color: #8b97a8;
-      margin-bottom: 1rem;
-    }
-    .pipe-col .stage-works {
-      list-style: none;
-      padding: 0; margin: 0;
-      font-size: .88rem;
-      color: #3f4a5c;
-      line-height: 1.9;
-    }
-    .pipe-col .stage-works .co {
-      font-size: .7rem;
-      color: #a2acba;
-      margin-left: .2rem;
-    }
-    /* per-axis colors */
-    .col-gen  .stage-num, .col-gen  h5 span { color: #7c5cbf; }
-    .col-gen  .stage-rule { background: #7c5cbf; }
-    .col-pred .stage-num { color: var(--accent-dark); }
-    .col-pred .stage-rule { background: var(--accent-color); }
-    .col-opt  .stage-num { color: #0f766e; }
-    .col-opt  .stage-rule { background: #0d9488; }
+    .fw-col-head.head-gen  { border-bottom-color: #7c5cbf; }
+    .fw-col-head.head-gen  .dot { background: #7c5cbf; }
+    .fw-col-head.head-pred { border-bottom-color: var(--accent-color); }
+    .fw-col-head.head-pred .dot { background: var(--accent-color); }
+    .fw-col-head.head-opt  { border-bottom-color: #0d9488; }
+    .fw-col-head.head-opt  .dot { background: #0d9488; }
+    .fw-column .framework-card { margin-bottom: 1.5rem; }
+    .fw-column .framework-card:last-child { margin-bottom: 0; }
 
-    /* autonomous + industry, kept understated */
-    .autonomous-note {
-      margin-top: 2.4rem;
-      padding-top: 1.4rem;
-      border-top: 1px solid #eaeef3;
-      font-size: .95rem;
+    /* ===== Research overview pipeline (boxed + arrows) ===== */
+    .overview-mission {
+      text-align: center;
+      font-size: 1.05rem;
       color: #47526a;
+      max-width: 760px;
+      margin: 0 auto 2.2rem;
     }
-    .autonomous-note strong { color: #5b3ea6; font-weight: 700; }
+    .overview-mission strong { color: var(--bg-dark); font-weight: 700; }
+    .pipeline {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr auto 1fr;
+      align-items: stretch;
+      gap: .25rem;
+    }
+    .pipe-stage {
+      border: 1px solid #e7ecf2;
+      border-radius: .85rem;
+      padding: 1.25rem 1.1rem;
+      background: #fff;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+    }
+    .pipe-stage .stage-num {
+      width: 30px; height: 30px;
+      margin: 0 auto .6rem;
+      border-radius: 50%;
+      display: grid; place-items: center;
+      font-weight: 700; font-size: .85rem; color: #fff;
+    }
+    .pipe-stage h5 {
+      font-weight: 800;
+      font-size: 1.02rem;
+      margin-bottom: .1rem;
+      color: var(--bg-dark);
+    }
+    .pipe-stage .stage-sub {
+      font-size: .78rem;
+      color: #8b97a8;
+      margin-bottom: .9rem;
+    }
+    .pipe-stage .stage-works {
+      list-style: none;
+      padding: 0; margin: 0 0 .1rem;
+      font-size: .82rem;
+      color: #47526a;
+      line-height: 1.7;
+    }
+    .pipe-stage .stage-works .co {
+      font-size: .68rem;
+      color: #99a3b2;
+      margin-left: .15rem;
+    }
+    /* stage accent colors */
+    .stage-gen    { border-top: 3px solid #7c5cbf; }
+    .stage-gen    .stage-num { background: #7c5cbf; }
+    .stage-pred   { border-top: 3px solid var(--accent-color); }
+    .stage-pred   .stage-num { background: var(--accent-color); }
+    .stage-opt    { border-top: 3px solid #0d9488; }
+    .stage-opt    .stage-num { background: #0d9488; }
+    .pipe-arrow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #c2ccd8;
+      font-size: 1.3rem;
+    }
+    .overview-flow-down {
+      text-align: center;
+      color: #c2ccd8;
+      font-size: 1.3rem;
+      margin: .5rem 0;
+    }
+    .autonomous-banner {
+      border: 1px dashed #b9a6e0;
+      background: rgba(124, 92, 191, .06);
+      border-radius: .75rem;
+      padding: .9rem 1.25rem;
+      text-align: center;
+      max-width: 620px;
+      margin: 0 auto;
+    }
+    .autonomous-banner .lead-line {
+      font-weight: 700;
+      color: #5b3ea6;
+    }
+    .autonomous-banner .sub-line {
+      font-size: .82rem;
+      color: #6b7688;
+    }
     .industry-line {
+      text-align: center;
       font-size: .82rem;
       color: #8b97a8;
-      margin-top: .5rem;
+      margin-top: 1.4rem;
     }
     .industry-line strong { color: #47526a; font-weight: 600; }
     @media (max-width: 767px) {
-      .pipeline { grid-template-columns: 1fr; gap: 1.8rem; }
+      .pipeline { grid-template-columns: 1fr; }
+      .pipe-arrow { transform: rotate(90deg); padding: .1rem 0; }
     }
   </style>
 </head>
@@ -220,9 +274,8 @@
     </p>
 
     <div class="pipeline" data-aos="fade-up">
-      <div class="pipe-col col-gen">
-        <div class="stage-num">01</div>
-        <div class="stage-rule"></div>
+      <div class="pipe-stage stage-gen">
+        <div class="stage-num">1</div>
         <h5>Generative AI</h5>
         <div class="stage-sub">Creating design candidates</div>
         <ul class="stage-works">
@@ -231,9 +284,10 @@
         </ul>
       </div>
 
-      <div class="pipe-col col-pred">
-        <div class="stage-num">02</div>
-        <div class="stage-rule"></div>
+      <div class="pipe-arrow"><i class="bi bi-arrow-right"></i></div>
+
+      <div class="pipe-stage stage-pred">
+        <div class="stage-num">2</div>
         <h5>Predictive AI</h5>
         <div class="stage-sub">Replacing simulation with neural surrogates</div>
         <ul class="stage-works">
@@ -243,9 +297,10 @@
         </ul>
       </div>
 
-      <div class="pipe-col col-opt">
-        <div class="stage-num">03</div>
-        <div class="stage-rule"></div>
+      <div class="pipe-arrow"><i class="bi bi-arrow-right"></i></div>
+
+      <div class="pipe-stage stage-opt">
+        <div class="stage-num">3</div>
         <h5>Optimization AI</h5>
         <div class="stage-sub">Optimizing &amp; orchestrating with LLM agents</div>
         <ul class="stage-works">
@@ -255,10 +310,13 @@
       </div>
     </div>
 
-    <p class="autonomous-note mb-1" data-aos="fade-up">
-      Together, these move toward <strong>autonomous design</strong> — LLM agents that
-      generate, predict, and optimize with minimal human intervention.
-    </p>
+    <div class="overview-flow-down" data-aos="fade-up"><i class="bi bi-arrow-down"></i></div>
+
+    <div class="autonomous-banner" data-aos="fade-up">
+      <div class="lead-line">Toward Autonomous Design</div>
+      <div class="sub-line">LLM agents that generate, predict, and optimize with minimal human intervention</div>
+    </div>
+
     <p class="industry-line mb-5" data-aos="fade-up">
       Applied with <strong>Hyundai Motor</strong> · <strong>Samsung Heavy Industries</strong> ·
       <strong>LG Display</strong> · <strong>KORAIL</strong>
@@ -266,11 +324,13 @@
 
     <!-- ========================= FRAMEWORKS ========================= -->
     <h2 class="fw-bold heading-navy mb-4 mt-5" data-aos="fade-up">Proposed Frameworks</h2>
-    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+    <div class="row g-4">
 
-      <!-- AutoATC -->
-      <div class="col" data-aos="fade-up">
-        <div class="framework-card h-100">
+      <!-- ===== Column 1 · Generative AI ===== -->
+      <div class="col-lg-4 fw-column" data-aos="fade-up">
+        <div class="fw-col-head head-gen"><span class="dot"></span><h5>Generative AI</h5></div>
+
+        <div class="framework-card">
           <button type="button" class="figure-btn" data-bs-toggle="modal" data-bs-target="#figModal"
                   data-fig="assets/img/research/dialogcad.webp"
                   data-title="DialogCAD — MCP-based multi-agent CAD generation framework">
@@ -278,7 +338,6 @@
             <span class="zoom-hint"><i class="bi bi-arrows-fullscreen"></i></span>
           </button>
           <div class="card-body">
-            <span class="fw-cat cat-generative">Generative AI</span>
             <h6 class="fw-bold mb-2">DialogCAD</h6>
             <p class="small text-muted mb-0">
               A <strong>dialogue-driven CAD generation</strong> framework
@@ -287,11 +346,29 @@
             </p>
           </div>
         </div>
+
+        <div class="framework-card">
+          <button type="button" class="figure-btn" data-bs-toggle="modal" data-bs-target="#figModal"
+                  data-fig="assets/img/research/deepjeb.webp"
+                  data-title="DeepJEB — 3D deep learning-based synthetic jet engine bracket dataset">
+            <img src="assets/img/research/deepjeb.webp" class="research-thumb" alt="DeepJEB synthetic bracket dataset" width="928" height="521" loading="lazy">
+            <span class="zoom-hint"><i class="bi bi-arrows-fullscreen"></i></span>
+          </button>
+          <div class="card-body">
+            <h6 class="fw-bold mb-2">DeepJEB <span class="text-muted fw-normal small">(co-author)</span></h6>
+            <p class="small text-muted mb-0">
+              A <strong>synthetic 3D dataset</strong> of jet engine brackets
+              generated by deep learning for <strong>data-driven design</strong>.
+            </p>
+          </div>
+        </div>
       </div>
 
-      <!-- Point-DeepONet -->
-      <div class="col" data-aos="fade-up">
-        <div class="framework-card h-100">
+      <!-- ===== Column 2 · Predictive AI ===== -->
+      <div class="col-lg-4 fw-column" data-aos="fade-up">
+        <div class="fw-col-head head-pred"><span class="dot"></span><h5>Predictive AI</h5></div>
+
+        <div class="framework-card">
           <button type="button" class="figure-btn" data-bs-toggle="modal" data-bs-target="#figModal"
                   data-fig="assets/img/research/point-deeponet.webp"
                   data-title="Point-DeepONet — architecture for 3D physical-field prediction">
@@ -299,7 +376,6 @@
             <span class="zoom-hint"><i class="bi bi-arrows-fullscreen"></i></span>
           </button>
           <div class="card-body">
-            <span class="fw-cat cat-predictive">Predictive AI</span>
             <h6 class="fw-bold mb-2">Point-DeepONet</h6>
             <p class="small text-muted mb-0">
               Predicts <strong>nonlinear physical fields</strong> on
@@ -308,11 +384,8 @@
             </p>
           </div>
         </div>
-      </div>
 
-      <!-- BMO-GNN -->
-      <div class="col" data-aos="fade-up">
-        <div class="framework-card h-100">
+        <div class="framework-card">
           <button type="button" class="figure-btn" data-bs-toggle="modal" data-bs-target="#figModal"
                   data-fig="assets/img/research/bmo-gnn.webp"
                   data-title="BMO-GNN — Bayesian mesh optimization framework">
@@ -320,7 +393,6 @@
             <span class="zoom-hint"><i class="bi bi-arrows-fullscreen"></i></span>
           </button>
           <div class="card-body">
-            <span class="fw-cat cat-predictive">Predictive AI</span>
             <h6 class="fw-bold mb-2">BMO-GNN</h6>
             <p class="small text-muted mb-0">
               <strong>Bayesian mesh optimization</strong> that boosts
@@ -329,11 +401,8 @@
             </p>
           </div>
         </div>
-      </div>
 
-      <!-- Physics-Constrained GNN -->
-      <div class="col" data-aos="fade-up">
-        <div class="framework-card h-100">
+        <div class="framework-card">
           <button type="button" class="figure-btn" data-bs-toggle="modal" data-bs-target="#figModal"
                   data-fig="assets/img/research/physics-constrained-gnn.webp"
                   data-title="Physics-Constrained GNN — training / inference pipeline">
@@ -341,8 +410,7 @@
             <span class="zoom-hint"><i class="bi bi-arrows-fullscreen"></i></span>
           </button>
           <div class="card-body">
-            <span class="fw-cat cat-predictive">Predictive AI</span>
-            <h6 class="fw-bold mb-2">Physics-Constrained GNN</h6>
+            <h6 class="fw-bold mb-2">Physics-Constrained GNN <span class="text-muted fw-normal small">(co-author)</span></h6>
             <p class="small text-muted mb-0">
               <strong>Spatio-temporal prediction</strong> of drop impact
               on OLED display panels with <strong>physics
@@ -352,9 +420,11 @@
         </div>
       </div>
 
-      <!-- AutoATC -->
-      <div class="col" data-aos="fade-up">
-        <div class="framework-card h-100">
+      <!-- ===== Column 3 · Optimization AI ===== -->
+      <div class="col-lg-4 fw-column" data-aos="fade-up">
+        <div class="fw-col-head head-opt"><span class="dot"></span><h5>Optimization AI</h5></div>
+
+        <div class="framework-card">
           <button type="button" class="figure-btn" data-bs-toggle="modal" data-bs-target="#figModal"
                   data-fig="assets/img/research/autoatc.webp"
                   data-title="AutoATC — multi-agent decomposition framework">
@@ -362,7 +432,6 @@
             <span class="zoom-hint"><i class="bi bi-arrows-fullscreen"></i></span>
           </button>
           <div class="card-body">
-            <span class="fw-cat cat-optimization">Optimization AI</span>
             <h6 class="fw-bold mb-2">AutoATC</h6>
             <p class="small text-muted mb-0">
               <strong>Automatically decomposes</strong> complex
@@ -371,11 +440,8 @@
             </p>
           </div>
         </div>
-      </div>
 
-      <!-- LLM-Guided Adaptive Penalty -->
-      <div class="col" data-aos="fade-up">
-        <div class="framework-card h-100">
+        <div class="framework-card">
           <button type="button" class="figure-btn" data-bs-toggle="modal" data-bs-target="#figModal"
                   data-fig="assets/img/research/llm-adaptive-penalty.webp"
                   data-title="LLM-Guided Adaptive Penalty — LLM-ADMM architecture">
@@ -383,7 +449,6 @@
             <span class="zoom-hint"><i class="bi bi-arrows-fullscreen"></i></span>
           </button>
           <div class="card-body">
-            <span class="fw-cat cat-optimization">Optimization AI</span>
             <h6 class="fw-bold mb-2">LLM-Guided Adaptive Penalty</h6>
             <p class="small text-muted mb-0">
               An <strong>LLM adaptively tunes penalty parameters</strong>
@@ -393,7 +458,6 @@
           </div>
         </div>
       </div>
-
     </div>
 
   </main>
