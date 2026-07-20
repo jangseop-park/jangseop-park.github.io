@@ -66,22 +66,17 @@
     }
     .framework-card:hover .zoom-hint { opacity: 1; }
     .framework-card .card-body { padding: 1rem 1.15rem 1.15rem; }
-    .fw-venue {
-      font-size: .72rem;
-      font-weight: 600;
-      letter-spacing: .02em;
-      text-transform: uppercase;
-      color: var(--accent-dark);
-      margin-bottom: .35rem;
-    }
     .fw-cat {
       font-size: .68rem;
-      font-weight: 600;
-      letter-spacing: .04em;
+      font-weight: 700;
+      letter-spacing: .05em;
       text-transform: uppercase;
-      color: #8b97a8;
+      color: var(--accent-dark);
+      background: rgba(74, 155, 206, .12);
+      padding: .2rem .6rem;
+      border-radius: 999px;
       display: inline-block;
-      margin-bottom: .55rem;
+      margin-bottom: .6rem;
     }
     #figModalImg { max-height: 80vh; }
   </style>
@@ -167,7 +162,6 @@
           </button>
           <div class="card-body">
             <span class="fw-cat">Agentic AI</span>
-            <div class="fw-venue">Under Review · 2026</div>
             <h6 class="fw-bold mb-2">LLM-Guided Adaptive Penalty</h6>
             <p class="small text-muted mb-0">
               An <strong>LLM adaptively tunes penalty parameters</strong>
@@ -189,7 +183,6 @@
           </button>
           <div class="card-body">
             <span class="fw-cat">Agentic AI</span>
-            <div class="fw-venue">Under Review · 2026</div>
             <h6 class="fw-bold mb-2">AutoATC</h6>
             <p class="small text-muted mb-0">
               <strong>Automatically decomposes</strong> complex
@@ -211,7 +204,6 @@
           </button>
           <div class="card-body">
             <span class="fw-cat">Agentic AI</span>
-            <div class="fw-venue">KSME · 2025</div>
             <h6 class="fw-bold mb-2">DialogCAD</h6>
             <p class="small text-muted mb-0">
               A <strong>dialogue-driven CAD generation</strong> framework
@@ -233,7 +225,6 @@
           </button>
           <div class="card-body">
             <span class="fw-cat">3D Surrogate Modeling</span>
-            <div class="fw-venue">Neural Networks · 2026</div>
             <h6 class="fw-bold mb-2">Point-DeepONet</h6>
             <p class="small text-muted mb-0">
               Predicts <strong>nonlinear physical fields</strong> on
@@ -255,7 +246,6 @@
           </button>
           <div class="card-body">
             <span class="fw-cat">3D Surrogate Modeling</span>
-            <div class="fw-venue">Expert Systems w/ Applications · 2025</div>
             <h6 class="fw-bold mb-2">Physics-Constrained GNN</h6>
             <p class="small text-muted mb-0">
               <strong>Spatio-temporal prediction</strong> of drop impact
@@ -277,7 +267,6 @@
           </button>
           <div class="card-body">
             <span class="fw-cat">3D Surrogate Modeling</span>
-            <div class="fw-venue">J. Computational Design &amp; Eng. · 2024</div>
             <h6 class="fw-bold mb-2">BMO-GNN</h6>
             <p class="small text-muted mb-0">
               <strong>Bayesian mesh optimization</strong> that boosts
