@@ -72,25 +72,6 @@
     }
     .date-sidebar .month-group.collapsed .chev { transform: rotate(-90deg); }
     .date-sidebar .month-group.collapsed .date-item { display: none; }
-    .trend-card {
-      border: 1px solid #dee2e6;
-      border-radius: .5rem;
-      padding: 1rem 1.25rem;
-      margin-bottom: 1.25rem;
-      background: #fff;
-    }
-    .trend-card h6 {
-      font-size: .85rem;
-      font-weight: 700;
-      color: #495057;
-      margin-bottom: .75rem;
-      text-transform: uppercase;
-      letter-spacing: .03em;
-    }
-    .trend-card .chart-wrap {
-      position: relative;
-      height: 180px;
-    }
     .graph-card {
       border: 1px solid #dee2e6;
       border-radius: .5rem;
@@ -311,11 +292,6 @@
           </div>
         </div>
 
-        <div class="trend-card">
-          <h6><i class="bi bi-graph-up me-1"></i>Category Activity — last 30 days</h6>
-          <div class="chart-wrap"><canvas id="trend-chart"></canvas></div>
-        </div>
-
         <div class="graph-card">
           <h6>
             <span><i class="bi bi-diagram-3 me-1"></i>Concept Graph <span class="subtitle" id="graph-subtitle">— shared keywords across today's items</span></span>
@@ -358,7 +334,6 @@
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vis-network@9.1.9/standalone/umd/vis-network.min.js"></script>
   <script>
     const REPO = 'jangseop-park/ai-news-daily';
@@ -432,7 +407,6 @@
       if (sel) sel.value = date;
       currentDate = date;
       renderNews(date);
-      if (trendChart) highlightTrendPoint(date);
     }
 
     function renderSidebar(dates, active) {
@@ -474,64 +448,6 @@
       const sel = document.getElementById('date-select');
       sel.innerHTML = dates.map(d => `<option value="${d}"${d === active ? ' selected' : ''}>${d}</option>`).join('');
       sel.onchange = () => selectDate(sel.value);
-    }
-
-    let trendChart = null;
-
-    function highlightTrendPoint(date) {
-      if (!trendChart) return;
-      const idx = trendChart.data.labels.indexOf(date);
-      trendChart.setActiveElements(idx >= 0 ? [
-        { datasetIndex: 0, index: idx },
-        { datasetIndex: 1, index: idx },
-        { datasetIndex: 2, index: idx },
-      ] : []);
-      trendChart.update('none');
-    }
-
-    async function renderTrendChart(dates) {
-      const ordered = [...dates].reverse();
-      const results = await Promise.all(ordered.map(d => loadDay(d)));
-      const gh = results.map(r => (r?.github_trending || []).length);
-      const hf = results.map(r => (r?.huggingface || []).length);
-      const gn = results.map(r => (r?.geeknews || []).length);
-
-      const ctx = document.getElementById('trend-chart').getContext('2d');
-      trendChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-          labels: ordered,
-          datasets: [
-            { label: 'GitHub Trending', data: gh, borderColor: '#f97316', backgroundColor: 'rgba(249,115,22,.15)', tension: .3, fill: true, borderWidth: 2, pointRadius: 2, pointHoverRadius: 5 },
-            { label: 'HF Papers',       data: hf, borderColor: '#0d6efd', backgroundColor: 'rgba(13,110,253,.15)',  tension: .3, fill: true, borderWidth: 2, pointRadius: 2, pointHoverRadius: 5 },
-            { label: 'GeekNews',        data: gn, borderColor: '#198754', backgroundColor: 'rgba(25,135,84,.15)',   tension: .3, fill: true, borderWidth: 2, pointRadius: 2, pointHoverRadius: 5 },
-          ],
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          interaction: { mode: 'index', intersect: false },
-          plugins: {
-            legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 11 } } },
-            tooltip: { callbacks: { title: items => items[0].label } },
-          },
-          scales: {
-            x: { ticks: { font: { size: 10 }, maxRotation: 0, autoSkip: true, maxTicksLimit: 8 }, grid: { display: false } },
-            y: { beginAtZero: true, ticks: { font: { size: 10 }, precision: 0 }, grid: { color: '#f0f0f0' } },
-          },
-          onClick: (evt, elements) => {
-            const points = trendChart.getElementsAtEventForMode(evt, 'index', { intersect: false }, false);
-            if (points.length) {
-              const date = trendChart.data.labels[points[0].index];
-              selectDate(date);
-              const monthKey = date.slice(0, 7);
-              const group = document.querySelector(`.month-group[data-month="${monthKey}"]`);
-              if (group) group.classList.remove('collapsed');
-            }
-          },
-        },
-      });
-      highlightTrendPoint(currentDate);
     }
 
     async function renderNews(date) {
@@ -844,10 +760,10 @@
       let headerTitle = '';
       if (primary) {
         related = items.filter((_, idx) => itemConcepts[idx].includes(primary));
-        headerTitle = `Related items — <span class="concept-chip">${primary}</span>`;
+        headerTitle = `<span class="concept-chip">${primary}</span>`;
       } else {
         related = [clickedItem];
-        headerTitle = 'Selected item';
+        headerTitle = '<span class="concept-chip">Selected</span>';
       }
 
       const rows = related.map(it => {
@@ -901,7 +817,6 @@
       currentDate = dates[0];
       renderSidebar(dates, currentDate);
       await renderNews(currentDate);
-      renderTrendChart(dates).catch(err => console.error('trend chart failed', err));
     }
 
     init();
