@@ -286,12 +286,12 @@
       from { opacity: 0; transform: translateY(24px); }
       to   { opacity: 1; transform: translateY(0); }
     }
-    .reveal-up {
-      opacity: 0;
+    .reveal-up { opacity: 0; }
+    body.reveal-go .reveal-up {
       animation: reveal-up .55s ease forwards;
     }
     @media (prefers-reduced-motion: reduce) {
-      .reveal-up { animation: none; opacity: 1; }
+      .reveal-up { animation: none !important; opacity: 1 !important; }
     }
   </style>
 </head>
@@ -334,6 +334,17 @@
         <p class="text-muted small mb-0 reveal-up" style="animation-delay:.3s">Automatically collected and updated every morning</p>
       </div>
     </div>
+    <script>
+      // Start the header rise-in only after the first painted frame,
+      // so the animation is actually visible (CSS alone can finish
+      // before first paint while fonts/scripts are still loading).
+      requestAnimationFrame(function () {
+        requestAnimationFrame(function () {
+          document.body.classList.add('reveal-go');
+        });
+      });
+    </script>
+    <noscript><style>.reveal-up { opacity: 1; }</style></noscript>
 
     <!-- Mobile date dropdown (hidden on desktop) -->
         <div class="mobile-date-wrap mb-3">
