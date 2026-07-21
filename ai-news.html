@@ -19,6 +19,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet" />
   <link href="https://cdn.jsdelivr.net/npm/vis-network@9.1.9/styles/vis-network.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="assets/css/style.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" />
   <style>
     .ai-news-layout {
       display: flex;
@@ -281,18 +282,6 @@
       }
     }
 
-    /* Header rise-in (mirrors the fade-up used by other pages via AOS) */
-    @keyframes reveal-up {
-      from { opacity: 0; transform: translateY(24px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    .reveal-up { opacity: 0; }
-    body.reveal-go .reveal-up {
-      animation: reveal-up .55s ease forwards;
-    }
-    @media (prefers-reduced-motion: reduce) {
-      .reveal-up { animation: none !important; opacity: 1 !important; }
-    }
   </style>
 </head>
 <body>
@@ -329,31 +318,11 @@
 
     <div class="row justify-content-center mb-4">
       <div class="col-lg-10 text-center">
-        <h1 class="section-title reveal-up">AI News Daily</h1>
-        <p class="lead text-muted mb-1 reveal-up" style="animation-delay:.15s">GitHub Trending · Hugging Face Papers · GeekNews</p>
-        <p class="text-muted small mb-0 reveal-up" style="animation-delay:.3s">Automatically collected and updated every morning</p>
+        <h1 class="section-title" data-aos="fade-up" data-aos-delay="0">AI News Daily</h1>
+        <p class="lead text-muted mb-1" data-aos="fade-up" data-aos-delay="150">GitHub Trending · Hugging Face Papers · GeekNews</p>
+        <p class="text-muted small mb-0" data-aos="fade-up" data-aos-delay="300">Automatically collected and updated every morning</p>
       </div>
     </div>
-    <script>
-      // Start the header rise-in after DOMContentLoaded (same timing AOS
-      // uses on the other pages) — rAF alone can tick before the first
-      // contentful paint, finishing the animation on a blank screen.
-      (function () {
-        function go() {
-          requestAnimationFrame(function () {
-            requestAnimationFrame(function () {
-              document.body.classList.add('reveal-go');
-            });
-          });
-        }
-        if (document.readyState === 'loading') {
-          document.addEventListener('DOMContentLoaded', go);
-        } else {
-          go();
-        }
-      })();
-    </script>
-    <noscript><style>.reveal-up { opacity: 1; }</style></noscript>
 
     <!-- Mobile date dropdown (hidden on desktop) -->
         <div class="mobile-date-wrap mb-3">
@@ -407,6 +376,8 @@
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+  <script>AOS.init({ duration: 450, once: true, offset: 40, startEvent: "DOMContentLoaded" });</script>
   <script src="https://cdn.jsdelivr.net/npm/vis-network@9.1.9/standalone/umd/vis-network.min.js"></script>
   <script>
     const REPO = 'jangseop-park/ai-news-daily';
