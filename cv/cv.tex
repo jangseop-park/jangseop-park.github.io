@@ -3,6 +3,7 @@
 \usepackage[margin=1.5cm]{geometry}
 \usepackage{enumitem}
 \usepackage{hyperref}
+\hypersetup{hidelinks}  % 링크 테두리 제거 (색/밑줄로만 표시)
 \usepackage{xcolor}
 \usepackage{graphicx}
 \usepackage{xltxtra}
@@ -45,7 +46,12 @@
     \end{minipage}
     \begin{minipage}{\linewidth}
     \vspace{2pt}
-    \hspace{10pt}\textbf{E-mail:} \href{mailto:jangseop@kaist.ac.kr}{\textcolor{blue}{jangseop@kaist.ac.kr}}\hspace{65pt} \textbf{Homepage:} \href{https://jangseop.page}{\textcolor{blue}{jangseop.page}}
+    \hspace{10pt}\begin{tabular}{@{}l@{\hspace{8pt}}l@{\hspace{28pt}}l@{\hspace{8pt}}l@{}}
+    \textbf{E-mail:}  & \href{mailto:jangseop@kaist.ac.kr}{\textcolor{blue}{\underline{jangseop@kaist.ac.kr}}}
+                      & \textbf{Homepage:} & \href{https://jangseop.page}{\textcolor{blue}{\underline{jangseop.page}}} \\[2pt]
+    \textbf{Scholar:} & \href{https://scholar.google.com/citations?user=67ZMHSAAAAAJ&hl=en}{\textcolor{blue}{\underline{Google Scholar}}}
+                      & \textbf{GitHub:}   & \href{https://github.com/jangseop-park}{\textcolor{blue}{\underline{jangseop-park}}}
+    \end{tabular}
     \end{minipage}
 \end{minipage}
 \hfill
